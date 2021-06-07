@@ -9,7 +9,8 @@
 ### Adding images in a HOL description
 Please, always add files under the `media` folder.
 
-**Example:** ![](media/adf-copy-data-blob-storage.png 'Launch Workspace')
+**Example:**
+![](media/adf-copy-data-blob-storage.png 'Launch Workspace')
 
 ### Referencing files to be used on the HOL
 Most files will be imported to the learner's subscription during the Before the Hands On Lab phase.
