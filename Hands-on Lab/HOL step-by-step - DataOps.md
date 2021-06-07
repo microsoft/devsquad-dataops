@@ -75,7 +75,9 @@ At the end of this hands-on lab, you will be better able to implement an end-to-
 
 ## Solution architecture
 
-Show the architecture of the final solution.
+Below is a diagram of the solution architecture you will deploy in this lab, leveraging several DataOps best practices.
+
+![](media/high-level-overview-dataops.png 'Solution Architecture')
 
 Explain each one of the repos that will be user for this workshop:
 - IaC
@@ -85,7 +87,11 @@ Explain each one of the repos that will be user for this workshop:
 
 ## Requirements
 
-Add Requirements.
+1. Microsoft Azure subscription must be pay-as-you-go or MSDN.
+    - Trial subscriptions will not work.
+
+2. Follow all the steps provided in [Before the Hands-on Lab](Before%20the%20HOL%20-%20DataOps.md)
+
 
 ## Before the hands-on lab
 
@@ -95,6 +101,8 @@ Refer to the Before the hands-on lab setup guide manual before continuing to the
 ## Exercise 1: Exploring Azure Data Services
 
 Duration: 20 minutes
+
+In this exercise, you will explore all resources that have been created in your Azure Subscription.
 
 ### Task 1: Azure Data Lake Storage
 ### Task 2: Azure Data Factory
