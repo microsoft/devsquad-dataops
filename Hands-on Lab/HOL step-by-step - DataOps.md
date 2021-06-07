@@ -30,33 +30,47 @@ Microsoft and the trademarks listed at <https://www.microsoft.com/en-us/legal/in
   - [Overview](#overview)
   - [Solution architecture](#solution-architecture)
   - [Requirements](#requirements)
-  - [Before the hands-on lab (20~30 min)](#before-the-hands-on-lab)
-  - [Exercise 1: Exploring Azure Data Services (30 min) / Entender la casa](#exercise-3-creating-digital-twin-instances-to-build-an-environment-knowledge-graph)
-    - [Task 1: Azure Data Lake Storage](#task-1-create-digital-twin-instances-using-the-cli)
-    - [Task 2: Azure Data Factory](#task-2-create-a-digital-twin-instance-using-the-azure-digital-twins-explorer)
-    - [Task 3: Azure Databricks](#task-3-importing-digital-twin-instances-using-a-spreadsheet)
-  - [Exercise 2: Infrastructure As Code (30 min)](#exercise-1-authoring-digital-twins-definition-language-dtdl-models)
-    - [Task 1: Creating a sandbox environment](#task-1-the-components-of-a-model)
-    - [Task 2: Understanding ARM Templates](#task-2-ontologies-overview)
-    - [Task 3: Checklist of IaC Best Practices](#task-3-validating-best-practices)
-  - [Exercise 3: CI/CD (45 min)](#exercise-2-loading-models-into-azure-digital-twins)
-    - [Task 1: Understanding Repos](#task-1-configure-azure-digital-twins-permissions)
-    - [Task 2: Understanding Branching Strategy](#task-1-configure-azure-digital-twins-permissions)
-    - [Task 3: Release Lifecycle Strategy](#task-2-loading-models-using-the-cli)
-    - [Task 4: CI Pipelines for IaC](#task-3-setup-the-azure-digital-twins-explorer-application)
-    - [Task 5: CD Pipelines for IaC](#task-4-loading-models-using-the-azure-digital-twins-explorer)
-    - [Task 6: Checklist of IaC Best Practices](#task-4-loading-models-using-the-azure-digital-twins-explorer)
-  - [Exercise 4: Semantic Versioning of Libraries (25 min)](#exercise-4-querying-and-visualizing-the-azure-digital-twins-graph)
-    - [Task 1: Building Data Engineering libraries](#task-1-run-digital-twin-queries-using-the-cli)
-    - [Task 2: The Git workflow for Data](#task-2-run-digital-twin-queries-using-azure-digital-twins-explorer)
-    - [Task 3: Commiting a change to the Data Eng Library](#task-3-importing-digital-twin-instances-using-a-spreadsheet)
-  - [Exercise 5: Unit Testing (20 min)](#exercise-5-keeping-azure-digital-twin-instances-up-to-date)
-    
-  - [Exercise 6: ML PLatform (optional) (30 min)](#exercise-6-visualizing-incoming-data-with-azure-time-series-insights)
-   
+  - [Before the hands-on lab](#before-the-hands-on-lab) (20~30 min) (5) (Renan)
+  - [Exercise 1: Exploring Azure Data Services]() (30 min) (Owner: Maritza)
+    - [Task 1: Azure Data Lake Storage]()
+    - [Task 2: Azure Data Factory]()
+    - [Task 3: Azure Databricks]()
+  - [Exercise 2: Infrastructure As Code]() (30 min) (Owner: Jaque)
+    - [Task 1: Understanding the IaC repository]()
+    - [Task 2: Creating a new sandbox environment with Powershell]()
+    - [Task 3: Checklist of IaC best practices]()
+  - [Exercise 3: Git Workflow and CI/CD]() (45 min) (5) (Owner: Ana/Adrian)
+    - [Task 1: Understanding all repositories]()
+    - [Task 2: Understanding naming conventions for branches and commits]()
+    - [Task 3: Release lifecycle strategy]()
+    - [Task 4: Commiting and releasing a feature to ADF]()
+    - [Task 5: CI Pipelines]()
+    - [Task 6: CD Pipelines]()
+    - [Task 7: Checklist of branching strategy (?) racionality]()
+  - [Exercise 4: Semantic Versioning of Data Engineering Libraries]() (25 min) (Owner: Leandro)
+    - [Task 1: Building custom libraries for data engineering]()
+    - [Task 2: The Git workflow for data]()
+    - [Task 3: Creating a new PR for the custom library]()
+    - [Task 4: Custom libraries checklist]()
+  - [Exercise 5: Testing]() (20 min) (2) (Owner: Jesus)
+    - [Unit testing for IaC]()
+    - [Task 1: Understanding BDD tests]()
+    - [Task 2: Developing a new test]()
+  - [Exercise 6: ML PLatform (optional)]() (30 min) (TBD)
   - [After the hands-on lab](#after-the-hands-on-lab)
     - [Task 1: Delete resource group](#task-1-delete-resource-group)
 <!-- /TOC -->
+
+
+## Personal Preferences
+
+- Maritza: Exercise 1 and 6
+- Jaqueline: Exercise 2 and 3
+- Leandro: Exercise 1 and 4
+- Jesus: Exercise 5
+- Adrian: Exercise 3 and 6
+- Ana: Exercise 3 and 6
+
 
 # Leveraging Azure Digital Twins in a supply chain hands-on lab step-by-step
 
@@ -90,11 +104,8 @@ Refer to the Before the hands-on lab setup guide manual before continuing to the
 
 ## Exercise 1: Authoring Digital Twins Definition Language (DTDL) models
 
-Duration: 20 minutes
+Duration: 30 minutes
 
-The Azure Digital Twins PaaS service's core offering is the ability to create knowledge graphs representing an entire environment based on digital models. An environment could be a store, a city, factory, farm, or even the whole planet. Contained within an environment, you will find people, places, and things. Each model defined is significant to a business and is entirely customizable. They can be as large as the world and as small as a tiny sensor. The environment, the components found within, and the relationships between them are represented digitally using a model expressed using Digital Twin Definition Language (DTDL). Digital Twin Definition Language is based on JSON-LD (JavaScript Object Notation for Linked Data). Azure Digital Twins uses DTDL version 2. You can think of a model definition as being similar to a class in object-oriented programming. Later, you will use these model definitions to create digital twins instances representing specific entities in an environment.
-
-In this exercise, you will be assisting Contoso Apparel in defining a model representing a storeroom. In Contoso's environment, we must track the temperature and humidity telemetry coming from the storeroom as well as the current stock level.
 
 ### Task 1: The components of a model
 
