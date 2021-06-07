@@ -30,16 +30,16 @@ Microsoft and the trademarks listed at <https://www.microsoft.com/en-us/legal/in
   - [Overview](#overview)
   - [Solution architecture](#solution-architecture)
   - [Requirements](#requirements)
-  - [Before the hands-on lab](#before-the-hands-on-lab) (20~30 min) (Renan)
-  - [Exercise 1: Exploring Azure Data Services]() (30 min) (Owner: Maritza)
-    - [Task 1: Azure Data Lake Storage]()
-    - [Task 2: Azure Data Factory]()
-    - [Task 3: Azure Databricks]()
-  - [Exercise 2: Infrastructure As Code]() (30 min) (Owner: Jaque)
+  - [Before the hands-on lab](#before-the-hands-on-lab) (20 min) (Owner: Renan)
+  - [Exercise 1: Exploring Azure Data Services](#Exercise-1-Exploring-Azure-Data-Services) (30 min) (Owner: Maritza)
+    - [Task 1: Azure Data Lake Storage](#Task-1-Azure-Data-Lake-Storage)
+    - [Task 2: Azure Data Factory](#Task-2-Azure-Data-Factory)
+    - [Task 3: Azure Databricks](#Task-3-Azure-Databricks)
+  - [Exercise 2: Infrastructure As Code](#Exercise-2-Infrastructure-As-Code) (30 min) (Owner: Jaque)
     - [Task 1: Understanding the IaC repository]()
     - [Task 2: Creating a new sandbox environment with Powershell]()
     - [Task 3: Checklist of IaC best practices]()
-  - [Exercise 3: Git Workflow and CI/CD]() (45 min) (Owner: Ana/Adrian)
+  - [Exercise 3: Git Workflow and CI/CD](#Exercise-3-Git-Workflow-and-CI/CD) (45 min) (Owner: Ana/Adrian)
     - [Task 1: Understanding all repositories]()
     - [Task 2: Understanding naming conventions for branches and commits]()
     - [Task 3: Release lifecycle strategy]()
@@ -47,12 +47,12 @@ Microsoft and the trademarks listed at <https://www.microsoft.com/en-us/legal/in
     - [Task 5: CI Pipelines]()
     - [Task 6: CD Pipelines]()
     - [Task 7: Checklist of branching strategy (?) racionality]()
-  - [Exercise 4: Semantic Versioning of Data Engineering Libraries]() (25 min) (Owner: Leandro)
+  - [Exercise 4: Semantic Versioning of Data Engineering Libraries](#Exercise-4-Semantic-Versioning-of-Data-Engineering-Libraries) (25 min) (Owner: Leandro)
     - [Task 1: Building custom libraries for data engineering]()
     - [Task 2: The Git workflow for data]()
     - [Task 3: Creating a new PR for the custom library]()
     - [Task 4: Custom libraries checklist]()
-  - [Exercise 5: Testing]() (20 min) (Owner: Jesus)
+  - [Exercise 5: Testing](#Exercise-5-Testing) (25 min) (Owner: Jesus)
     - [Task 1: Understanding test types]()
     - [Task 2: Understanding BDD tests]()
     - [Task 3: Developing a new test]()
@@ -60,17 +60,6 @@ Microsoft and the trademarks listed at <https://www.microsoft.com/en-us/legal/in
   - [After the hands-on lab](#after-the-hands-on-lab)
     - [Task 1: Delete resource group](#task-1-delete-resource-group)
 <!-- /TOC -->
-
-
-## Personal Preferences
-
-- Maritza: Exercise 1 and 6
-- Jaqueline: Exercise 2 and 3
-- Leandro: Exercise 1 and 4
-- Jesus: Exercise 5
-- Adrian: Exercise 3 and 6
-- Ana: Exercise 3 and 6
-
 
 # Leveraging Azure Digital Twins in a supply chain hands-on lab step-by-step
 
@@ -102,18 +91,30 @@ Add Requirements.
 
 Refer to the Before the hands-on lab setup guide manual before continuing to the lab exercises.
 
-## Exercise 1: Authoring Digital Twins Definition Language (DTDL) models
+
+## Exercise 1: Exploring Azure Data Services
+
+Duration: 20 minutes
+
+### Task 1: Azure Data Lake Storage
+### Task 2: Azure Data Factory
+### Task 3: Azure Databricks
+
+## Exercise 2: Infrastructure As Code
 
 Duration: 30 minutes
 
+## Exercise 3: Git Workflow and CI/CD
 
-### Task 1: The components of a model
+Duration: 45 minutes
 
+## Exercise 4: Semantic Versioning of Data Engineering Libraries
 
+Duration: 25 minutes
 
-### Task 2: Ontologies overview
+## Exercise 5: Testing
 
-
+Duration: 25 minutes
 
 ## After the hands-on lab
 
