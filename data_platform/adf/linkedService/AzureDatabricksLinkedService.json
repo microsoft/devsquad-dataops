@@ -1,0 +1,13 @@
+{
+	"name": "AzureDatabricksLinkedService",
+	"properties": {
+		"annotations": [],
+		"type": "AzureDatabricks",
+		"typeProperties": {
+			"domain": "https://adb-1283426365855364.4.azuredatabricks.net",
+			"authentication": "MSI",
+			"workspaceResourceId": "/subscriptions/5cf319e7-8fcb-4a24-bd7e-251785cc9e4f/resourceGroups/rg-dataops-compute-dev/providers/Microsoft.Databricks/workspaces/dbw-dataops-eastus2-dev",
+			"existingClusterId": "0330-191731-dog598"
+		}
+	}
+}

@@ -1,0 +1,91 @@
+parameters:
+  - name: environment
+    type: string
+  - name: iacCdVariableGroupPrefix
+    type: string
+  - name: iacCdDbwVariableGroupPrefix
+    type: string
+  - name: workingDirectory
+    type: string
+  - name: testResultsDirectory
+    type: string
+    
+stages:
+- stage: behavior_tests
+  dependsOn: deploy_adf
+  condition: and(succeeded(), ne(variables['Build.SourceBranchName'], 'main'))
+  displayName: "Run behavior tests"
+  variables:
+  - group: ${{ parameters.iacCdVariableGroupPrefix }}-${{ parameters.environment }}
+  - group: ${{ parameters.iacCdDbwVariableGroupPrefix }}-${{ parameters.environment }}
+  jobs:
+  - job: adf_pipelines_tests
+    displayName: "Run behavior tests"
+    steps:
+      - task: AzureCLI@1
+        displayName: "SETUP: Set Azure Credentials"
+        inputs:
+          azureSubscription: spn-iac-${{ parameters.environment }}
+          scriptLocation: inlineScript
+          inlineScript: |
+            set -eu
+
+            subscriptionId=$(az account show --query id -o tsv)
+            accountKey=$(az storage account keys list \
+              -n $(dataLakeName) \
+              -g $(resourceGroupData) \
+              --query [0].value -o tsv)
+
+            echo "##vso[task.setvariable variable=CLIENT_ID]$servicePrincipalId"
+            echo "##vso[task.setvariable variable=CLIENT_SECRET;issecret=true]$servicePrincipalKey"
+            echo "##vso[task.setvariable variable=SUBSCRIPTION_ID]$subscriptionId"
+            echo "##vso[task.setvariable variable=TENANT_ID]$tenantId"
+            echo "##vso[task.setvariable variable=STORAGE_ACCOUNT_KEY;issecret=true]$accountKey"
+          addSpnToEnvironment: true
+    
+      - task: UsePythonVersion@0
+        inputs:
+          versionSpec: "3.7"
+
+      - script: pip install -r requirements.txt
+        displayName: "SETUP: Install all dependencies"
+        workingDirectory: ${{ parameters.workingDirectory }}
+
+      - script: |
+          export CLIENT_ID=$(CLIENT_ID)
+          export CLIENT_SECRET=${CLIENT_SECRET}
+          export SUBSCRIPTION_ID=$(SUBSCRIPTION_ID)
+          export TENANT_ID=$(TENANT_ID)
+          export ADF_NAME=$(dataFactoryName)
+          export RESOURCE_GROUP_NAME=$(resourceGroupCompute)
+          export STORAGE_ACCOUNT_NAME=$(dataLakeName)
+          export STORAGE_ACCOUNT_KEY=${STORAGE_ACCOUNT_KEY}
+
+          BEHAVE_RESULTS=${{ parameters.testResultsDirectory }}/behave_results.json
+          behave --format=json -o $BEHAVE_RESULTS
+        displayName: "TEST: Run behave features"
+        workingDirectory: ${{ parameters.workingDirectory }}
+        env:
+          CLIENT_SECRET: $(CLIENT_SECRET)
+          STORAGE_ACCOUNT_KEY: $(STORAGE_ACCOUNT_KEY)
+      
+      - script: |
+          BEHAVE_RESULTS=${{ parameters.testResultsDirectory }}/behave_results.json
+          JUNIT_RESULTS=${{ parameters.testResultsDirectory }}/output.xml
+          python3 scripts/junit_converter.py $BEHAVE_RESULTS $JUNIT_RESULTS
+        displayName: 'RESULTS: Convert behavior test results to JUnit format'
+        condition: succeededOrFailed()
+        workingDirectory: ${{ parameters.workingDirectory }}
+
+      - task: PublishTestResults@2
+        inputs:
+          testResultsFormat: 'JUnit'
+          testResultsFiles: '${{ parameters.testResultsDirectory }}/output.xml'
+          failTaskOnFailedTests: true
+        condition: succeededOrFailed()
+        displayName: 'RESULTS: Publish behavior test results'
+
+      - publish: ${{ parameters.testResultsDirectory }}
+        artifact: BDDTestResults
+        condition: succeededOrFailed()
+        displayName: 'RESULTS: Publish artifacts'

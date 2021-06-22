@@ -1,0 +1,207 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "environment": {
+            "type": "string",
+            "metadata": {
+                "description": "Environment which the infrastructure will be deployed"
+            }
+        },
+        "location": {
+            "type": "string",
+            "metadata": {
+                "description": "Location of the compute resources"
+            }
+        },
+        "dataFactoryName": {
+            "type": "string",
+            "metadata": {
+                "description": "Data Factory name"
+            }
+        },
+        "dataFactoryAccountName": {
+            "type": "string",
+            "metadata": {
+                "description": "TODO"
+            }
+        },
+        "dataFactoryProjectName": {
+            "type": "string",
+            "metadata": {
+                "description": "TODO"
+            }
+        },
+        "dataFactoryRepositoryName": {
+            "type": "string",
+            "metadata": {
+                "description": "TODO"
+            }
+        },
+        "dataFactoryCollaborationBranch": {
+            "type": "string",
+            "metadata": {
+                "description": "TODO"
+            }
+        },
+        "dataFactoryRootFolder": {
+            "type": "string",
+            "metadata": {
+                "description": "TODO"
+            }
+        },
+        "resourceGroupManagedDatabricks": {
+            "type": "string",
+            "metadata": {
+                "description": "TODO"
+            }
+        },
+        "databricksName": {
+            "type": "string",
+            "metadata": {
+                "description": "TODO"
+            }
+        },
+        "keyVaultName": {
+            "type": "string",
+            "metadata": {
+                "description": "TODO"
+            }
+        },
+        "keyVaultSecrets": {
+            "type": "secureObject",
+            "defaultValue": "{}",
+            "metadata": {
+                "description": "Specifies all secrets {\"secretName\":\"\",\"secretValue\":\"\"} wrapped in a secure object."
+            }
+        },
+        "keyVaultSecretsAdminObjectId": {
+            "type": "string",
+            "metadata": {
+                "description": "TODO"
+            }
+        }    
+    },
+    "functions": [],
+    "variables": {
+        "isDev": "[equals(parameters('environment'), 'dev')]",
+        "dataFactoryRepoConfiguration": {
+            "type": "FactoryVSTSConfiguration",
+            "tenantId": "[subscription().tenantId]",
+            "accountName": "[parameters('dataFactoryAccountName')]",
+            "projectName": "[parameters('dataFactoryProjectName')]",
+            "repositoryName": "[parameters('dataFactoryRepositoryName')]",
+            "collaborationBranch": "[parameters('dataFactoryCollaborationBranch')]",
+            "rootFolder": "[parameters('dataFactoryRootFolder')]"
+        },
+        "databricksSpnObjectId": "fe597bb2-377c-44f1-8515-82c8a1a62e3d"
+    },
+    "resources": [
+        {
+            "type": "Microsoft.DataFactory/factories",
+            "apiVersion": "2018-06-01",
+            "name": "[parameters('dataFactoryName')]",
+            "location": "[parameters('location')]",
+            "properties": {
+                "repoConfiguration": "[if(variables('isDev'), variables('dataFactoryRepoConfiguration'), json('null'))]"
+            },
+            "identity": {
+                "type": "SystemAssigned"
+            }
+        },
+        {
+            "type": "Microsoft.Databricks/workspaces",
+            "apiVersion": "2018-04-01",
+            "name": "[parameters('databricksName')]",
+            "location": "[parameters('location')]",
+            "properties": {
+                "managedResourceGroupId": "[subscriptionResourceId('Microsoft.Resources/resourceGroups', parameters('resourceGroupManagedDatabricks'))]",
+                "parameters": {
+                }
+            },
+            "sku": {
+                "name": "premium"
+            }
+        },
+        {
+            "type": "Microsoft.KeyVault/vaults",
+            "apiVersion": "2019-09-01",
+            "name": "[parameters('keyVaultName')]",
+            "location": "[parameters('location')]",
+            "properties": {
+                "tenantId": "[subscription().tenantId]",
+                "sku": {
+                    "family": "A",
+                    "name": "Standard"
+                },
+                "enabledForDeployment": false,
+                "enabledForDiskEncryption": false,
+                "enabledForTemplateDeployment": false,
+                "enableSoftDelete": true,
+                "softDeleteRetentionInDays": 90,
+                "enablePurgeProtection": true,
+                "accessPolicies": [
+                    {
+                        "tenantId": "[subscription().tenantId]",
+                        "objectId": "[reference(parameters('dataFactoryName'), '2018-06-01', 'Full').identity.principalId]",
+                        "permissions": {
+                            "secrets": [
+                                "get",
+                                "list"
+                            ]
+                        }
+                    },
+                    {
+                        "tenantId": "[subscription().tenantId]",
+                        "objectId": "[parameters('keyVaultSecretsAdminObjectId')]",
+                        "permissions": {
+                            "secrets": [
+                                "set",
+                                "list",
+                                "delete"
+                            ]
+                        }
+                    },
+                    {
+                        "tenantId": "[subscription().tenantId]",
+                        "objectId": "[variables('databricksSpnObjectId')]",
+                        "permissions": {
+                            "secrets": [
+                                "get",
+                                "list"
+                            ]
+                        }
+                    }
+                ]
+            },
+            "dependsOn": [
+                "[parameters('dataFactoryName')]"
+            ]
+        },
+        {
+            "type": "Microsoft.KeyVault/vaults/secrets",
+            "apiVersion": "2019-09-01",
+            "name": "[concat(parameters('keyVaultName'), '/', parameters('keyVaultSecrets').secrets[copyIndex()].secretName)]",
+            "dependsOn": [
+                "[resourceId('Microsoft.KeyVault/vaults/', parameters('keyVaultName'))]"
+            ],
+            "copy": {
+                "name": "secretsCopy",
+                "count": "[length(parameters('keyVaultSecrets').secrets)]"
+            },
+            "properties": {
+                "value": "[parameters('keyVaultSecrets').secrets[copyIndex()].secretValue]"
+            }
+        }
+    ],
+    "outputs": {
+        "dataFactoryPrincipalId": {
+            "type": "string",
+            "value": "[reference(parameters('dataFactoryName'), '2018-06-01', 'Full').identity.principalId]"
+        },
+        "databricksWorkspaceUrl": {
+            "type": "string",
+            "value": "[reference(parameters('databricksName')).workspaceUrl]"
+        }
+    }
+}

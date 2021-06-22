@@ -1,0 +1,11 @@
+pip
+wheel
+flake8
+flake8-junit-report==2.1.0
+python-dateutil==2.8.1
+coverage
+twine
+pytest
+pytest-runner
+databricks-cli
+pyspark==3.0.1

@@ -1,0 +1,11 @@
+Year,Month,DayofMonth,DayOfWeek,Carrier,CRSDepTime,DepDelay,DepDel15,CRSArrTime,ArrDelay,ArrDel15,Cancelled,OriginAirportCode,OriginAirportName,OriginLatitude,OriginLongitude,DestAirportCode,DestAirportName,DestLatitude,DestLongitude
+2013,4,19,5,DL,837,-3,0,1138,1,0,0,DTW,Detroit Metro Wayne County,42.2125,-83.35333333,MIA,Miami International,25.79527778,-80.29
+2013,4,19,5,DL,1705,0,0,2336,-8,0,0,SLC,Salt Lake City International,40.78833333,-111.9777778,JFK,John F. Kennedy International,40.64,-73.77861111
+2013,4,19,5,DL,600,-4,0,851,-15,0,0,PDX,Portland International,45.58861111,-122.5969444,SLC,Salt Lake City International,40.78833333,-111.9777778
+2013,4,19,5,DL,1630,28,1,1903,24,1,0,STL,Lambert-St. Louis International,38.74861111,-90.37,DTW,Detroit Metro Wayne County,42.2125,-83.35333333
+2013,4,19,5,DL,1615,-6,0,1805,-11,0,0,CVG,Cincinnati/Northern Kentucky International,39.04888889,-84.66777778,LAX,Los Angeles International,33.9425,-118.4080556
+2013,4,19,5,DL,1726,-1,0,1818,-19,0,0,ATL,Hartsfield-Jackson Atlanta International,33.63666667,-84.42777778,STL,Lambert-St. Louis International,38.74861111,-90.37
+2013,4,19,5,DL,1900,0,0,2133,-1,0,0,STL,Lambert-St. Louis International,38.74861111,-90.37,ATL,Hartsfield-Jackson Atlanta International,33.63666667,-84.42777778
+2013,4,19,5,DL,2145,15,1,2356,24,1,0,ATL,Hartsfield-Jackson Atlanta International,33.63666667,-84.42777778,SLC,Salt Lake City International,40.78833333,-111.9777778
+2013,4,19,5,DL,2157,33,1,2333,34,1,0,ATL,Hartsfield-Jackson Atlanta International,33.63666667,-84.42777778,AUS,Austin - Bergstrom International,30.19444444,-97.67
+2013,4,19,5,DL,1900,323,1,2055,322,1,0,DCA,Ronald Reagan Washington National,38.85138889,-77.03777778,ATL,Hartsfield-Jackson Atlanta International,33.63666667,-84.42777778

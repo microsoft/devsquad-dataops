@@ -1,0 +1,3 @@
+next-version: 0.1
+mode: ContinuousDeployment
+continuous-delivery-fallback-tag: prod

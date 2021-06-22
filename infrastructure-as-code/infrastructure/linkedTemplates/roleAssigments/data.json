@@ -1,0 +1,33 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "dataLakeName": {
+      "type": "string"
+    },
+    "dataFactoryPrincipalId": {
+      "type": "string"
+    }
+  },
+  "variables": {
+    "role": {
+      "Owner": "[resourceId('Microsoft.Authorization/roleDefinitions', '8e3af657-a8ff-443c-a75c-2fe8c4bcb635')]",
+      "Contributor": "[resourceId('Microsoft.Authorization/roleDefinitions', 'b24988ac-6180-42a0-ab88-20f7382dd24c')]",
+      "Reader": "[resourceId('Microsoft.Authorization/roleDefinitions', 'acdd72a7-3385-48ef-bd42-f606fba81ae7')]",
+      "Storage Blob Data Contributor": "[resourceId('Microsoft.Authorization/roleDefinitions', 'ba92f5b4-2d11-453d-a403-e96b0029c9fe')]"
+    },
+    "dataFactoryDataLakeRoleId": "[guid(resourceId('Microsoft.Storage/storageAccounts', parameters('dataLakeName')), variables('role')['Storage Blob Data Contributor'], parameters('dataFactoryPrincipalId'))]"
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Storage/storageAccounts/providers/roleAssignments",
+      "apiVersion": "2020-04-01-preview",
+      "name": "[concat(parameters('dataLakeName'), '/Microsoft.Authorization/', variables('dataFactoryDataLakeRoleId'))]",
+      "properties": {
+        "roleDefinitionId": "[variables('role')['Storage Blob Data Contributor']]",
+        "principalId": "[parameters('dataFactoryPrincipalId')]"
+      }
+    }
+  ],
+  "outputs": {}
+}

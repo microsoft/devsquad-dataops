@@ -1,0 +1,42 @@
+parameters:
+- name: environment
+  type: string
+- name: azureServiceConnection
+  type: string
+- name: iacCdVariableGroupPrefix
+  type: string
+
+stages:
+- stage: publish_static_artifacts_${{ parameters.environment }}
+  displayName: 'Deploy to ${{ parameters.environment }} Databricks'
+  jobs:
+  - deployment: publish_static_artifacts_${{ parameters.environment }}
+    displayName: 'Deploy to ${{ parameters.environment }} Databricks'
+    pool:
+      vmImage: 'Ubuntu-18.04'
+    environment: databricks-${{ parameters.environment }}
+    variables:
+    - group:  ${{ parameters.iacCdVariableGroupPrefix }}-${{ parameters.environment }}
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - checkout: self
+          - task: PublishBuildArtifacts@1
+            inputs:
+              PathtoPublish: notebooks
+              ArtifactName: 'databricks-${{ parameters.environment }}'
+            displayName: 'Publish Databricks Artifacts'
+          - template: ./databricks-setup-environment-template.yml
+          - template: ./databricks-auth-step-template.yml
+            parameters:
+              azureServiceConnection: ${{ parameters.azureServiceConnection }}
+          - script: |
+              echo "Uploading notebooks at ${NOTEBOOKS_PATH} to workspace (${DATABRICKS_NOTEBOOK_PATH})..."
+              databricks workspace import_dir --overwrite "${NOTEBOOKS_PATH}" "${DATABRICKS_NOTEBOOK_PATH}"
+            env:
+              DATABRICKS_HOST: https://$(databricksWorkspaceUrl)
+              DATABRICKS_TOKEN: $(DATABRICKS_TOKEN)
+              NOTEBOOKS_PATH: $(Pipeline.Workspace)/s/notebooks
+              DATABRICKS_NOTEBOOK_PATH: '/'
+            displayName: 'Deploy notebooks'

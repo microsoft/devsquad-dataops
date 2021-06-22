@@ -1,0 +1,12 @@
+variables:
+  location: eastus2
+  solutionName: dataops
+  ${{ if eq(variables['Build.SourceBranchName'], 'main') }}:
+    environmentName: prod
+    azureServiceConnection: spn-iac-prod
+  ${{ if eq(variables['Build.SourceBranchName'], 'qa') }}:
+    environmentName: qa
+    azureServiceConnection: spn-iac-qa
+  ${{ if and(ne(variables['Build.SourceBranchName'], 'main'), ne(variables['Build.SourceBranchName'], 'qa')) }}:
+    environmentName: dev
+    azureServiceConnection: spn-iac-dev

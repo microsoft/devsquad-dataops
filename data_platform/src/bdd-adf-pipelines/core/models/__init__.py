@@ -1,0 +1,1 @@
+from core.models.service_principal import ServicePrincipal

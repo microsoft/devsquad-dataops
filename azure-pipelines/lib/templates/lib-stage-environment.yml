@@ -1,0 +1,33 @@
+parameters:
+- name: branch
+  type: string
+- name: environment
+  type: string
+- name: libraryDirectory
+  type: string
+  default: $(System.DefaultWorkingDirectory)/src/dataopslib
+- name: artifactFeed
+  type: string
+- name: variableGroupName
+  type: string
+- name: prereleaseAlias
+  type: string
+  default: none
+  values:
+  - alpha
+  - beta
+  - preview
+  - none
+
+stages:
+- stage: publish_${{ parameters.environment }}
+  condition: eq(variables['Build.SourceBranch'], '${{ parameters.branch }}')
+  displayName: 'Package for ${{ parameters.environment }}'
+  jobs:
+  - template: lib-build-publish.yml
+    parameters:
+      libraryDirectory: ${{ parameters.libraryDirectory }}
+      artifactFeed: ${{ parameters.artifactFeed }}
+      variableGroupName: ${{ parameters.variableGroupName }}
+      prereleaseAlias: ${{ parameters.prereleaseAlias }}
+      sourceBranchName: main

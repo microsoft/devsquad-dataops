@@ -1,0 +1,45 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "environment":{
+            "value": "dev"
+        },
+        "location": {
+            "value": "eastus2"
+        },
+        "resourceGroupData":{
+            "value": "rg-dataops-data-dev"
+        },
+        "resourceGroupCompute":{
+            "value": "rg-dataops-compute-dev"
+        },
+        "resourceGroupMachineLearning":{
+            "value": "rg-dataops-ml-dev"
+        },
+        "resourceGroupManagedDatabricks":{
+            "value": "rg-dataops-compute-dbw-dev"
+        },
+        "dataLakeSkuName":{
+            "value": "Standard_LRS"
+        },
+        "keyVaultSecretsAdminObjectId": {
+            "value": "c06d0482-8384-4205-a17f-edd2222dce1b"
+        },
+        "dataFactoryAccountName": {
+            "value": "csu-devsquad"
+        },
+        "dataFactoryProjectName": {
+            "value": "advworks-dataops"
+        },
+        "dataFactoryRepositoryName": {
+            "value": "data_platform"
+        },
+        "dataFactoryCollaborationBranch": {
+            "value": "develop"
+        },
+        "dataFactoryRootFolder": {
+            "value": "/adf"
+        }
+    }
+}

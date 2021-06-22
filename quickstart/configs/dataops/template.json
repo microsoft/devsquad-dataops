@@ -1,0 +1,59 @@
+{
+    "Domain": {
+        "Name": "<project.name>"
+    },
+    "RepoConfiguration": {
+        "RepoName": "<project.name>",
+        "AzureDevOpsOrganizationURI": "https://dev.azure.com/<azureDevOps.organization>",
+        "AzureDevOpsProject": "<project.name>",
+        "TemplateGitUrl": "https://csu-devsquad@dev.azure.com/csu-devsquad/advworks-dataops/_git/hol",
+        "DefaultBranchName": "develop",
+        "MinimumApprovers": "1",
+        "Pipelines": [
+            {
+                "Name": "<project.alias>-iac-ci",
+                "SourceYamlPath": "azure-pipelines/iac/iac-ci.yml",
+                "BuildPolicy": {
+                    "Name": "<project.alias>-iac-ci build policy",
+                    "PathFilter": "/infrastructure-as-code/*"
+                }
+            },
+            {
+                "Name": "<project.alias>-iac-cd",
+                "SourceYamlPath": "azure-pipelines/iac/iac-cd.yml"
+            },
+            {
+                "Name": "<project.alias>-lib-ci",
+                "SourceYamlPath": "azure-pipelines/lib/lib-ci.yml",
+                "BuildPolicy": {
+                    "Name": "<project.alias>-lib-ci build policy",
+                    "PathFilter": "/data_platform/src/dataopslib/dataopslib/*"
+                }
+            },
+            {
+                "Name": "<project.alias>-lib-cd",
+                "SourceYamlPath": "azure-pipelines/lib/lib-cd.yml"
+            },
+            {
+                "Name": "<project.alias>-databricks-ci",
+                "SourceYamlPath": "azure-pipelines/databricks/databricks-ci.yml",
+                "BuildPolicy": {
+                    "Name": "<project.alias>-databricks-ci build policy",
+                    "PathFilter": "/data_platform/notebooks/*"
+                }
+            },
+            {
+                "Name": "<project.alias>-databricks-cd",
+                "SourceYamlPath": "azure-pipelines/databricks/databricks-notebooks-cd.yml"
+            },
+            {
+                "Name": "<project.alias>-databricks-lib-cd",
+                "SourceYamlPath": "azure-pipelines/databricks/databricks-lib-cd.yml"
+            },            
+            {
+                "Name": "<project.alias>-adf-cd",
+                "SourceYamlPath": "azure-pipelines/adf/adf-cd.yml"
+            }
+        ]
+    }
+}
