@@ -1,0 +1,18 @@
+parameters:
+- name: gitversionVersion
+  type: string
+  default: 5.6.6
+- name: gitversionConfigFile
+  type: string
+
+steps:
+- task: gitversion/setup@0
+  displayName: 'Install GitVersion'
+  inputs:
+    versionSpec: '${{ parameters.gitversionVersion }}'
+    
+- task: gitversion/execute@0
+  displayName: 'Execute GitVersion'
+  inputs:
+    useConfigFile: true
+    configFilePath: '${{ parameters.gitversionConfigFile }}'

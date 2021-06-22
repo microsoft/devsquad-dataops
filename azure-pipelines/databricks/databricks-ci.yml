@@ -1,0 +1,29 @@
+trigger: none
+
+variables:
+  NOTEBOOK_WORKING_DIR: $(System.DefaultWorkingDirectory)/notebooks
+
+pool:
+  vmImage: 'Ubuntu-18.04'
+
+jobs:
+- job: 'validate_notebooks'
+  displayName: 'Validate Databricks Notebooks'
+  steps:
+    - task: UsePythonVersion@0
+      inputs:
+        versionSpec: 3.6
+        addToPath: true
+        architecture: 'x64'
+      displayName: 'Use Python Version: 3.6'
+
+    - script: |
+        python -m pip install --upgrade pip
+        pip install flake8
+      displayName: 'Setup Agent'
+      
+    - script: |
+        echo 'Working directory: $(NOTEBOOK_WORKING_DIR)'
+        flake8 ./
+      displayName: 'Validating notebook with flake8'
+      workingDirectory: $(NOTEBOOK_WORKING_DIR)

@@ -1,0 +1,165 @@
+{
+  "$schema": "http://json-schema.org/schema#",
+  "type": "object",
+  "properties": {
+    "version": {
+      "type": "string",
+      "pattern": "1.0.0"
+    },
+    "project": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 30,
+          "pattern": "^\\S+$"
+        },
+        "alias": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 9,
+          "pattern": "^\\S+$"
+        },
+        "location": {
+          "type": "string",
+          "enum": [
+            "eastasia",
+            "southeastasia",
+            "centralus",
+            "eastus",
+            "eastus2",
+            "westus",
+            "northcentralus",
+            "southcentralus",
+            "northeurope",
+            "westeurope",
+            "japanwest",
+            "japaneast",
+            "brazilsouth",
+            "australiaeast",
+            "australiasoutheast",
+            "southindia",
+            "centralindia",
+            "westindia",
+            "jioindiawest",
+            "canadacentral",
+            "canadaeast",
+            "uksouth",
+            "ukwest",
+            "westcentralus",
+            "westus2",
+            "koreacentral",
+            "koreasouth",
+            "francecentral",
+            "francesouth",
+            "australiacentral",
+            "australiacentral2",
+            "uaecentral",
+            "uaenorth",
+            "southafricanorth",
+            "southafricawest",
+            "switzerlandnorth",
+            "switzerlandwest",
+            "germanynorth",
+            "germanywestcentral",
+            "norwaywest",
+            "norwayeast",
+            "brazilsoutheast",
+            "westus3"
+          ]
+        }
+      },
+      "required": [
+        "alias",
+        "location",
+        "name"
+      ]
+    },
+    "servicePrincipals": {
+      "type": "array",
+      "items": {      
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 260
+        },
+      "additionalProperties": false
+    },
+    "azureDevOps": {
+      "type": "object",
+      "properties": {
+        "organization": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 50
+        },
+        "project": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64
+        }
+      },
+      "required": [
+        "organization",
+        "project"
+      ]
+    },
+    "environments": {
+      "type": "object",
+      "patternProperties": {
+        "^[a-z]{2,4}$": {
+          "type": "object",
+          "properties": {
+            "subscriptionId": {
+              "type": "string",
+              "pattern": "^[0-9A-Fa-f]{8}-([0-9A-Fa-f]{4}-){3}[0-9A-Fa-f]{12}$"
+            },
+            "servicePrincipalName": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 260
+            },
+            "serviceConnectionName": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 256
+            }
+          },
+          "required": [
+            "serviceConnectionName",
+            "servicePrincipalName",
+            "subscriptionId"
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "output": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "template": {
+            "type": "string",
+            "pattern": "[^/]+(?:\\.\\w+)?$"
+          },
+          "file": {
+            "type": "string",
+            "pattern": "[^/]+(?:\\.\\w+)?$"
+          }
+        },
+        "required": [
+          "file",
+          "template"
+        ]
+      }
+    }
+  },
+  "required": [
+    "azureDevOps",
+    "environments",
+    "project",
+    "servicePrincipals",
+    "version"
+  ]
+}

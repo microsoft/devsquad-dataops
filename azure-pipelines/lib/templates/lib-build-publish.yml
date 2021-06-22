@@ -1,0 +1,166 @@
+
+parameters:
+- name: libraryDirectory
+  type: string
+  default: $(System.DefaultWorkingDirectory)/src/dataopslib
+- name: artifactFeed
+  type: string
+- name: variableGroupName
+  type: string
+- name: prereleaseAlias
+  type: string
+  default: none
+  values:
+  - alpha
+  - beta
+  - preview
+  - none
+- name: sourceBranchName
+  type: string
+
+jobs:
+  - job: style_test
+    displayName: "Run style guide enforcement and unit tests"
+    steps:
+      - task: UsePythonVersion@0
+        inputs:
+          versionSpec: "3.7"
+
+      - script: pip install -r requirements.txt
+        displayName: "Install requirements"
+        workingDirectory:  ${{ parameters.libraryDirectory }}
+
+      - script: |
+          flake8 ./dataopslib ./samples ./tests --output-file $(System.DefaultWorkingDirectory)/flake8.txt
+          python -m junit_conversor $(System.DefaultWorkingDirectory)/flake8.txt $(System.DefaultWorkingDirectory)/tests-flake8.xml
+        workingDirectory: ${{ parameters.libraryDirectory }}
+        displayName: "Run flake8 for style guide enforcement"
+
+      - script: pytest --ignore=setup.py --junitxml=$(System.DefaultWorkingDirectory)/tests-pytest.xml
+        workingDirectory: ${{ parameters.libraryDirectory }}
+        displayName: "Run pytest"
+
+      - task: PublishTestResults@2
+        inputs:
+          testResultsFormat: 'JUnit'
+          testResultsFiles: '$(System.DefaultWorkingDirectory)/tests-flake8.xml'
+          failTaskOnFailedTests: true
+        condition: succeededOrFailed()
+        displayName: 'Publish flake8 results'
+
+      - task: PublishTestResults@2
+        inputs:
+          testResultsFormat: 'JUnit'
+          testResultsFiles: '$(System.DefaultWorkingDirectory)/tests-pytest.xml'
+          failTaskOnFailedTests: true
+          mergeTestResults: true
+        condition: succeededOrFailed()
+        displayName: 'Publish PyTest results'
+
+  - job: publish
+    displayName: "Build and publish the library"
+    dependsOn: 'style_test'
+    condition: succeeded()
+    steps:
+      - script: az extension add -n azure-devops
+        displayName: 'Install Azure DevOps Extension'
+
+      - script: echo ${AZURE_DEVOPS_CLI_PAT} | az devops login
+        env:
+          AZURE_DEVOPS_CLI_PAT: $(System.AccessToken)
+        displayName: 'Login Azure DevOps Extension'
+
+      - script: az devops configure --defaults organization="$(System.TeamFoundationCollectionUri)" project="$(System.TeamProject)"
+        displayName: 'Set default Azure DevOps organization and project'
+
+      - script: |
+          groupId=$(az pipelines variable-group list --query "[?name=='${{ parameters.variableGroupName }}'].id" -o tsv)
+
+          if [ -z "$groupId" ]; then
+            echo "The variable group '${{ parameters.variableGroupName }}' was not found."
+            exit 1
+          fi
+
+          major=$(az pipelines variable-group show --group-id $groupId --query "variables.MAJOR.value" -o tsv)
+
+          if [ -z "$major" ]; then
+            echo "The MAJOR variable was not found on the variable group '${{ parameters.variableGroupName }}'."
+            exit 1
+          fi
+
+          minor=$(az pipelines variable-group show --group-id $groupId --query "variables.MINOR.value" -o tsv)
+
+          if [ -z "$minor" ]; then
+            echo "The MINOR variable was not found on the variable group '${{ parameters.variableGroupName }}'."
+            exit 1
+          fi
+
+          patch=$(az pipelines variable-group show --group-id $groupId --query "variables.PATCH.value" -o tsv)
+
+          if [ -z "$patch" ]; then
+            echo "The PATCH variable was not found on the variable group '${{ parameters.variableGroupName }}'."
+            exit 1
+          fi
+
+          if [[ ${{ parameters.sourceBranchName }} == *"feature"* ]]; then
+            ((minor=minor+1))
+          else
+            if [[ ${{ parameters.sourceBranchName }} == *"patch"* ]]; then
+              ((patch=patch+1))
+            else
+              if [[ ${{ parameters.sourceBranchName }} != "qa" && ${{ parameters.sourceBranchName }} != "main" && ${{ parameters.sourceBranchName }} != "" ]]; then
+                echo "The branch name '${{ parameters.sourceBranchName }}' is not at a valid format for features and patches."
+                exit 1
+              fi
+            fi
+          fi
+
+          if [ ${{ parameters.prereleaseAlias }} == "none" ]; then
+            version="$major.$minor.$patch"
+          else
+            version="$major.$minor.$patch-${{ parameters.prereleaseAlias }}.$(Build.BuildId)"
+          fi
+
+          echo "##vso[task.setvariable variable=variable_group_id]$groupId"
+          echo "##vso[task.setvariable variable=minor]$minor"
+          echo "##vso[task.setvariable variable=patch]$patch"
+          echo "##vso[task.setvariable variable=package_version]$version"
+        displayName: 'Define semantic version'
+
+      - script: |
+          echo "Prerelease version: $package_version"
+        displayName: 'Prerelease version'
+        env:
+          package_version: $(package_version)
+
+      - task: UsePythonVersion@0
+        inputs:
+          versionSpec: "3.7"
+
+      - script: python -m pip install -U pip setuptools wheel twine
+        displayName: "Install build tools"
+
+      - script: |
+          python setup.py bdist_wheel
+        displayName: "Build the library"
+        workingDirectory: ${{ parameters.libraryDirectory }}
+        env:
+          package_version: $(package_version)
+
+      - task: TwineAuthenticate@0
+        displayName: "Configure twine authentication"
+        inputs:
+          artifactFeeds: ${{ parameters.artifactFeed }}
+      
+      - script: twine upload --skip-existing -r "${{ parameters.artifactFeed }}" --config-file $(PYPIRC_PATH) dist/*
+        workingDirectory: ${{ parameters.libraryDirectory }}
+        displayName: "Publish the library"
+
+      - script: |
+          az pipelines variable-group variable update --group-id $groupId --name MINOR --value $minor
+          az pipelines variable-group variable update --group-id $groupId --name PATCH --value $patch
+        displayName: "Update versions on variable group"
+        env:
+          groupId: $(variable_group_id)
+          minor: $(minor)
+          patch: $(patch)

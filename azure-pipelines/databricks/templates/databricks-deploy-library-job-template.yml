@@ -1,0 +1,45 @@
+parameters:
+- name: environment
+  type: string
+- name: azureServiceConnection
+  type: string
+- name: branch
+  type: string
+
+stages:
+- stage: publish_library_${{ parameters.environment }}
+  #condition: eq(variables['Build.SourceBranch'], '${{ parameters.branch }}')
+  displayName: 'Deploy to ${{ parameters.environment }} Databricks'
+  jobs:
+  - deployment: publish_library_${{ parameters.environment }}
+    displayName: 'Deploy to ${{ parameters.environment }} Databricks'
+    pool:
+      vmImage: 'Ubuntu-18.04'
+    environment: databricks-${{ parameters.environment }}
+    variables:
+    - group: dataops-iac-cd-output-${{ parameters.environment }}
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - task: DownloadPackage@1
+            inputs:
+              packageType: 'pypi'
+              feed: '$(System.TeamProjectId)/lib-packages'
+              definition: 'dataopslib'
+              version: 'latest'
+              downloadPath: '$(System.ArtifactsDirectory)/lib-library'
+          - template: ./databricks-setup-environment-template.yml
+          - template: ./databricks-auth-step-template.yml
+            parameters:
+              azureServiceConnection: ${{ parameters.azureServiceConnection }}
+          - script: | 
+              echo "DBFS URL ${DATABRICKS_HOST}"
+              echo "Copy library in cluster from ${PYPI_REPO} to ${DATABRICKS_LIB_PATH}"
+              databricks fs cp --overwrite -r "${PYPI_REPO}" "${DATABRICKS_LIB_PATH}"
+            env:
+              DATABRICKS_HOST: https://$(databricksWorkspaceUrl)
+              DATABRICKS_TOKEN: $(DATABRICKS_TOKEN)
+              PYPI_REPO: $(System.ArtifactsDirectory)/lib-library
+              DATABRICKS_LIB_PATH: dbfs:/FileStore/pypi-libs
+            displayName: 'Copy and install python library'

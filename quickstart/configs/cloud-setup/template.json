@@ -1,0 +1,38 @@
+{
+    "version": "1.0.0",
+    "project": {
+        "name": "<projectName>",
+        "alias": "<projectAlias>",
+        "location": "eastus2"
+    },
+    "servicePrincipals": [
+        "SP-<projectName>-DevTest"
+    ],
+    "azureDevOps": {
+        "organization": "<orgName>",
+        "project": "<projectName>"
+    },
+    "environments": {
+        "dev": {
+            "subscriptionId": "<subscriptionId>",
+            "servicePrincipalName": "SP-<projectName>-DevTest",
+            "serviceConnectionName": "sp-iac-dev"
+        },
+        "qa": {
+            "subscriptionId": "<subscriptionId>",
+            "servicePrincipalName": "SP-<projectName>-DevTest",
+            "serviceConnectionName": "sp-iac-qa"
+        },
+        "prod": {
+            "subscriptionId": "<subscriptionId>",
+            "servicePrincipalName": "SP-<projectName>-DevTest",
+            "serviceConnectionName": "sp-iac-prod"
+        }
+    },
+    "output": [
+        {
+            "template": "quickstart/configs/dataops/template.json",
+            "file": "quickstart/outputs/<projectName>.json"            
+        }
+    ]
+}

@@ -1,0 +1,102 @@
+parameters:
+- name: environment
+  type: string
+- name: azureServiceConnection
+  type: string
+- name: location
+  type: string
+- name: solutionName
+  type: string
+
+stages:
+- stage: deploy
+  displayName: 'Deploy to ${{ parameters.environment }}'
+  jobs:
+  - deployment: deploy_arm
+    displayName: 'Deploy ARM to ${{ parameters.environment }}'
+    condition: succeeded()
+    pool:
+      vmImage: 'Ubuntu-20.04'
+    variables:
+      azPowershellVersion: 5.5.0
+    environment: ${{ parameters.environment }}
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - checkout: self
+          - template: step.install-gitversion.yml
+            parameters:
+              gitversionConfigFile: $(Build.SourcesDirectory)/GitVersion.yml
+          - task: AzurePowerShell@4
+            displayName: 'Deploy ARM'
+            inputs:
+              azureSubscription: ${{ parameters.azureServiceConnection }}
+              scriptType: filePath
+              scriptPath: scripts/Deploy.ps1
+              scriptArguments: >
+                -Environment ${{ parameters.environment }}
+                -Version $(GitVersion.SemVer)
+                -Location "${{ parameters.location }}"
+                -SolutionName "${{ parameters.solutionName }}"
+                -DeploymentOutputFile "armOutput.json"
+              azurePowerShellVersion: 'OtherVersion'
+              preferredAzurePowerShellVersion: $(azPowershellVersion)
+          - task: PowerShell@2
+            displayName: 'Publish Outputs'
+            inputs:
+              filePath: scripts/PublishOutputs.ps1
+              arguments: >
+                -AzureDevOpsPAT "$(System.AccessToken)"
+                -AzureDevOpsOrganization $(System.TeamFoundationCollectionUri)
+                -AzureDevOpsProject "$(System.TeamProject)"
+                -GroupName "${{ parameters.solutionName }}-iac-cd-output-${{ parameters.environment }}"
+                -DeploymentOutputFile "armOutput.json"
+              pwsh: true
+              showWarnings: true
+            env:
+              AzureDevOpsPAT: $(System.AccessToken)
+  
+  - deployment: deploy_dbw_clusters
+    displayName: 'Deploy DBW Clusters to ${{ parameters.environment }}'
+    condition: succeeded()
+    dependsOn: deploy_arm
+    pool:
+      vmImage: 'Ubuntu-20.04'
+    environment: ${{ parameters.environment }}
+    variables:
+    - group: dataops-iac-cd-output-${{ parameters.environment }}
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - checkout: self
+          - template: step.install-databricks-cli.yml
+            parameters:
+              azureServiceConnection: ${{ parameters.azureServiceConnection }}
+          - task: PowerShell@2
+            displayName: Deploy DBW Clusters
+            inputs:
+              pwsh: true
+              targetType: 'filePath'
+              filePath: scripts/DatabricksClusters.ps1
+              arguments: >
+                -Environment ${{ parameters.environment }}
+                -DeploymentOutputFile "dbwOutput.json"
+            env:
+              DATABRICKS_HOST: https://$(databricksWorkspaceUrl)
+              DATABRICKS_TOKEN: $(DATABRICKS_TOKEN)
+          - task: PowerShell@2
+            displayName: 'Publish Outputs'
+            inputs:
+              filePath: scripts/PublishOutputs.ps1
+              arguments: >
+                -AzureDevOpsPAT "$(System.AccessToken)"
+                -AzureDevOpsOrganization $(System.TeamFoundationCollectionUri)
+                -AzureDevOpsProject "$(System.TeamProject)"
+                -GroupName "${{ parameters.solutionName }}-iac-dbw-cd-output-${{ parameters.environment }}"
+                -DeploymentOutputFile "dbwOutput.json"
+              pwsh: true
+              showWarnings: true
+            env:
+              AzureDevOpsPAT: $(System.AccessToken)

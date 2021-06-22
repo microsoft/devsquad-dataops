@@ -1,0 +1,13 @@
+parameters:
+- name: ttkFolder
+  type: string
+- name: ttkUri
+  type: string
+  default: https://aka.ms/arm-ttk-latest
+
+steps:
+- pwsh: |
+    New-Item '${{ parameters.ttkFolder }}' -ItemType Directory
+    Invoke-WebRequest -Uri '${{ parameters.ttkUri }}' -OutFile '${{ parameters.ttkFolder }}/arm-ttk.zip' -Verbose
+    Expand-Archive -Path '${{ parameters.ttkFolder }}/*.zip' -DestinationPath '${{ parameters.ttkFolder }}' -Verbose
+  displayName:  'Install ARM Template Test Tookit'

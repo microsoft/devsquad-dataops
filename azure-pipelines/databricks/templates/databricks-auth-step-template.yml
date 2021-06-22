@@ -1,0 +1,19 @@
+parameters:
+- name: azureServiceConnection
+  type: string
+
+steps:
+
+- task: AzureCLI@1
+  displayName: Get Databricks token
+  inputs:
+    azureSubscription: ${{ parameters.azureServiceConnection }}
+    scriptLocation: inlineScript
+    inlineScript: |
+      databricks_resource_id="2ff814a6-3304-4ab8-85cb-cd0e6f879c1d" # This is the official databricks resource id
+      accessToken=$(curl -X GET -H 'Content-Type: application/x-www-form-urlencoded' \
+        -d "grant_type=client_credentials&client_id=$servicePrincipalId&resource=$databricks_resource_id&client_secret=$servicePrincipalKey" \
+        https://login.microsoftonline.com/$tenantId/oauth2/token \
+        | jq -r .access_token)
+      echo "##vso[task.setvariable variable=DATABRICKS_TOKEN;issecret=true]$accessToken"
+    addSpnToEnvironment: true

@@ -1,0 +1,11 @@
+
+include setup.py
+include dataopslib/spark/data_quality.py
+include dataopslib/spark/data_transformation.py
+include dataopslib/spark/functions.py
+include dataopslib/schemas.py
+
+recursive-include tests *
+recursive-include samples *
+recursive-exclude * __pycache__
+recursive-exclude * *.py[co]

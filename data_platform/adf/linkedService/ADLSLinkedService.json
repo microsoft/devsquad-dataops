@@ -1,0 +1,10 @@
+{
+	"name": "ADLSLinkedService",
+	"properties": {
+		"annotations": [],
+		"type": "AzureBlobFS",
+		"typeProperties": {
+			"url": "https://lakedataopseastus2dev.dfs.core.windows.net"
+		}
+	}
+}
