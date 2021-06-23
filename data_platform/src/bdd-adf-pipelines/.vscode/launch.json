@@ -1,0 +1,15 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Python: Behave",
+      "type": "python",
+      "request": "launch",
+      "module": "behave",
+      "console": "integratedTerminal",
+      "args": [
+        "${file}"
+      ]
+    },
+  ]
+}

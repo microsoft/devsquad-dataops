@@ -1,0 +1,38 @@
+trigger:
+  batch: true
+  branches:
+    include:
+    - develop
+    - qa
+    - main
+  paths:
+    include:
+    - src/dataopslib/dataopslib
+
+variables:
+  artifactFeed: advworks-dataops/lib-packages
+  variableGroupName: lib-versions
+
+stages:
+- template: templates/lib-stage-environment.yml
+  parameters:
+    branch: 'refs/heads/develop'
+    environment: dev
+    prereleaseAlias: beta
+    variableGroupName: $(variableGroupName)
+    artifactFeed: $(artifactFeed)
+
+- template: templates/lib-stage-environment.yml
+  parameters:
+    branch: 'refs/heads/qa'
+    environment: qa
+    prereleaseAlias: preview
+    variableGroupName: $(variableGroupName)
+    artifactFeed: $(artifactFeed)    
+
+- template: templates/lib-stage-environment.yml
+  parameters:
+    branch: 'refs/heads/main'
+    environment: prod
+    variableGroupName: $(variableGroupName)
+    artifactFeed: $(artifactFeed)

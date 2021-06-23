@@ -1,0 +1,4 @@
+trigger: none
+
+stages:
+- template: templates/stage.validate.yml

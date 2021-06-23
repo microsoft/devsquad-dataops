@@ -1,0 +1,12 @@
+variables:
+  iacCdVariableGroupPrefix: 'dataops-iac-cd-output'
+  iacCdDbwVariableGroupPrefix: 'dataops-iac-dbw-cd-output'
+  ${{ if eq(variables['Build.SourceBranchName'], 'main') }}:
+    environment: prod
+    azureServiceConnection: spn-iac-prod
+  ${{ if eq(variables['Build.SourceBranchName'], 'qa') }}:    
+    environment: qa
+    azureServiceConnection: spn-iac-qa
+  ${{ if and(ne(variables['Build.SourceBranchName'], 'main'), ne(variables['Build.SourceBranchName'], 'qa')) }}:
+    environment: dev
+    azureServiceConnection: spn-iac-dev

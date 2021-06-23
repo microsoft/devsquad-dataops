@@ -1,0 +1,67 @@
+parameters:
+  - name: environment
+    type: string
+  - name: iacCdVariableGroupPrefix
+    type: string
+  - name: iacCdDbwVariableGroupPrefix
+    type: string
+  - name: workingDirectory
+    type: string
+
+stages:
+- stage: build_adf
+  displayName: "Build the ARM Template"
+  variables:
+  - group: '${{ parameters.iacCdVariableGroupPrefix }}-${{ parameters.environment }}'
+  - group: ${{ parameters.iacCdDbwVariableGroupPrefix }}-${{ parameters.environment }}
+  jobs:
+    - job: build
+      displayName: "Build Data Factory resources"
+      steps:
+      - task: AzureCLI@1
+        displayName: "SETUP: Set Azure Credentials"
+        inputs:
+          azureSubscription: spn-iac-${{ parameters.environment }}
+          scriptLocation: inlineScript
+          inlineScript: |
+            set -eu
+            subscriptionId=$(az account show --query id -o tsv)
+            echo "##vso[task.setvariable variable=SUBSCRIPTION_ID]$subscriptionId"
+          addSpnToEnvironment: true
+          
+      # Installs Node and the npm packages saved in your package.json file in the build
+      - task: NodeTool@0
+        inputs:
+          versionSpec: '10.x'
+        displayName: 'Install Node.js'
+      - task: Npm@1
+        inputs:
+          command: 'install'
+          workingDir: ${{ parameters.workingDirectory }}
+          verbose: true
+        displayName: 'Install npm package'
+
+      # Validates all of the Data Factory resources in the repository. You'll get the same validation errors as when "Validate All" is selected.
+      # Enter the appropriate subscription and name for the source factory.
+      - task: Npm@1
+        inputs:
+          command: 'custom'
+          workingDir: ${{ parameters.workingDirectory }}
+          customCommand: 'run build validate $(Build.Repository.LocalPath)/${{ parameters.workingDirectory }} /subscriptions/$(SUBSCRIPTION_ID)/resourceGroups/$(resourceGroupCompute)/providers/Microsoft.DataFactory/factories/$(dataFactoryName)'
+        displayName: 'Validate'
+
+      # Validate and then generate the ARM template into the destination folder, which is the same as selecting "Publish" from the UX.
+      # The ARM template generated isn't published to the live version of the factory. Deployment should be done by using a CI/CD pipeline. 
+      - task: Npm@1
+        inputs:
+          command: 'custom'
+          workingDir: ${{ parameters.workingDirectory }}
+          customCommand: 'run build export $(Build.Repository.LocalPath)/${{ parameters.workingDirectory }} /subscriptions/$(SUBSCRIPTION_ID)/resourceGroups/$(resourceGroupCompute)/providers/Microsoft.DataFactory/factories/$(dataFactoryName) "../ArmTemplates"'
+        displayName: 'Validate and Generate ARM template'
+
+      # Publish the artifact to be used as a source for a release pipeline.
+      - task: PublishPipelineArtifact@1
+        inputs:
+          targetPath: '$(Build.Repository.LocalPath)/ArmTemplates'
+          artifact: 'ArmTemplates'
+          publishLocation: 'pipeline'

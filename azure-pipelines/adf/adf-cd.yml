@@ -1,0 +1,41 @@
+# Sample YAML file to validate and export an ARM template into a build artifact
+# Requires a package.json file located in the target repository
+
+trigger:
+  branches:
+    include:
+    - main
+    - qa
+    - develop
+  paths:
+    include:
+    - adf
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+- template: templates/variable.environment.yml
+  
+stages:
+- template: templates/adf/build.yml
+  parameters:
+    environment: ${{variables.environment}}
+    iacCdVariableGroupPrefix: ${{variables.iacCdVariableGroupPrefix}}
+    iacCdDbwVariableGroupPrefix: ${{variables.iacCdDbwVariableGroupPrefix}}
+    workingDirectory: 'adf'
+
+- template: templates/adf/deploy.yml
+  parameters:
+    environment: ${{variables.environment}}
+    iacCdVariableGroupPrefix: ${{variables.iacCdVariableGroupPrefix}}
+    iacCdDbwVariableGroupPrefix: ${{variables.iacCdDbwVariableGroupPrefix}}
+    pipelineArtifactDirectory: $(System.DefaultWorkingDirectory)/_dataops-adf-cd
+
+- template: templates/adf/test.yml
+  parameters:
+    environment: ${{variables.environment}}
+    iacCdVariableGroupPrefix: ${{variables.iacCdVariableGroupPrefix}}
+    iacCdDbwVariableGroupPrefix: ${{variables.iacCdDbwVariableGroupPrefix}}
+    workingDirectory: src/bdd-adf-pipelines
+    testResultsDirectory: $(System.DefaultWorkingDirectory)/results

@@ -1,0 +1,40 @@
+parameters:
+- name: environment
+  type: string
+- name: azureServiceConnection
+  type: string
+- name: location
+  type: string
+- name: solutionName
+  type: string
+
+stages:
+- stage: plan
+  displayName: 'Plan for ${{ parameters.environment }}'
+  jobs:
+  - job: plan
+    displayName: 'Plan for ${{ parameters.environment }}'
+    pool:
+      vmImage: 'Ubuntu-20.04'
+    variables:
+      azPowershellVersion: 5.5.0
+    steps:
+    - template: step.install-gitversion.yml
+      parameters:
+        gitversionConfigFile: $(Build.SourcesDirectory)/infrastructure-as-code/GitVersion.yml
+    - task: AzurePowerShell@4
+      displayName: 'Plan'
+      inputs:
+        azureSubscription: ${{ parameters.azureServiceConnection }}
+        scriptType: filePath
+        scriptPath: infrastructure-as-code/scripts/Plan.ps1
+        scriptArguments: >
+          -Environment ${{ parameters.environment }}
+          -Location "${{ parameters.location }}"
+          -SolutionName "${{ parameters.solutionName }}"
+          -Version $(GitVersion.SemVer)
+          -VersionDescription "$(Build.SourceVersionMessage)"
+          -VersionBuildId $(Build.BuildId)
+          -VersionAuthor $(Build.RequestedForEmail)
+        azurePowerShellVersion: 'OtherVersion'
+        preferredAzurePowerShellVersion: $(azPowershellVersion)

@@ -1,0 +1,20 @@
+stages:
+- stage: validate
+  displayName: 'Validate'
+  jobs:
+  - job: lint
+    displayName: 'Lint'
+    pool:
+      vmImage: 'Ubuntu-20.04'
+    steps:
+    - template: step.install-arm-template-toolkit.yml
+      parameters:
+        ttkFolder: ./ttk
+    - task: PowerShell@2
+      displayName: Run ARM Template Test Tookit
+      inputs:
+        pwsh: true
+        targetType: 'filePath'
+        filePath: infrastructure-as-code/scripts/Lint.ps1
+        arguments: >
+          -TtkFolder "./ttk"

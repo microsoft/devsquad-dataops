@@ -1,0 +1,59 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "location": {
+      "type": "string"
+    },
+    "dataLakeName": {
+      "type": "string"
+    },
+    "dataLakeSkuName": {
+      "type": "string",
+      "defaultValue": "Standard_LRS",
+      "allowedValues": [
+        "Standard_LRS",
+        "Standard_GRS",
+        "Standard_ZRS"
+      ],
+      "metadata": {
+        "description": "Storage Account SKU"
+      }
+    }
+  },
+  "variables": {
+    "datalakeFileSystems": [ "landing", "trusted", "refined" ]
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Storage/storageAccounts",
+      "apiVersion": "2019-06-01",
+      "name": "[parameters('dataLakeName')]",
+      "location": "[parameters('location')]",
+      "sku": {
+        "name": "[parameters('dataLakeSkuName')]",
+        "tier": "Standard"
+      },
+      "kind": "StorageV2",
+      "properties": {
+        "accessTier": "Hot",
+        "isHnsEnabled": true,
+        "supportsHttpsTrafficOnly": true,
+        "minimumTlsVersion": "TLS1_2"
+      }
+    },
+    {
+      "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
+      "apiVersion": "2019-06-01",
+      "name": "[concat(parameters('dataLakeName'), '/default/', variables('datalakeFileSystems')[copyIndex()])]",
+      "copy": {
+        "name": "lakeContainersCopy",
+        "count": "[length(variables('datalakeFileSystems'))]"
+      },
+      "dependsOn": [
+        "[parameters('dataLakeName')]"
+      ]
+    }
+  ],
+  "outputs": {}
+}

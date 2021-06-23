@@ -1,0 +1,11 @@
+Year,Month,Day,Time,TimeZone,SkyCondition,Visibility,WeatherType,DryBulbFarenheit,DryBulbCelsius,WetBulbFarenheit,WetBulbCelsius,DewPointFarenheit,DewPointCelsius,RelativeHumidity,WindSpeed,WindDirection,ValueForWindCharacter,StationPressure,PressureTendency,PressureChange,SeaLevelPressure,RecordType,HourlyPrecip,Altimeter,AirportCode,DISPLAY_AIRPORT_NAME,LATITUDE,LONGITUDE
+2013,4,1,56,-4,FEW018 SCT044 BKN070,10.00,-RA,76,24.4,74,23.3,73,22.8,90,13,080,,30.06,,,30.06,AA,T,30.07,SJU,Luis Munoz Marin International,18.43944444,-66.00222222
+2013,4,1,156,-4,FEW037 SCT070,10.00,"",76,24.4,73,22.5,71,21.7,85,10,090,,30.05,6,17,30.05,AA,"",30.06,SJU,Luis Munoz Marin International,18.43944444,-66.00222222
+2013,4,1,256,-4,FEW037 SCT070,10.00,"",76,24.4,73,22.5,71,21.7,85,9,100,,30.03,,,30.03,AA,"",30.04,SJU,Luis Munoz Marin International,18.43944444,-66.00222222
+2013,4,1,356,-4,FEW025 SCT070,10.00,"",76,24.4,72,22.2,70,21.1,82,9,100,,30.02,,,30.03,AA,"",30.03,SJU,Luis Munoz Marin International,18.43944444,-66.00222222
+2013,4,1,456,-4,FEW025,10.00,"",76,24.4,72,22.2,70,21.1,82,7,110,,30.03,5,4,30.04,AA,"",30.04,SJU,Luis Munoz Marin International,18.43944444,-66.00222222
+2013,4,1,556,-4,FEW025 SCT080,10.00,"",76,24.4,71,21.8,69,20.6,79,7,100,,30.04,,,30.05,AA,"",30.05,SJU,Luis Munoz Marin International,18.43944444,-66.00222222
+2013,4,1,656,-4,FEW028 BKN080,10.00,"",77,25.0,71,21.7,68,20.0,74,9,110,,30.07,,,30.07,AA,"",30.08,SJU,Luis Munoz Marin International,18.43944444,-66.00222222
+2013,4,1,756,-4,FEW028 BKN080,10.00,"",79,26.1,72,22.4,69,20.6,72,13,100,,30.09,3,20,30.10,AA,"",30.10,SJU,Luis Munoz Marin International,18.43944444,-66.00222222
+2013,4,1,856,-4,FEW030 BKN080,10.00,"",82,27.8,73,22.9,69,20.6,65,14,100,21,30.11,,,30.11,AA,"",30.12,SJU,Luis Munoz Marin International,18.43944444,-66.00222222
+2013,4,1,956,-4,SCT035 BKN090,10.00,"",83,28.3,74,23.0,69,20.6,63,16,090,23,30.11,,,30.12,AA,"",30.12,SJU,Luis Munoz Marin International,18.43944444,-66.00222222

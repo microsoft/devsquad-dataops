@@ -1,0 +1,42 @@
+parameters:
+- name: environment
+  type: string
+- name: azureServiceConnection
+  type: string
+- name: solutionName
+  type: string
+
+stages:
+- stage: test
+  displayName: 'Acceptance Test for ${{ parameters.environment }}'
+  jobs:
+  - job: test
+    displayName: 'Acceptance Test for ${{ parameters.environment }}'
+    pool:
+      vmImage: 'Ubuntu-20.04'
+    variables:
+      azPowershellVersion: 5.5.0
+    steps:
+    - task: AzurePowerShell@4
+      displayName: 'Acceptance Test'
+      inputs:
+        azureSubscription: ${{ parameters.azureServiceConnection }}
+        scriptType: filePath
+        scriptPath: $(Build.SourcesDirectory)/infrastructure-as-code/scripts/AcceptanceTest.ps1
+        scriptArguments: >
+          -AzureDevOpsPAT "$(System.AccessToken)"
+          -AzureDevOpsOrganization $(System.TeamFoundationCollectionUri)
+          -AzureDevOpsProject "$(System.TeamProject)"
+          -SolutionName "${{ parameters.solutionName }}"
+          -Environment ${{ parameters.environment }}
+        azurePowerShellVersion: 'OtherVersion'
+        preferredAzurePowerShellVersion: $(azPowershellVersion)
+      env:
+        AzureDevOpsPAT: $(System.AccessToken)
+    - task: PublishTestResults@2
+      displayName: 'Pester Acceptance Tests'
+      inputs:
+        testResultsFormat: 'NUnit'
+        testResultsFiles: '**/testResults.xml' 
+        failTaskOnFailedTests: true
+        testRunTitle: 'Pester Acceptance Tests (${{ parameters.environment }})'

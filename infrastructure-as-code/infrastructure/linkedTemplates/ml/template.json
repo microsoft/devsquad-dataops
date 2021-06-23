@@ -1,0 +1,128 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "location": {
+      "type": "string"
+    },
+    "amlWorkspaceName": {
+        "type": "string",
+        "metadata": {
+            "description": "Machine Learning Service workspace"
+        }
+    },
+    "amlKeyVaultName": {
+        "type": "string",
+        "metadata": {
+            "description": "Key Vault associated with the Machine Learning Service workspace"
+        }
+    },
+    "amlStorageAccountName": {
+        "type": "string",
+        "metadata": {
+            "description": "Storage Account associated with the Machine Learning Service workspace"
+        }
+    },
+    "amlApplicationInsightsName": {
+        "type": "string",
+        "metadata": {
+            "description": "Application Insights associated with the Machine Learning Service workspace"
+        }
+    },
+    "amlContainerRegistryName": {
+        "type": "string",
+        "metadata": {
+            "description": "Container Registry associated with the Machine Learning Service workspace"
+        }
+    }
+  },
+  "variables": {
+    "amlStorageAccountType": "Standard_LRS",
+    "tenantId": "[subscription().tenantId]"
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Storage/storageAccounts",
+      "apiVersion": "2018-07-01",
+      "name": "[parameters('amlStorageAccountName')]",
+      "location": "[parameters('location')]",
+      "sku": {
+        "name": "[variables('amlStorageAccountType')]"
+      },
+      "kind": "StorageV2",
+      "properties": {
+        "encryption": {
+          "services": {
+            "blob": {
+              "enabled": true
+            },
+            "file": {
+              "enabled": true
+            }
+          },
+          "keySource": "Microsoft.Storage"
+        },
+        "supportsHttpsTrafficOnly": true
+      }
+    },
+    {
+      "type": "Microsoft.KeyVault/vaults",
+      "apiVersion": "2018-02-14",
+      "name": "[parameters('amlKeyVaultName')]",
+      "location": "[parameters('location')]",
+      "properties": {
+        "tenantId": "[variables('tenantId')]",
+        "sku": {
+          "name": "standard",
+          "family": "A"
+        },
+        "accessPolicies": [
+        ]
+      }
+    },
+    {
+      "type": "Microsoft.Insights/components",
+      "apiVersion": "2015-05-01",
+      "name": "[parameters('amlApplicationInsightsName')]",
+      "location": "[parameters('location')]",
+      "kind": "web",
+      "properties": {
+        "Application_Type": "web"
+      }
+    },
+    {
+      "type": "Microsoft.ContainerRegistry/registries",
+      "apiVersion": "2017-10-01",
+      "name": "[parameters('amlContainerRegistryName')]",
+      "location": "[parameters('location')]",
+      "sku": {
+        "name": "Standard"
+      },
+      "properties": {
+        "adminUserEnabled": true
+      }
+    },
+    {
+      "type": "Microsoft.MachineLearningServices/workspaces",
+      "apiVersion": "2020-08-01",
+      "name": "[parameters('amlWorkspaceName')]",
+      "location": "[parameters('location')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Storage/storageAccounts', parameters('amlStorageAccountName'))]",
+        "[resourceId('Microsoft.KeyVault/vaults', parameters('amlKeyVaultName'))]",
+        "[resourceId('Microsoft.Insights/components', parameters('amlApplicationInsightsName'))]",
+        "[resourceId('Microsoft.ContainerRegistry/registries', parameters('amlContainerRegistryName'))]"
+      ],
+      "identity": {
+        "type": "systemAssigned"
+      },
+      "properties": {
+        "friendlyName": "[parameters('amlWorkspaceName')]",
+        "keyVault": "[resourceId('Microsoft.KeyVault/vaults',parameters('amlKeyVaultName'))]",
+        "applicationInsights": "[resourceId('Microsoft.Insights/components',parameters('amlApplicationInsightsName'))]",
+        "containerRegistry": "[resourceId('Microsoft.ContainerRegistry/registries',parameters('amlContainerRegistryName'))]",
+        "storageAccount": "[resourceId('Microsoft.Storage/storageAccounts/',parameters('amlStorageAccountName'))]"
+      }
+    }
+  ]
+}

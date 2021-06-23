@@ -1,0 +1,10 @@
+{
+	"name": "AzureKeyVaultLinkedService",
+	"properties": {
+		"annotations": [],
+		"type": "AzureKeyVault",
+		"typeProperties": {
+			"baseUrl": "https://kv-dataops-eastus2-dev.vault.azure.net/"
+		}
+	}
+}
