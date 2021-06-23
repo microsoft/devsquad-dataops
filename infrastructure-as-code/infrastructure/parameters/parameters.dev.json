@@ -33,13 +33,13 @@
             "value": "advworks-dataops"
         },
         "dataFactoryRepositoryName": {
-            "value": "data_platform"
+            "value": "hol"
         },
         "dataFactoryCollaborationBranch": {
             "value": "develop"
         },
         "dataFactoryRootFolder": {
-            "value": "/adf"
+            "value": "data_platform/adf"
         }
     }
 }

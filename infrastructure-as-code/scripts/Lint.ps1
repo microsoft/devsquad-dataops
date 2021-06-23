@@ -1,6 +1,6 @@
 param(
     [string] $TtkFolder = "./ttk",
-    [string] $SolutionTemplateFolder = "./infrastructure"
+    [string] $SolutionTemplateFolder = "./infrastructure-as-code/infrastructure"
 )
 
 $ErrorActionPreference = "Continue"
