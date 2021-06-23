@@ -15,6 +15,6 @@ stages:
       inputs:
         pwsh: true
         targetType: 'filePath'
-        filePath: scripts/Lint.ps1
+        filePath: infrastructure-as-code/scripts/Lint.ps1
         arguments: >
           -TtkFolder "./ttk"

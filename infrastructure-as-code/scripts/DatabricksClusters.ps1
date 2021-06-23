@@ -1,6 +1,6 @@
 param(
     [Parameter(Mandatory)] [string] [ValidateSet("dev", "qa", "prod", "sandbox")] $Environment,
-    [string] $ClustersPath = "./databricks/$Environment",
+    [string] $ClustersPath = "./infrastructure-as-code/databricks/$Environment",
     [string] $DeploymentOutputFile,
     [string] $DatabricksWorkspaceHost
 )

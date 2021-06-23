@@ -22,7 +22,7 @@ stages:
       inputs:
         azureSubscription: ${{ parameters.azureServiceConnection }}
         scriptType: filePath
-        scriptPath: $(Build.SourcesDirectory)/scripts/AcceptanceTest.ps1
+        scriptPath: $(Build.SourcesDirectory)/infrastructure-as-code/scripts/AcceptanceTest.ps1
         scriptArguments: >
           -AzureDevOpsPAT "$(System.AccessToken)"
           -AzureDevOpsOrganization $(System.TeamFoundationCollectionUri)

@@ -21,13 +21,13 @@ stages:
     steps:
     - template: step.install-gitversion.yml
       parameters:
-        gitversionConfigFile: $(Build.SourcesDirectory)/GitVersion.yml
+        gitversionConfigFile: $(Build.SourcesDirectory)/infrastructure-as-code/GitVersion.yml
     - task: AzurePowerShell@4
       displayName: 'Plan'
       inputs:
         azureSubscription: ${{ parameters.azureServiceConnection }}
         scriptType: filePath
-        scriptPath: scripts/Plan.ps1
+        scriptPath: infrastructure-as-code/scripts/Plan.ps1
         scriptArguments: >
           -Environment ${{ parameters.environment }}
           -Location "${{ parameters.location }}"

@@ -31,3 +31,7 @@ CreateAzDevOpsRepoCommentPolicy  -RepoInfo $repoInfo -RepoConfiguration $config.
 CreateAzDevOpsYamlPipelines -RepoConfiguration $config.RepoConfiguration -Verbose:$VerbosePreference
 
 CreateAzDevOpsRepoBuildPolicy -RepoInfo $repoInfo -RepoConfiguration $config.RepoConfiguration -Verbose:$VerbosePreference
+
+CreateAzureDevOpsVariableGroup -VariableGroupName "dataops-iac-cd-output-dev"
+CreateAzureDevOpsVariableGroup -VariableGroupName "dataops-iac-cd-output-qa"
+CreateAzureDevOpsVariableGroup -VariableGroupName "dataops-iac-cd-output-prod"

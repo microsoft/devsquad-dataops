@@ -3,7 +3,7 @@ param(
     [Parameter(Mandatory)] [string] $Version,
     [Parameter(Mandatory)] [string] $Location,
     [Parameter(Mandatory)] [string] $SolutionName,
-    [string] $SolutionParametersFile = "./infrastructure/parameters/parameters.$Environment.json",
+    [string] $SolutionParametersFile = "./infrastructure-as-code/infrastructure/parameters/parameters.$Environment.json",
     [string] $TemplateSpecRgName = "rg-dataops-template-specs",
     [string] $DeploymentOutputFile
 )

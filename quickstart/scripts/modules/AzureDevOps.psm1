@@ -2,6 +2,48 @@ Using module ./Common.psm1
 Using module ./RepoOperations.psm1
 Using module ./Logging.psm1
 
+function GetAzureDevOpsVariableGroup {
+    [cmdletbinding()]
+    param(
+        [Parameter(Mandatory)] [string] $VariableGroupName,
+        [Parameter(Mandatory)] [uri] $AzureDevOpsOrganizationURI,
+        [Parameter(Mandatory)] [string] $AzureDevOpsProject
+    )
+    [Argument]::AssertIsNotNullOrEmpty("VariableGroupName", $VariableGroupName)
+
+    Write-Verbose "Getting variables from Variable Group $VariableGroupName..."
+
+    $GroupId = $(az pipelines variable-group list --organization=$AzureDevOpsOrganizationURI --project="$AzureDevOpsProject" --query "[?name=='$VariableGroupName'].id" -o tsv)
+
+    Write-Verbose "Variable Group Id: $GroupId"
+
+    $json = $(az pipelines variable-group variable list --group-id $GroupId --organization=$AzureDevOpsOrganizationURI --project="$AzureDevOpsProject")
+    $variables = $json | ConvertFrom-Json -AsHashtable
+
+    return  $variables
+}
+
+function CreateAzureDevOpsVariableGroup {
+    [cmdletbinding()]
+    param(
+        [Parameter(Mandatory)] [string] $VariableGroupName
+    )
+    [Argument]::AssertIsNotNullOrEmpty("VariableGroupName", $VariableGroupName)
+
+    $GroupId = $(az pipelines variable-group list --query "[?name=='$VariableGroupName'].id" -o tsv)
+
+    if (! $GroupId) {
+        Write-Verbose "Creating variable group $VariableGroupName ..."
+        $GroupId = $(az pipelines variable-group create --name $VariableGroupName --authorize --variable createdAt="$(Get-Date)" --query "id" -o tsv)
+
+        if (! $GroupId) {
+            Write-Error "The build agent does not have permissions to create variable groups"
+            exit 1
+        }
+    }
+    return $GroupId
+}
+
 function CreateAzureDevopsRepository {
     param (
         [Parameter(Mandatory)] [hashtable] $RepoConfiguration
