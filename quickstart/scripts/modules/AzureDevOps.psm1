@@ -2,6 +2,23 @@ Using module ./Common.psm1
 Using module ./RepoOperations.psm1
 Using module ./Logging.psm1
 
+function CreateAzDevOpsVariableGroups {
+    [cmdletbinding()]
+    param(
+        [Parameter(Mandatory)] [hashtable] $RepoConfiguration
+    )
+    
+    [Argument]::AssertIsNotNull("RepoConfiguration", $RepoConfiguration)
+    
+    CreateAzureDevOpsVariableGroup -VariableGroupName "dataops-iac-cd-output-dev" -AzureDevOpsOrganizationURI $RepoConfiguration.AzureDevOpsOrganizationURI -AzureDevOpsProject $RepoConfiguration.AzureDevOpsProject
+    CreateAzureDevOpsVariableGroup -VariableGroupName "dataops-iac-cd-output-qa" -AzureDevOpsOrganizationURI $RepoConfiguration.AzureDevOpsOrganizationURI -AzureDevOpsProject $RepoConfiguration.AzureDevOpsProject
+    CreateAzureDevOpsVariableGroup -VariableGroupName "dataops-iac-cd-output-prod" -AzureDevOpsOrganizationURI $RepoConfiguration.AzureDevOpsOrganizationURI -AzureDevOpsProject $RepoConfiguration.AzureDevOpsProject
+    CreateAzureDevOpsVariableGroup -VariableGroupName "lib-versions" -AzureDevOpsOrganizationURI $RepoConfiguration.AzureDevOpsOrganizationURI -AzureDevOpsProject $RepoConfiguration.AzureDevOpsProject
+    CreateAzureDevOpsVariable -VariableGroupName "lib-versions" -AzureDevOpsOrganizationURI $RepoConfiguration.AzureDevOpsOrganizationURI -AzureDevOpsProject $RepoConfiguration.AzureDevOpsProject -VariableName "MAJOR" -VariableValue "0"
+    CreateAzureDevOpsVariable -VariableGroupName "lib-versions" -AzureDevOpsOrganizationURI $RepoConfiguration.AzureDevOpsOrganizationURI -AzureDevOpsProject $RepoConfiguration.AzureDevOpsProject -VariableName "MINOR" -VariableValue "1"
+    CreateAzureDevOpsVariable -VariableGroupName "lib-versions" -AzureDevOpsOrganizationURI $RepoConfiguration.AzureDevOpsOrganizationURI -AzureDevOpsProject $RepoConfiguration.AzureDevOpsProject -VariableName "PATCH" -VariableValue "0"
+}
+
 function GetAzureDevOpsVariableGroup {
     [cmdletbinding()]
     param(
@@ -26,15 +43,17 @@ function GetAzureDevOpsVariableGroup {
 function CreateAzureDevOpsVariableGroup {
     [cmdletbinding()]
     param(
-        [Parameter(Mandatory)] [string] $VariableGroupName
+        [Parameter(Mandatory)] [string] $VariableGroupName,
+        [Parameter(Mandatory)] [uri] $AzureDevOpsOrganizationURI,
+        [Parameter(Mandatory)] [string] $AzureDevOpsProject        
     )
     [Argument]::AssertIsNotNullOrEmpty("VariableGroupName", $VariableGroupName)
 
-    $GroupId = $(az pipelines variable-group list --query "[?name=='$VariableGroupName'].id" -o tsv)
+    $GroupId = $(az pipelines variable-group list --organization=$AzureDevOpsOrganizationURI --project="$AzureDevOpsProject" --query "[?name=='$VariableGroupName'].id" -o tsv)
 
     if (! $GroupId) {
         Write-Verbose "Creating variable group $VariableGroupName ..."
-        $GroupId = $(az pipelines variable-group create --name $VariableGroupName --authorize --variable createdAt="$(Get-Date)" --query "id" -o tsv)
+        $GroupId = $(az pipelines variable-group create --organization=$AzureDevOpsOrganizationURI --project="$AzureDevOpsProject" --name $VariableGroupName --authorize --variable createdAt="$(Get-Date)" --query "id" -o tsv)
 
         if (! $GroupId) {
             Write-Error "The build agent does not have permissions to create variable groups"
@@ -48,6 +67,8 @@ function CreateAzureDevOpsVariable {
     [cmdletbinding()]
     param(
         [Parameter(Mandatory)] [string] $VariableGroupName,
+        [Parameter(Mandatory)] [uri] $AzureDevOpsOrganizationURI,
+        [Parameter(Mandatory)] [string] $AzureDevOpsProject,        
         [Parameter(Mandatory)] [string] $VariableName,
         [Parameter(Mandatory)] [string] $VariableValue
     )
@@ -55,11 +76,11 @@ function CreateAzureDevOpsVariable {
     [Argument]::AssertIsNotNullOrEmpty("VariableName", $VariableName)
     [Argument]::AssertIsNotNullOrEmpty("VariableValue", $VariableValue)
 
-    $GroupId = $(az pipelines variable-group list --query "[?name=='$VariableGroupName'].id" -o tsv)
+    $GroupId = $(az pipelines variable-group list --query "[?name=='$VariableGroupName'].id" --organization=$AzureDevOpsOrganizationURI --project="$AzureDevOpsProject" -o tsv)
 
     if (! $GroupId) {
         Write-Verbose "Creating variable group $VariableGroupName ..."
-        $GroupId = $(az pipelines variable-group create --name $VariableGroupName --authorize --variable createdAt="$(Get-Date)" --query "id" -o tsv)
+        $GroupId = $(az pipelines variable-group create --name $VariableGroupName --authorize --variable createdAt="$(Get-Date)" --query "id" --organization=$AzureDevOpsOrganizationURI --project="$AzureDevOpsProject" -o tsv)
 
         if (! $GroupId) {
             Write-Error "The build agent does not have permissions to create variable groups"
@@ -68,9 +89,9 @@ function CreateAzureDevOpsVariable {
     }
 
     Write-Verbose "Trying to update variable $VariableName..."
-    if (! (az pipelines variable-group variable update --group-id $GroupId --name $VariableName --value $VariableValue)) { 
+    if (! (az pipelines variable-group variable update --group-id $GroupId --name $VariableName --value $VariableValue --organization=$AzureDevOpsOrganizationURI --project="$AzureDevOpsProject")) { 
         Write-Verbose "Creating variable $key..."
-        az pipelines variable-group variable create --group-id $GroupId --name $VariableName --value $VariableValue
+        az pipelines variable-group variable create --group-id $GroupId --name $VariableName --value $VariableValue --organization=$AzureDevOpsOrganizationURI --project="$AzureDevOpsProject"
     }
 }
 
