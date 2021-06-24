@@ -28,15 +28,6 @@ UpdateIaCParameters -Configuration $config -Directory $directory[0] -Verbose:$Ve
 
 CreateAzDevOpsRepoApprovalPolicy -RepoInfo $repoInfo -RepoConfiguration $config.RepoConfiguration -Verbose:$VerbosePreference
 CreateAzDevOpsRepoCommentPolicy  -RepoInfo $repoInfo -RepoConfiguration $config.RepoConfiguration -Verbose:$VerbosePreference
-
 CreateAzDevOpsYamlPipelines -RepoConfiguration $config.RepoConfiguration -Verbose:$VerbosePreference
-
 CreateAzDevOpsRepoBuildPolicy -RepoInfo $repoInfo -RepoConfiguration $config.RepoConfiguration -Verbose:$VerbosePreference
-
-CreateAzureDevOpsVariableGroup -VariableGroupName "dataops-iac-cd-output-dev"
-CreateAzureDevOpsVariableGroup -VariableGroupName "dataops-iac-cd-output-qa"
-CreateAzureDevOpsVariableGroup -VariableGroupName "dataops-iac-cd-output-prod"
-CreateAzureDevOpsVariableGroup -VariableGroupName "lib-versions"
-CreateAzureDevOpsVariable -VariableGroupName "lib-versions" -VariableName "MAJOR" -VariableValue "0"
-CreateAzureDevOpsVariable -VariableGroupName "lib-versions" -VariableName "MINOR" -VariableValue "1"
-CreateAzureDevOpsVariable -VariableGroupName "lib-versions" -VariableName "PATCH" -VariableValue "0"
+CreateAzDevOpsVariableGroups -RepoConfiguration $config.RepoConfiguration -Verbose:$VerbosePreference
