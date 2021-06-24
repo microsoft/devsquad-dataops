@@ -41,6 +41,8 @@ cp quickstart/configs/cloud-setup/template.json quickstart/configs/cloud-setup/h
 |<_orgName_>|Azure DevOps organization name|_MyOrg_|
 |<_subscriptionId_>|Azure Subscription ID where the resources will be deployed|_f7e5bb9e-0f98-4c5d-a5c1-a9154bf3cd61_|
 
+## Run the Scripts
+
 3. Run a script to deploy the Azure pre-requisites using PowerShell Core. Note that this script will also validade the parameters of the config file.
 
 ```
