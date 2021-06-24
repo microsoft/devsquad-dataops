@@ -69,7 +69,7 @@ function CreateAzureDevOpsVariable {
 
     Write-Verbose "Trying to update variable $VariableName..."
     if (! (az pipelines variable-group variable update --group-id $GroupId --name $VariableName --value $VariableValue)) { 
-        Write-Verbose"Creating variable $key..."
+        Write-Verbose "Creating variable $key..."
         az pipelines variable-group variable create --group-id $GroupId --name $VariableName --value $VariableValue
     }
 }
