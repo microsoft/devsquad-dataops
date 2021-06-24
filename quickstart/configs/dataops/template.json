@@ -5,6 +5,7 @@
     },
     "RepoConfiguration": {
         "RepoName": "<project.name>",
+        "AzureDevOpsOrganization": "<azureDevOps.organization>",
         "AzureDevOpsOrganizationURI": "https://dev.azure.com/<azureDevOps.organization>",
         "AzureDevOpsProject": "<project.name>",
         "TemplateGitUrl": "https://csu-devsquad@dev.azure.com/csu-devsquad/advworks-dataops/_git/hol",

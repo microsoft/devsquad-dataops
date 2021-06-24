@@ -9,16 +9,16 @@
             "value": "eastus2"
         },
         "resourceGroupData":{
-            "value": "rg-<project.alias>-data-dev"
+            "value": "rg-<Project.Alias>-data-dev"
         },
         "resourceGroupCompute":{
-            "value": "rg-<project.alias>-compute-dev"
+            "value": "rg-<Project.Alias>-compute-dev"
         },
         "resourceGroupMachineLearning":{
-            "value": "rg-<project.alias>-ml-dev"
+            "value": "rg-<Project.Alias>-ml-dev"
         },
         "resourceGroupManagedDatabricks":{
-            "value": "rg-<project.alias>-compute-dbw-dev"
+            "value": "rg-<Project.Alias>-compute-dbw-dev"
         },
         "dataLakeSkuName":{
             "value": "Standard_LRS"
@@ -27,13 +27,13 @@
             "value": "c06d0482-8384-4205-a17f-edd2222dce1b"
         },
         "dataFactoryAccountName": {
-            "value": "<azureDevOps.organization>"
+            "value": "<RepoConfiguration.AzureDevOpsOrganization>"
         },
         "dataFactoryProjectName": {
-            "value": "<project.name>"
+            "value": "<RepoConfiguration.AzureDevOpsProject>"
         },
         "dataFactoryRepositoryName": {
-            "value": "<project.name>"
+            "value": "<RepoConfiguration.RepoName>"
         },
         "dataFactoryCollaborationBranch": {
             "value": "develop"
