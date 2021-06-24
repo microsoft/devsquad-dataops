@@ -60,6 +60,9 @@ function UpdateIaCParameters {
 	git add infrastructure-as-code/infrastructure/parameters/parameters.dev.json
 	git add infrastructure-as-code/infrastructure/parameters/parameters.qa.json
 	git add infrastructure-as-code/infrastructure/parameters/parameters.prod.json
+
+	git commit -m "Update IaC paramaters."
+
     git push -u origin $RepoConfiguration.DefaultBranchName
 	
     Set-Location -
