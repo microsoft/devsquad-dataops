@@ -138,7 +138,7 @@
       "eastus": "eastus",
       "brazilsouth": "brzsouth"
     },
-    "uniqueStr": "[substring(uniqueString(subscription().subscriptionId), 0, 5)]",
+    "uniqueStr": "[substring(uniqueString(subscription().subscriptionId), 0, 6)]",
     "dataDeploymentName": "[concat('data-', deployment().name)]",
     "computeDeploymentName": "[concat('compute-', deployment().name)]",
     "mlDeploymentName": "[concat('ml-', deployment().name)]",

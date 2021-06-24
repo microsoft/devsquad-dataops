@@ -5,7 +5,7 @@ Using module ../modules/Validation.psm1
 [cmdletbinding()]
 param(
     [Parameter(Mandatory)] $ConfigurationFile,
-    [boolean] $UseSSH = $true,
+    [boolean] $UseSSH = $false,
     [boolean] $UsePAT = $true
 )
 
