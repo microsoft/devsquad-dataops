@@ -1,0 +1,30 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "environment":{
+            "value": "qa"
+        },
+        "location": {
+            "value": "eastus2"
+        },
+        "resourceGroupData":{
+            "value": "rg-<project.alias>-data-qa"
+        },
+        "resourceGroupCompute":{
+            "value": "rg-<project.alias>-compute-qa"
+        },
+        "resourceGroupMachineLearning":{
+            "value": "rg-<project.alias>-ml-qa"
+        },
+        "resourceGroupManagedDatabricks":{
+            "value": "rg-<project.alias>-compute-dbw-qa"
+        },
+        "dataLakeSkuName":{
+            "value": "Standard_GRS"
+        },
+        "keyVaultSecretsAdminObjectId": {
+            "value": "4b0a1c5e-3f7c-4d81-9d2b-479a654b1c70"
+        }
+    }
+}

@@ -39,7 +39,7 @@ setup(
     setup_requires=setup_requirements,
     test_suite='tests',
     tests_require=test_requirements,
-    url='https://dev.azure.com/csu-devsquad/advworks-dataops/_git/data_platform',
+    url='https://dev.azure.com/csu-devsquad/advworks-dataops/_git/hol',
     version=version,
     python_requires='>=3.6'
 )

@@ -2,12 +2,15 @@
   "$schema": "http://json-schema.org/schema#",
   "type": "object",
   "properties": {
-    "Domain": {
+    "Project": {
       "type": "object",
       "properties": {
         "Name": {
           "type": "string"
-        }
+        },
+        "Alias": {
+          "type": "string"
+        }        
       },
       "required": [
         "Name"
@@ -79,7 +82,7 @@
     }
   },
   "required": [
-    "Domain",
+    "Project",
     "RepoConfiguration"
   ]
 }

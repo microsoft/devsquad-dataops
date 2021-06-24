@@ -44,6 +44,36 @@ function CreateAzureDevOpsVariableGroup {
     return $GroupId
 }
 
+function CreateAzureDevOpsVariable {
+    [cmdletbinding()]
+    param(
+        [Parameter(Mandatory)] [string] $VariableGroupName,
+        [Parameter(Mandatory)] [string] $VariableName,
+        [Parameter(Mandatory)] [string] $VariableValue
+    )
+    [Argument]::AssertIsNotNullOrEmpty("VariableGroupName", $VariableGroupName)
+    [Argument]::AssertIsNotNullOrEmpty("VariableName", $VariableName)
+    [Argument]::AssertIsNotNullOrEmpty("VariableValue", $VariableValue)
+
+    $GroupId = $(az pipelines variable-group list --query "[?name=='$VariableGroupName'].id" -o tsv)
+
+    if (! $GroupId) {
+        Write-Verbose "Creating variable group $VariableGroupName ..."
+        $GroupId = $(az pipelines variable-group create --name $VariableGroupName --authorize --variable createdAt="$(Get-Date)" --query "id" -o tsv)
+
+        if (! $GroupId) {
+            Write-Error "The build agent does not have permissions to create variable groups"
+            exit 1
+        }
+    }
+
+    Write-Verbose "Trying to update variable $VariableName..."
+    if (! (az pipelines variable-group variable update --group-id $GroupId --name $VariableName --value $VariableValue)) { 
+        Write-Verbose"Creating variable $key..."
+        az pipelines variable-group variable create --group-id $GroupId --name $VariableName --value $VariableValue
+    }
+}
+
 function CreateAzureDevopsRepository {
     param (
         [Parameter(Mandatory)] [hashtable] $RepoConfiguration

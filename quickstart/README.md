@@ -38,3 +38,11 @@ $env:AZURE_DEVOPS_EXT_PAT="<my pat goes here>"
 ./quickstart/scripts/dataops/Deploy-AzureDevOps.ps1 -ConfigurationFile "./quickstart/outputs/hol.json" 
 
 ```
+
+# Install GitTools
+
+https://marketplace.visualstudio.com/items?itemName=gittools.gittools&targetId=0d8e54d4-e229-47bd-9dc5-9be0f116a5c0&utm_source=vstsproduct&utm_medium=ExtHubManageList
+
+# Authorize Build Services to use Variable Groups
+
+# Change IAC parameters.dev.json values

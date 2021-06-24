@@ -2,7 +2,7 @@
 parameters:
 - name: libraryDirectory
   type: string
-  default: $(System.DefaultWorkingDirectory)/src/dataopslib
+  default: $(System.DefaultWorkingDirectory)/data-platform/src/dataopslib
 - name: artifactFeed
   type: string
 - name: variableGroupName

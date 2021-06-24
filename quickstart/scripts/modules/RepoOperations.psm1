@@ -23,7 +23,45 @@ function ImportTemplateRepoToDomainRepo {
     git merge remotes/template/main
     git branch -M $RepoConfiguration.DefaultBranchName
     git push -u origin $RepoConfiguration.DefaultBranchName
+	
+    Set-Location -
+}
 
+function UpdateIaCParameters {
+    param (
+        [Parameter(Mandatory)] [hashtable] $Configuration,
+        [Parameter(Mandatory)] [string] $Directory
+    )
+    [Argument]::AssertIsNotNull("Configuration", $Configuration)
+
+    Write-Host "Updating IaC parameters..." -ForegroundColor Green
+
+    Set-Location $Directory
+
+	BeginScope -Scope "IaC parameters"
+
+	ReplaceTemplateTokens `
+		-Configuration $Configuration `
+		-InputFile infrastructure-as-code/infrastructure/parameters/parameters.dev.template.json `
+		-OutputFile infrastructure-as-code/infrastructure/parameters/parameters.dev.json
+
+	ReplaceTemplateTokens `
+		-Configuration $Configuration `
+		-InputFile infrastructure-as-code/infrastructure/parameters/parameters.qa.template.json `
+		-OutputFile infrastructure-as-code/infrastructure/parameters/parameters.qa.json 
+
+	ReplaceTemplateTokens `
+		-Configuration $Configuration `
+		-InputFile infrastructure-as-code/infrastructure/parameters/parameters.prod.template.json `
+		-OutputFile infrastructure-as-code/infrastructure/parameters/parameters.prod.json 
+		
+	EndScope
+
+	git add infrastructure-as-code/infrastructure/parameters/parameters.dev.json
+	git add infrastructure-as-code/infrastructure/parameters/parameters.qa.json
+	git add infrastructure-as-code/infrastructure/parameters/parameters.prod.json
+    git push -u origin $RepoConfiguration.DefaultBranchName
+	
     Set-Location -
 }
 

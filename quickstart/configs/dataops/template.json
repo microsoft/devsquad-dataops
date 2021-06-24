@@ -1,6 +1,7 @@
 {
-    "Domain": {
-        "Name": "<project.name>"
+    "Project": {
+        "Name": "<project.name>",
+        "Alias": "<project.alias>"
     },
     "RepoConfiguration": {
         "RepoName": "<project.name>",
@@ -27,7 +28,7 @@
                 "SourceYamlPath": "azure-pipelines/lib/lib-ci.yml",
                 "BuildPolicy": {
                     "Name": "<project.alias>-lib-ci build policy",
-                    "PathFilter": "/data_platform/src/dataopslib/dataopslib/*"
+                    "PathFilter": "/data-platform/src/dataopslib/dataopslib/*"
                 }
             },
             {
@@ -39,7 +40,7 @@
                 "SourceYamlPath": "azure-pipelines/databricks/databricks-ci.yml",
                 "BuildPolicy": {
                     "Name": "<project.alias>-databricks-ci build policy",
-                    "PathFilter": "/data_platform/notebooks/*"
+                    "PathFilter": "/data-platform/notebooks/*"
                 }
             },
             {
