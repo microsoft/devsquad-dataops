@@ -26,7 +26,7 @@ Describe "Key Vault" -Tag "Acceptance" {
             $keyVault.EnablePurgeProtection | Should -BeTrue
         }
         It "Enables Soft Delete" {
-            $keyVault.EnableSoftDelete | Should -BeTrue
+            $keyVault.EnableSoftDelete | Should -BeFalse
         }
     }
     Context "Usage Flags" {
