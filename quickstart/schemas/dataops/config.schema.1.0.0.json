@@ -22,6 +22,9 @@
         "RepoName": {
           "type": "string"
         },
+        "AzureDevOpsOrganization": {
+          "type": "string"
+        },        
         "AzureDevOpsOrganizationURI": {
           "type": "string"
         },
