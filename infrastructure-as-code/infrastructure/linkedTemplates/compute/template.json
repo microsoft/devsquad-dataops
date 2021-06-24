@@ -139,7 +139,7 @@
                 "enabledForTemplateDeployment": false,
                 "enableSoftDelete": false,
                 "softDeleteRetentionInDays": 90,
-                "enablePurgeProtection": false,
+                "enablePurgeProtection": true,
                 "accessPolicies": [
                     {
                         "tenantId": "[subscription().tenantId]",
