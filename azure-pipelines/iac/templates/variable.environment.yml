@@ -1,5 +1,5 @@
 variables:
-  location: eastus2
+  location: eastus
   solutionName: dataops
   ${{ if eq(variables['Build.SourceBranchName'], 'main') }}:
     environmentName: prod

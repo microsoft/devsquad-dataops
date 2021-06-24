@@ -1,5 +1,5 @@
 param(
-    [string] $Location = "eastus2",
+    [string] $Location = "eastus",
     [string] $SolutionName = "dataops",
     [switch] $AutoApprove,
     [switch] $Test,

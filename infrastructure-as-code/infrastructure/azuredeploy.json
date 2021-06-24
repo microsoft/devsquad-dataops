@@ -11,7 +11,7 @@
     "location": {
       "type": "string",
       "metadata": {
-        "description": "Region where the resource is provisioned; eastus2 for dev / prod and brazilsouth for sandbox"
+        "description": "Region where the resource is provisioned"
       }
     }, 
     "resourceGroupData": {
@@ -135,7 +135,7 @@
   ],
   "variables": {
     "envMapping": {
-      "eastus2": "eastus2",
+      "eastus": "eastus",
       "brazilsouth": "brzsouth"
     },
     "uniqueStr": "[substring(uniqueString(subscription().subscriptionId), 0, 5)]",

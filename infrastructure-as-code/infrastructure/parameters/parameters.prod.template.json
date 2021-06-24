@@ -6,7 +6,7 @@
             "value": "prod"
         },
         "location": {
-            "value": "eastus2"
+            "value": "eastus"
         },
         "resourceGroupData":{
             "value": "rg-<Project.Alias>-data-prod"

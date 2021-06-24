@@ -3,7 +3,7 @@
     "project": {
         "name": "<projectName>",
         "alias": "<projectAlias>",
-        "location": "eastus2"
+        "location": "eastus"
     },
     "servicePrincipals": [
         "SP-<projectName>-DevTest"

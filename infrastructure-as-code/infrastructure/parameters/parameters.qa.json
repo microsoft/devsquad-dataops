@@ -6,7 +6,7 @@
             "value": "qa"
         },
         "location": {
-            "value": "eastus2"
+            "value": "eastus"
         },
         "resourceGroupData":{
             "value": "rg-dataops-data-qa"
