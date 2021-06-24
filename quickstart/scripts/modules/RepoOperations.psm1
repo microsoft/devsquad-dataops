@@ -15,7 +15,7 @@ function ImportTemplateRepoToDomainRepo {
 
 	$templateGitUrl = $RepoConfiguration.TemplateGitUrl
 	if ($UsePAT) {
-		$templateGitUrl = $templateGitUrl -replace "(?<=https://\s*).*?(?=\s*@)", $env:AZURE_DEVOPS_EXT_PAT
+		$templateGitUrl = $templateGitUrl -replace "(?<=https://\s*).*?(?=\s*@)", $env:AZURE_DEVOPS_EXT_PAT_TEMPLATE
 	}
 
     git remote add template $templateGitUrl

@@ -76,6 +76,12 @@
           "name": "standard",
           "family": "A"
         },
+        "enabledForDeployment": false,
+        "enabledForDiskEncryption": false,
+        "enabledForTemplateDeployment": false,
+        "enableSoftDelete": false,
+        "softDeleteRetentionInDays": 90,
+        "enablePurgeProtection": true,        
         "accessPolicies": [
         ]
       }

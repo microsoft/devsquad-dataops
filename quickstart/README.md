@@ -43,22 +43,37 @@ cp quickstart/configs/cloud-setup/template.json quickstart/configs/cloud-setup/h
 
 ## Run the Scripts
 
-3. Run a script to deploy the Azure pre-requisites using PowerShell Core. Note that this script will also validade the parameters of the config file.
+3. Login into Azure
+
+```
+az login
+az account set --subscription <subscriptionId>
+```
+
+4. Run a script to deploy the Azure pre-requisites using PowerShell Core. Note that this script will also validade the parameters of the config file.
 
 ```
 pwsh
+
+Set-AzContext <subscriptionId>
 
 ./quickstart/scripts/cloud-setup/Deploy-AzurePreReqs.ps1 -ConfigurationFile "quickstart/configs/cloud-setup/hol.json"
 
 ```
 
-4. Now set the environment variable ```$env:AZURE_DEVOPS_EXT_PAT``` with a [PAT (Personal Access Token)](https://docs.microsoft.com/en-us/azure/devops/organizations/accounts/use-personal-access-tokens-to-authenticate?view=azure-devops&tabs=preview-page) with **Code (read)** [scope](https://docs.microsoft.com/en-us/azure/devops/integrate/get-started/authentication/oauth?view=azure-devops#scopes) to enable the script to connect to the Azure DevOps containing the files and instructions of the lab. It is required because if will clone the repository to the new Azure DevOps project that will be used for this lab.
+5. Set the environment variable ```$env:AZURE_DEVOPS_EXT_PAT_TEMPLATE``` with a [PAT (Personal Access Token)](https://docs.microsoft.com/en-us/azure/devops/organizations/accounts/use-personal-access-tokens-to-authenticate?view=azure-devops&tabs=preview-page) with **Code (read)** [scope](https://docs.microsoft.com/en-us/azure/devops/integrate/get-started/authentication/oauth?view=azure-devops#scopes) to enable the script to connect to the Azure DevOps containing the files and instructions of the lab. It is required because if will clone the repository to the new Azure DevOps project that will be used for this lab.
+
+```
+$env:AZURE_DEVOPS_EXT_PAT_TEMPLATE="<my pat goes here>"
+```
+
+5. Set the environment variable ```$env:AZURE_DEVOPS_EXT_PAT``` with a [PAT (Personal Access Token)](https://docs.microsoft.com/en-us/azure/devops/organizations/accounts/use-personal-access-tokens-to-authenticate?view=azure-devops&tabs=preview-page) with **Full Access** to enable the script to connect to the new Azure DevOps to deploy all the resources.
 
 ```
 $env:AZURE_DEVOPS_EXT_PAT="<my pat goes here>"
 ```
 
-5. Run the script to clone the repo, create the pipeline and service connections inside the new Azure DevOps. (*) Note that the file name is the one inside the output directory and the name is the same name of the _projectName_ that was replaced in the first config file.
+6. Run the script to clone the repo, create the pipeline and service connections inside the new Azure DevOps. (*) Note that the file name is the one inside the output directory and the name is the same name of the _projectName_ that was replaced in the first config file.
 
 ```
 ./quickstart/scripts/dataops/Deploy-AzureDevOps.ps1 -ConfigurationFile "./quickstart/outputs/hol.json"
