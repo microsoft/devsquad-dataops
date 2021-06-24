@@ -9,16 +9,16 @@
             "value": "eastus2"
         },
         "resourceGroupData":{
-            "value": "rg-<project.alias>-data-prod"
+            "value": "rg-<Project.Alias>-data-prod"
         },
         "resourceGroupCompute":{
-            "value": "rg-<project.alias>-compute-prod"
+            "value": "rg-<Project.Alias>-compute-prod"
         },
         "resourceGroupMachineLearning":{
-            "value": "rg-<project.alias>-ml-prod"
+            "value": "rg-<Project.Alias>-ml-prod"
         },
         "resourceGroupManagedDatabricks":{
-            "value": "rg-<project.alias>-compute-dbw-prod"
+            "value": "rg-<Project.Alias>-compute-dbw-prod"
         },
         "dataLakeSkuName":{
             "value": "Standard_GRS"
