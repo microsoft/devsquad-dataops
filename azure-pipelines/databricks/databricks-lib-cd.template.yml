@@ -1,0 +1,31 @@
+trigger: none
+
+resources:
+  pipelines:
+  - pipeline: lib
+    source: <Project.Alias>-lib-cd
+    trigger: 
+      branches:
+      - develop
+      - qa
+      - main
+
+stages:
+
+- template: templates/databricks-deploy-library-job-template.yml
+  parameters:
+    branch: 'refs/heads/develop'
+    environment: 'dev'
+    azureServiceConnection: 'spn-iac-dev'
+
+- template: templates/databricks-deploy-library-job-template.yml
+  parameters:
+    branch: 'refs/heads/qa'
+    environment: 'qa'
+    azureServiceConnection: 'spn-iac-qa'    
+
+- template: templates/databricks-deploy-library-job-template.yml
+  parameters:
+    branch: 'refs/heads/main'
+    environment: 'prod'
+    azureServiceConnection: 'spn-iac-prod'
