@@ -3,7 +3,7 @@ trigger: none
 resources:
   pipelines:
   - pipeline: lib
-    source: dataops-lib-cd
+    source: <Project.Alias>-lib-cd
     trigger: 
       branches:
       - develop

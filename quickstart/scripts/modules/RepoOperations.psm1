@@ -54,12 +54,18 @@ function UpdateIaCParameters {
 		-Configuration $Configuration `
 		-InputFile infrastructure-as-code/infrastructure/parameters/parameters.prod.template.json `
 		-OutputFile infrastructure-as-code/infrastructure/parameters/parameters.prod.json 
+	
+	ReplaceTemplateTokens `
+		-Configuration $Configuration `
+		-InputFile azure-pipelines/databricks/databricks-lib-cd.template.yml `
+		-OutputFile azure-pipelines/databricks/databricks-lib-cd.yml 
 		
 	EndScope
 
 	git add infrastructure-as-code/infrastructure/parameters/parameters.dev.json
 	git add infrastructure-as-code/infrastructure/parameters/parameters.qa.json
 	git add infrastructure-as-code/infrastructure/parameters/parameters.prod.json
+	git add azure-pipelines/databricks/databricks-lib-cd.yml
 
 	git commit -m "Update IaC paramaters."
 

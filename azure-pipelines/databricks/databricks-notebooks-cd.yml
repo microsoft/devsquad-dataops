@@ -9,7 +9,7 @@ trigger:
       - notebooks/*
 
 variables:
-- template: templates/variable.environment.yml
+- template: ../variable.environment.yml
 
 stages:
 - template: templates/databricks-deploy-notebooks-job-template.yml
