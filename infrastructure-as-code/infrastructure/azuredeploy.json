@@ -8,6 +8,12 @@
         "description": "Environment where resources will be deployed"
       }
     },
+    "solutionName": {
+      "type": "string",
+      "metadata": {
+        "description": "Solution name"
+      }
+    },    
     "location": {
       "type": "string",
       "metadata": {
@@ -103,11 +109,15 @@
             {
               "name": "environment",
               "type": "string"
-            }
+            },
+            {
+              "name": "solutionName",
+              "type": "string"
+            }            
           ],
           "output": {
             "type": "string",
-            "value": "[concat(parameters('resourcePurpose'), '-', 'dataops', '-', parameters('uniqueStr'), '-',  parameters('environment'))]"
+            "value": "[concat(parameters('resourcePurpose'), '-', parameters('solutionName'), '-', parameters('uniqueStr'), '-',  parameters('environment'))]"
           }
         },
         "clean": {
@@ -123,11 +133,15 @@
             {
               "name": "environment",
               "type": "string"
-            }
+            },
+            {
+              "name": "solutionName",
+              "type": "string"
+            }            
           ],
           "output": {
             "type": "string",
-            "value": "[concat(parameters('resourcePurpose'), 'dataops', parameters('uniqueStr'), parameters('environment'))]"
+            "value": "[concat(parameters('resourcePurpose'), parameters('solutionName'), parameters('uniqueStr'), parameters('environment'))]"
           }
         }
       }
@@ -144,16 +158,16 @@
     "mlDeploymentName": "[concat('ml-', deployment().name)]",
     "dataRoleAssigmentsDeploymentName": "[concat('data-roleAssigments-', deployment().name)]",
     "computeRoleAssigmentsDeploymentName": "[concat('compute-roleAssigments-', deployment().name)]",
-    "dataSourceStorageAccountName": "[naming.clean('stg',variables('uniqueStr'), parameters('environment'))]",
-    "dataLakeName": "[naming.clean('lake',variables('uniqueStr'), parameters('environment'))]",
-    "databricksName": "[naming.default('dbw',variables('uniqueStr'), parameters('environment'))]",
-    "dataFactoryName": "[naming.default('adf',variables('uniqueStr'), parameters('environment'))]",
-    "keyVaultName": "[naming.default('kv',variables('uniqueStr'), parameters('environment'))]",
-    "amlWorkspaceName": "[naming.default('mlw',variables('uniqueStr'), parameters('environment'))]",
-    "amlKeyVaultName": "[naming.default('kvm',variables('uniqueStr'), parameters('environment'))]",
-    "amlStorageAccountName": "[naming.clean('stml',variables('uniqueStr'), parameters('environment'))]",
-    "amlApplicationInsightsName": "[naming.default('appi-ml',variables('uniqueStr'), parameters('environment'))]",
-    "amlContainerRegistryName": "[naming.clean('crml',variables('uniqueStr'), parameters('environment'))]"
+    "dataSourceStorageAccountName": "[naming.clean('stg',variables('uniqueStr'), parameters('environment'), parameters('solutionName'))]",
+    "dataLakeName": "[naming.clean('lake',variables('uniqueStr'), parameters('environment'), parameters('solutionName'))]",
+    "databricksName": "[naming.default('dbw',variables('uniqueStr'), parameters('environment'), parameters('solutionName'))]",
+    "dataFactoryName": "[naming.default('adf',variables('uniqueStr'), parameters('environment'), parameters('solutionName'))]",
+    "keyVaultName": "[naming.default('kv',variables('uniqueStr'), parameters('environment'), parameters('solutionName'))]",
+    "amlWorkspaceName": "[naming.default('mlw',variables('uniqueStr'), parameters('environment'), parameters('solutionName'))]",
+    "amlKeyVaultName": "[naming.default('kvm',variables('uniqueStr'), parameters('environment'), parameters('solutionName'))]",
+    "amlStorageAccountName": "[naming.clean('stml',variables('uniqueStr'), parameters('environment'), parameters('solutionName'))]",
+    "amlApplicationInsightsName": "[naming.default('appi-ml',variables('uniqueStr'), parameters('environment'), parameters('solutionName'))]",
+    "amlContainerRegistryName": "[naming.clean('crml',variables('uniqueStr'), parameters('environment'), parameters('solutionName'))]"
   },
   "resources": [
     {
@@ -235,7 +249,7 @@
                 },
                 {
                   "secretName": "StorageAccountConnectionString",
-                  "secretValue": "[concat('DefaultEndpointsProtocol=https;AccountName=', variables('dataSourceStorageAccountName'), ';AccountKey=', listKeys(resourceId(parameters('resourceGroupData'),'Microsoft.Storage/storageAccounts', variables('dataSourceStorageAccountName')), '2019-04-01').keys[0].value,';EndpointSuffix=core.windows.net')]"
+                  "secretValue": "[concat('DefaultEndpointsProtocol=https;AccountName=', variables('dataSourceStorageAccountName'), ';AccountKey=', listKeys(concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', parameters('resourceGroupData'), '/providers/Microsoft.Storage/storageAccounts/', variables('dataSourceStorageAccountName')), '2019-04-01').keys[0].value,';EndpointSuffix=core.windows.net')]"
                 }  
               ]
             }

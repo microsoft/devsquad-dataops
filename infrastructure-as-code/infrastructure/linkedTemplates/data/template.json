@@ -82,31 +82,13 @@
         "tags": {}
     },
     {
-        "name": "[concat(parameters('dataSourceStorageAccountName'), '/flights-data')]",
-        "type": "Microsoft.Storage/storageAccounts/blobServices",
-        "apiVersion": "2019-06-01",
-        "properties": {
-            "restorePolicy": {
-                "enabled": false
-            },
-            "deleteRetentionPolicy": {
-                "enabled": true,
-                "days": 7
-            },
-            "containerDeleteRetentionPolicy": {
-                "enabled": true,
-                "days": 7
-            },
-            "changeFeed": {
-                "enabled": false
-            },
-            "isVersioningEnabled": false
-        },
-        "dependsOn": [
-            "[concat('Microsoft.Storage/storageAccounts/', parameters('dataSourceStorageAccountName'))]"
-        ]
+      "name": "[concat(parameters('dataSourceStorageAccountName'), '/default/', 'flights-data')]",
+      "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
+      "apiVersion": "2019-06-01",  
+      "dependsOn": [
+          "[concat('Microsoft.Storage/storageAccounts/', parameters('dataSourceStorageAccountName'))]"
+      ]
     }
-
   ],
   "outputs": {}
 }

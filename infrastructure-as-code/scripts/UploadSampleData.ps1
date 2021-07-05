@@ -6,8 +6,12 @@ Write-Host "Getting variables from $DeploymentOutputFile file..."
 $DeploymentOutput = Get-Content -Path $DeploymentOutputFile | ConvertFrom-Json -AsHashtable
 
 Write-Host "Uploading files..."
+$ResourceGroupName = $DeploymentOutput["resourceGroupData"]
 $StorageAccountName = $DeploymentOutput["dataSourceStorageAccountName"]
 $ContainerName = "flights-data"
-az storage blob upload --account-name $StorageAccountName --container-name $ContainerName --name AirportCodeLocationLookupClean.csv --file sample-data/AirportCodeLocationLookupClean.csv
-az storage blob upload --account-name $StorageAccountName --container-name $ContainerName --name FlightDelaysWithAirportCodes.csv --file sample-data/FlightDelaysWithAirportCodes.csv
-az storage blob upload --account-name $StorageAccountName --container-name $ContainerName --name FlightWeatherWithAirportCode.csv --file sample-data/FlightWeatherWithAirportCode.csv
+
+$uploadStorage = Get-AzStorageAccount -ResourceGroupName $ResourceGroupName -Name $StorageAccountName
+
+Set-AzStorageBlobContent -Container $ContainerName -File ../../sample-data/AirportCodeLocationLookupClean.csv -Context $uploadStorage.Context -Force
+Set-AzStorageBlobContent -Container $ContainerName -File ../../sample-data/FlightDelaysWithAirportCodes.csv -Context $uploadStorage.Context -Force
+Set-AzStorageBlobContent -Container $ContainerName -File ../../sample-data/FlightWeatherWithAirportCode.csv -Context $uploadStorage.Context -Force
