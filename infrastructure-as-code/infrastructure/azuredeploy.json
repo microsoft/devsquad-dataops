@@ -144,6 +144,7 @@
     "mlDeploymentName": "[concat('ml-', deployment().name)]",
     "dataRoleAssigmentsDeploymentName": "[concat('data-roleAssigments-', deployment().name)]",
     "computeRoleAssigmentsDeploymentName": "[concat('compute-roleAssigments-', deployment().name)]",
+    "dataSourceStorageAccountName": "[naming.clean('stg',variables('uniqueStr'), parameters('environment'))]",
     "dataLakeName": "[naming.clean('lake',variables('uniqueStr'), parameters('environment'))]",
     "databricksName": "[naming.default('dbw',variables('uniqueStr'), parameters('environment'))]",
     "dataFactoryName": "[naming.default('adf',variables('uniqueStr'), parameters('environment'))]",
@@ -169,6 +170,9 @@
           "location": {
             "value": "[parameters('location')]"
           },
+          "dataSourceStorageAccountName": {
+            "value": "[variables('dataSourceStorageAccountName')]"
+          },          
           "dataLakeName": {
             "value": "[variables('dataLakeName')]"
           },
@@ -224,11 +228,15 @@
           },
           "keyVaultSecrets": {
             "value": {
-              "secrets": [
+              "secrets": [           
                 {
                   "secretName": "dataLakeName",
                   "secretValue": "[variables('dataLakeName')]"
-                }
+                },
+                {
+                  "secretName": "StorageAccountConnectionString",
+                  "secretValue": "[concat('DefaultEndpointsProtocol=https;AccountName=', variables('dataSourceStorageAccountName'), ';AccountKey=', listKeys(resourceId(parameters('resourceGroupData'),'Microsoft.Storage/storageAccounts', variables('dataSourceStorageAccountName')), '2019-04-01').keys[0].value,';EndpointSuffix=core.windows.net')]"
+                }  
               ]
             }
           },
@@ -337,6 +345,10 @@
       "type": "string",
       "value": "[parameters('resourceGroupMachineLearning')]"
     },
+    "dataSourceStorageAccountName": {
+      "type": "string",
+      "value": "[variables('dataSourceStorageAccountName')]"
+    },    
     "dataLakeName": {
       "type": "string",
       "value": "[variables('dataLakeName')]"

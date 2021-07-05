@@ -5,6 +5,9 @@
     "location": {
       "type": "string"
     },
+    "dataSourceStorageAccountName": {
+      "type": "string"
+    },
     "dataLakeName": {
       "type": "string"
     },
@@ -53,7 +56,57 @@
       "dependsOn": [
         "[parameters('dataLakeName')]"
       ]
+    },
+    {
+        "name": "[parameters('dataSourceStorageAccountName')]",
+        "type": "Microsoft.Storage/storageAccounts",
+        "apiVersion": "2019-06-01",
+        "location": "[parameters('location')]",
+        "properties": {
+            "accessTier": "Hot",
+            "minimumTlsVersion": "TLS1_2",
+            "supportsHttpsTrafficOnly": true,
+            "allowBlobPublicAccess": true,
+            "allowSharedKeyAccess": true,
+            "networkAcls": {
+                "bypass": "AzureServices",
+                "defaultAction": "Allow",
+                "ipRules": []
+            }
+        },
+        "dependsOn": [],
+        "sku": {
+            "name": "Standard_LRS"
+        },
+        "kind": "StorageV2",
+        "tags": {}
+    },
+    {
+        "name": "[concat(parameters('dataSourceStorageAccountName'), '/flights-data')]",
+        "type": "Microsoft.Storage/storageAccounts/blobServices",
+        "apiVersion": "2019-06-01",
+        "properties": {
+            "restorePolicy": {
+                "enabled": false
+            },
+            "deleteRetentionPolicy": {
+                "enabled": true,
+                "days": 7
+            },
+            "containerDeleteRetentionPolicy": {
+                "enabled": true,
+                "days": 7
+            },
+            "changeFeed": {
+                "enabled": false
+            },
+            "isVersioningEnabled": false
+        },
+        "dependsOn": [
+            "[concat('Microsoft.Storage/storageAccounts/', parameters('dataSourceStorageAccountName'))]"
+        ]
     }
+
   ],
   "outputs": {}
 }
