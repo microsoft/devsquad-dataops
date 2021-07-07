@@ -5,6 +5,9 @@
         "environment":{
             "value": "prod"
         },
+        "solutionName":{
+            "value": "dataops"
+        },        
         "location": {
             "value": "eastus"
         },

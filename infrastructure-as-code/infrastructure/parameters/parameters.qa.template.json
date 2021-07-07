@@ -5,6 +5,9 @@
         "environment":{
             "value": "qa"
         },
+        "solutionName":{
+            "value": "<Project.Alias>"
+        },        
         "location": {
             "value": "eastus"
         },

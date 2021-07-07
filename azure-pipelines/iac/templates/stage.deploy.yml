@@ -42,6 +42,18 @@ stages:
                 -DeploymentOutputFile "armOutput.json"
               azurePowerShellVersion: 'OtherVersion'
               preferredAzurePowerShellVersion: $(azPowershellVersion)
+
+          - task: AzurePowerShell@4
+            displayName: 'Upload Sample Files'
+            inputs:
+              azureSubscription: ${{ parameters.azureServiceConnection }}
+              scriptType: filePath
+              scriptPath: infrastructure-as-code/scripts/UploadSampleData.ps1
+              scriptArguments: >
+                -DeploymentOutputFile "armOutput.json"
+              azurePowerShellVersion: 'OtherVersion'
+              preferredAzurePowerShellVersion: $(azPowershellVersion)
+
           - task: PowerShell@2
             displayName: 'Publish Outputs'
             inputs:

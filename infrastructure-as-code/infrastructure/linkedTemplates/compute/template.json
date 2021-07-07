@@ -137,8 +137,8 @@
                 "enabledForDeployment": false,
                 "enabledForDiskEncryption": false,
                 "enabledForTemplateDeployment": false,
-                "enableSoftDelete": false,
-                "softDeleteRetentionInDays": 90,
+                "enableSoftDelete": true,
+                "softDeleteRetentionInDays": 7,
                 "enablePurgeProtection": true,
                 "accessPolicies": [
                     {
