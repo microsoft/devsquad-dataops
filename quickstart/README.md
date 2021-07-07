@@ -62,16 +62,16 @@ Using [PowerShell Core](https://docs.microsoft.com/en-us/powershell/scripting/in
   $env:AZURE_DEVOPS_EXT_PAT_TEMPLATE="<my pat goes here>"
   ```
 
-4. Set the environment variable `$env:AZURE_DEVOPS_EXT_PAT` with a [PAT (Personal Access Token)](https://docs.microsoft.com/en-us/azure/devops/organizations/accounts/use-personal-access-tokens-to-authenticate?view=azure-devops&tabs=preview-page) with **Full Access** to enable the script to connect to the new Azure DevOps to deploy all the resources.
+5. Set the environment variable `$env:AZURE_DEVOPS_EXT_PAT` with a [PAT (Personal Access Token)](https://docs.microsoft.com/en-us/azure/devops/organizations/accounts/use-personal-access-tokens-to-authenticate?view=azure-devops&tabs=preview-page) with **Full Access** to enable the script to connect to the new Azure DevOps to deploy all the resources.
 
   ```
   $env:AZURE_DEVOPS_EXT_PAT="<my pat goes here>"
   ```
 
-5. Run the script to clone the repo, create the pipeline and service connections inside the new Azure DevOps.
+6. Run the script to clone the repo, create the pipeline and service connections inside the new Azure DevOps.
 
 >  Note the file name is the one inside the output directory and the name is the same name of the _projectName_ that was replaced in the first config file.
 
   ```
-  ./quickstart/scripts/dataops/Deploy-AzureDevOps.ps1 -ConfigurationFile "./quickstart/outputs/hol.json"
+  ./quickstart/scripts/dataops/Deploy-AzureDevOps.ps1 -ConfigurationFile "./quickstart/outputs/hol.json" -UsePAT $true
   ```
