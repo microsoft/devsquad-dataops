@@ -26,55 +26,63 @@
 
 ## Setup the Configuration File
 
-1. Open the terminal and create a new config file based on the template
+1. Clone the `hol` repository through SSH or HTTPS and navigate on its root directory:
+  ```
+  cd hol
+  ```
 
-```
-cp quickstart/configs/cloud-setup/template.json quickstart/configs/cloud-setup/hol.json
+2. Open the terminal and create a new config file based on the template
 
-```
-2. Open the file with your favorite editor and replace the following values:
+  ```
+  cp quickstart/configs/cloud-setup/template.json quickstart/configs/cloud-setup/hol.json
 
-|Value|Description|Example|
-|-----|-----------|-------|
-|<_projectName_>|Name of the existing project inside Azure DevOps that will be used in the lab|_MyDataOpsHOL_|
-|<_projectAlias_>|A string of 8 characteres that will be used as part of the name of for the Resource Groups|_dataops_|
-|<_orgName_>|Azure DevOps organization name|_MyOrg_|
-|<_subscriptionId_>|Azure Subscription ID where the resources will be deployed|_f7e5bb9e-0f98-4c5d-a5c1-a9154bf3cd61_|
+  ```
+
+3. Open the file with your favorite editor and replace the following values:
+
+  |Value|Description|Example|
+  |-----|-----------|-------|
+  |<_projectName_>|Name of the existing project inside Azure DevOps that will be used in the lab|_MyDataOpsHOL_|
+  |<_projectAlias_>|A string of 8 characteres that will be used as part of the name of for the Resource Groups|_dataops_|
+  |<_orgName_>|Azure DevOps organization name|_MyOrg_|
+  |<_subscriptionId_>|Azure Subscription ID where the resources will be deployed|_f7e5bb9e-0f98-4c5d-a5c1-a9154bf3cd61_|
 
 ## Run the Scripts
 
-3. Login into Azure
+1. Login into Azure
 
-```
-az login
-az account set --subscription <subscriptionId>
-```
+  ```
+  az login
+  az account set --subscription <subscriptionId>
+  ```
 
-4. Run a script to deploy the Azure pre-requisites using PowerShell Core. Note that this script will also validade the parameters of the config file.
+2. Run a script to deploy the Azure pre-requisites using PowerShell Core. Note that this script will also validade the parameters of the config file.
 
-```
-pwsh
+  ```
+  pwsh
 
-Set-AzContext <subscriptionId>
+  Set-AzContext <subscriptionId>
 
-./quickstart/scripts/cloud-setup/Deploy-AzurePreReqs.ps1 -ConfigurationFile "quickstart/configs/cloud-setup/hol.json"
+  ./quickstart/scripts/cloud-setup/Deploy-AzurePreReqs.ps1 -ConfigurationFile "quickstart/configs/cloud-setup/hol.json"
 
-```
+  ```
 
-5. Set the environment variable ```$env:AZURE_DEVOPS_EXT_PAT_TEMPLATE``` with a [PAT (Personal Access Token)](https://docs.microsoft.com/en-us/azure/devops/organizations/accounts/use-personal-access-tokens-to-authenticate?view=azure-devops&tabs=preview-page) with **Code (read)** [scope](https://docs.microsoft.com/en-us/azure/devops/integrate/get-started/authentication/oauth?view=azure-devops#scopes) to enable the script to connect to the Azure DevOps containing the files and instructions of the lab. It is required because if will clone the repository to the new Azure DevOps project that will be used for this lab.
+3. Set the environment variable `$env:AZURE_DEVOPS_EXT_PAT_TEMPLATE` with a [PAT (Personal Access Token)](https://docs.microsoft.com/en-us/azure/devops/organizations/accounts/use-personal-access-tokens-to-authenticate?view=azure-devops&tabs=preview-page) with **Code (read)** [scope](https://docs.microsoft.com/en-us/azure/devops/integrate/get-started/authentication/oauth?view=azure-devops#scopes) to enable the script to connect to the Azure DevOps containing the files and instructions of the lab. It is required because if will clone the repository to the new Azure DevOps project that will be used for this lab.
 
-```
-$env:AZURE_DEVOPS_EXT_PAT_TEMPLATE="<my pat goes here>"
-```
+  ```
+  $env:AZURE_DEVOPS_EXT_PAT_TEMPLATE="<my pat goes here>"
+  ```
 
-5. Set the environment variable ```$env:AZURE_DEVOPS_EXT_PAT``` with a [PAT (Personal Access Token)](https://docs.microsoft.com/en-us/azure/devops/organizations/accounts/use-personal-access-tokens-to-authenticate?view=azure-devops&tabs=preview-page) with **Full Access** to enable the script to connect to the new Azure DevOps to deploy all the resources.
+4. Set the environment variable `$env:AZURE_DEVOPS_EXT_PAT` with a [PAT (Personal Access Token)](https://docs.microsoft.com/en-us/azure/devops/organizations/accounts/use-personal-access-tokens-to-authenticate?view=azure-devops&tabs=preview-page) with **Full Access** to enable the script to connect to the new Azure DevOps to deploy all the resources.
 
-```
-$env:AZURE_DEVOPS_EXT_PAT="<my pat goes here>"
-```
+  ```
+  $env:AZURE_DEVOPS_EXT_PAT="<my pat goes here>"
+  ```
 
-6. Run the script to clone the repo, create the pipeline and service connections inside the new Azure DevOps. (*) Note that the file name is the one inside the output directory and the name is the same name of the _projectName_ that was replaced in the first config file.
+5. Run the script to clone the repo, create the pipeline and service connections inside the new Azure DevOps.
 
-```
-./quickstart/scripts/dataops/Deploy-AzureDevOps.ps1 -ConfigurationFile "./quickstart/outputs/hol.json"
-```
+>  Note the file name is the one inside the output directory and the name is the same name of the _projectName_ that was replaced in the first config file.
+
+  ```
+  ./quickstart/scripts/dataops/Deploy-AzureDevOps.ps1 -ConfigurationFile "./quickstart/outputs/hol.json"
+  ```
