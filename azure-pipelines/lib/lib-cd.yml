@@ -7,7 +7,7 @@ trigger:
     - main
   paths:
     include:
-    - src/dataopslib/dataopslib
+    - data-platform/src/dataopslib/dataopslib
 
 variables:
   artifactFeed: advworks-dataops/lib-packages
