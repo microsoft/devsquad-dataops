@@ -286,7 +286,17 @@ In this exercise, you will explore and understand the structure and contents of 
 
 Infrastructure as Code (IaC) is the management of infrastructure (networks, virtual machines, load balancers, and connection topology) in a descriptive model, using the same versioning as DevOps team uses for source code. Like the principle that the same source code generates the same binary, an IaC model generates the same environment every time it is applied. IaC is a key DevOps practice and is used in conjunction with continuous delivery. (https://docs.microsoft.com/en-us/devops/deliver/what-is-infrastructure-as-code)
 
+### Task 1: Understanding the IaC folder
 
+In this task you will explore and understand the folder structure and scripts, templates contained in it for execution in IaC.
+
+### Task 2: Creating a new sandbox environment with Powershell
+
+In this task you will learn how to create your first sandbox environment, with Azure Powershell scripts.
+
+### Task 3: Checklist of IaC best practices
+
+In this task you will understand the best practices in creating, executing and managing scripts and templates in IaC.
 
 
 ## Exercise 3: Git Workflow and CI/CD
