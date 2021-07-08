@@ -144,37 +144,40 @@ function CloneRepo {
 function CreateAzDevOpsRepoApprovalPolicy {
     [cmdletbinding()]
     param (
+        [Parameter(Mandatory)] [string] $Branch,
         [Parameter(Mandatory)] [hashtable] $RepoInfo,
         [Parameter(Mandatory)] [hashtable] $RepoConfiguration
     )
     [Argument]::AssertIsNotNull("RepoInfo", $RepoInfo)
     [Argument]::AssertIsNotNull("RepoConfiguration", $RepoConfiguration)
 
-    Write-Host "Creating policy for approver count on branch $($RepoConfiguration.DefaultBranchName)" -ForegroundColor Green
+    Write-Host "Creating policy for approver count on branch $Branch" -ForegroundColor Green
 
-    $result = az repos policy approver-count create --blocking true --branch $RepoConfiguration.DefaultBranchName --creator-vote-counts false --enabled true --minimum-approver-count $RepoConfiguration.MinimumApprovers --reset-on-source-push false --allow-downvotes false --repository-id $RepoInfo.id --org $RepoConfiguration.AzureDevOpsOrganizationURI --project $RepoConfiguration.AzureDevOpsProject
+    $result = az repos policy approver-count create --blocking true --branch $Branch --creator-vote-counts false --enabled true --minimum-approver-count $RepoConfiguration.MinimumApprovers --reset-on-source-push false --allow-downvotes false --repository-id $RepoInfo.id --org $RepoConfiguration.AzureDevOpsOrganizationURI --project $RepoConfiguration.AzureDevOpsProject
 
     $result | Write-Verbose
 }
 function CreateAzDevOpsRepoCommentPolicy {
     [cmdletbinding()]
     param (
+        [Parameter(Mandatory)] [string] $Branch,
         [Parameter(Mandatory)] [hashtable] $RepoInfo,
         [Parameter(Mandatory)] [hashtable] $RepoConfiguration
     )
     [Argument]::AssertIsNotNull("RepoInfo", $RepoInfo)
     [Argument]::AssertIsNotNull("RepoConfiguration", $RepoConfiguration)
 
-    Write-Host "Creating policy for comment resolution on branch $($RepoConfiguration.DefaultBranchName)" -ForegroundColor Green
+    Write-Host "Creating policy for comment resolution on branch $Branch" -ForegroundColor Green
 
-    $result = az repos policy comment-required create --blocking true --branch $RepoConfiguration.DefaultBranchName --enabled true --repository-id $RepoInfo.id --org $RepoConfiguration.AzureDevOpsOrganizationURI --project $RepoConfiguration.AzureDevOpsProject
+    $result = az repos policy comment-required create --blocking true --branch $Branch --enabled true --repository-id $RepoInfo.id --org $RepoConfiguration.AzureDevOpsOrganizationURI --project $RepoConfiguration.AzureDevOpsProject
 
     $result | Write-Verbose
 }
 function CreateAzDevOpsYamlPipelines {
     [cmdletbinding()]
     param(
-        [Parameter(Mandatory)] [hashtable] $RepoConfiguration
+        [Parameter(Mandatory)] [hashtable] $RepoConfiguration,
+        [Parameter(Mandatory)] [string] $DefaultBranch
     )
     [Argument]::AssertIsNotNull("RepoConfiguration", $RepoConfiguration)
 
@@ -183,7 +186,7 @@ function CreateAzDevOpsYamlPipelines {
 
         $result = az pipelines show --name "$($pipeline.Name)" --org $RepoConfiguration.AzureDevOpsOrganizationURI --project $RepoConfiguration.AzureDevOpsProject
         if (! $?){
-            $result = az pipelines create --skip-first-run --branch $RepoConfiguration.DefaultBranchName --name "$($pipeline.Name)" --folder-path $RepoConfiguration.RepoName `
+            $result = az pipelines create --skip-first-run --branch "$DefaultBranch" --name "$($pipeline.Name)" --folder-path $RepoConfiguration.RepoName `
                                           --repository-type tfsgit --repository $RepoConfiguration.RepoName --yml-path $pipeline.SourceYamlPath `
                                           --org $RepoConfiguration.AzureDevOpsOrganizationURI --project $RepoConfiguration.AzureDevOpsProject
         }else{
@@ -197,6 +200,7 @@ function CreateAzDevOpsYamlPipelines {
 function CreateAzDevOpsRepoBuildPolicy {
     [cmdletbinding()]
     param(
+        [Parameter(Mandatory)] [string] $Branch,
         [Parameter(Mandatory)] [hashtable] $RepoInfo,
         [Parameter(Mandatory)] [hashtable] $RepoConfiguration
     )
@@ -212,13 +216,13 @@ function CreateAzDevOpsRepoBuildPolicy {
 
             $displayName = "$($pipeline.BuildPolicy.Name)"
 
-            $policyId = az repos policy list --repository-id $RepoInfo.id --branch $RepoConfiguration.DefaultBranchName `
+            $policyId = az repos policy list --repository-id $RepoInfo.id --branch $Branch `
                             --org $RepoConfiguration.AzureDevOpsOrganizationURI --project $RepoConfiguration.AzureDevOpsProject `
                             --query "[?settings.displayName=='$displayName'].id" -o tsv
 
             if (! $policyId) {
                 $result = az repos policy build create --repository-id $RepoInfo.id --build-definition-id $pipelineId --display-name $displayName `
-                                                    --branch $RepoConfiguration.DefaultBranchName --path-filter $pipeline.BuildPolicy.PathFilter `
+                                                    --branch $Branch --path-filter $pipeline.BuildPolicy.PathFilter `
                                                     --blocking true --enabled true  --queue-on-source-update-only true `
                                                     --manual-queue-only false --valid-duration 0 `
                                                     --org $RepoConfiguration.AzureDevOpsOrganizationURI --project $RepoConfiguration.AzureDevOpsProject

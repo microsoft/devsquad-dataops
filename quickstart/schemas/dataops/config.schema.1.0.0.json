@@ -33,9 +33,6 @@
         },
         "TemplateGitUrl": {
           "type": "string"
-        },        
-        "DefaultBranchName": {
-          "type": "string"
         },
         "MinimumApprovers": {
           "type": "string"
@@ -77,7 +74,6 @@
       "required": [
         "AzureDevOpsOrganizationURI",
         "AzureDevOpsProject",
-        "DefaultBranchName",
         "MinimumApprovers",
         "Pipelines",
         "RepoName"

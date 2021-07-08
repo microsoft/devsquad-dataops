@@ -9,7 +9,6 @@
         "AzureDevOpsOrganizationURI": "https://dev.azure.com/<azureDevOps.organization>",
         "AzureDevOpsProject": "<project.name>",
         "TemplateGitUrl": "https://csu-devsquad@dev.azure.com/csu-devsquad/advworks-dataops/_git/hol",
-        "DefaultBranchName": "develop",
         "MinimumApprovers": "1",
         "Pipelines": [
             {

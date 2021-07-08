@@ -4,6 +4,7 @@ Using module ./Logging.psm1
 function ImportTemplateRepoToDomainRepo {
     param (
         [Parameter(Mandatory)] [hashtable] $RepoConfiguration,
+        [Parameter(Mandatory)] [string[]] $Branches,
         [Parameter(Mandatory)] [string] $Directory,
 		[Parameter(Mandatory)] [boolean] $UsePAT
     )
@@ -21,18 +22,17 @@ function ImportTemplateRepoToDomainRepo {
     git remote add template $templateGitUrl
     git fetch template
     git merge remotes/template/main
-	
-	git push -u origin HEAD:main
-	git push -u origin HEAD:qa
 
-	git branch -M $RepoConfiguration.DefaultBranchName
-	git push origin HEAD
+	foreach ($branch in $branches){
+		git push -u origin HEAD:$branch
+	}
 	
     Set-Location -
 }
 
 function UpdateIaCParameters {
     param (
+        [Parameter(Mandatory)] [string] $Branch,
         [Parameter(Mandatory)] [hashtable] $Configuration,
         [Parameter(Mandatory)] [string] $Directory
     )
@@ -42,7 +42,7 @@ function UpdateIaCParameters {
 
     Set-Location $Directory
 
-	git checkout $Configuration.RepoConfiguration.DefaultBranchName
+	git checkout $Branch
 
 	BeginScope -Scope "IaC parameters"
 
@@ -69,8 +69,8 @@ function UpdateIaCParameters {
 	EndScope
 
 	git add .
-	git commit -m "Update IaC paramaters."
-    git push -u origin HEAD:$($Configuration.RepoConfiguration.DefaultBranchName)
+	git commit -m "Update template parameters"
+    git push -u origin HEAD:$Branch
 
     Set-Location -
 }

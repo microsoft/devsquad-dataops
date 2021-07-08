@@ -18,18 +18,23 @@ if (! $validConfigFile)
 	throw "Invalid properties on the '$ConfigurationFile' configuration file."
 }
 
+$branches = 'develop','qa','main'
 $config = LoadConfigurationFile -ConfigurationFile $ConfigurationFile -Verbose:$VerbosePreference
 
 $repoInfo = CreateAzureDevopsRepository -RepoConfiguration $config.RepoConfiguration -Verbose:$VerbosePreference
 
 $directory = CloneRepo -RepoInfo $repoInfo -UseSSH $UseSSH -UsePAT $UsePAT -Verbose:$VerbosePreference
-ImportTemplateRepoToDomainRepo -RepoConfiguration $config.RepoConfiguration -UsePAT $UsePAT -Directory $directory[0] -Verbose:$VerbosePreference
+ImportTemplateRepoToDomainRepo -Branches $branches -RepoConfiguration $config.RepoConfiguration -UsePAT $UsePAT -Directory $directory[0] -Verbose:$VerbosePreference
 
-CreateAzDevOpsYamlPipelines -RepoConfiguration $config.RepoConfiguration -Verbose:$VerbosePreference
+CreateAzDevOpsYamlPipelines -DefaultBranch $branches[0] -RepoConfiguration $config.RepoConfiguration -Verbose:$VerbosePreference
 
-UpdateIaCParameters -Configuration $config -Directory $directory[0] -Verbose:$VerbosePreference
+UpdateIaCParameters -Branch $branches[0] -Configuration $config -Directory $directory[0] -Verbose:$VerbosePreference
 
-CreateAzDevOpsRepoApprovalPolicy -RepoInfo $repoInfo -RepoConfiguration $config.RepoConfiguration -Verbose:$VerbosePreference
-CreateAzDevOpsRepoCommentPolicy  -RepoInfo $repoInfo -RepoConfiguration $config.RepoConfiguration -Verbose:$VerbosePreference
-CreateAzDevOpsRepoBuildPolicy -RepoInfo $repoInfo -RepoConfiguration $config.RepoConfiguration -Verbose:$VerbosePreference
+foreach ($branch in $branches)
+{
+    CreateAzDevOpsRepoApprovalPolicy -Branch $branch -RepoInfo $repoInfo -RepoConfiguration $config.RepoConfiguration -Verbose:$VerbosePreference
+    CreateAzDevOpsRepoCommentPolicy -Branch $branch -RepoInfo $repoInfo -RepoConfiguration $config.RepoConfiguration -Verbose:$VerbosePreference
+    CreateAzDevOpsRepoBuildPolicy -Branch $branch -RepoInfo $repoInfo -RepoConfiguration $config.RepoConfiguration -Verbose:$VerbosePreference
+}
+
 CreateAzDevOpsVariableGroups -RepoConfiguration $config.RepoConfiguration -Verbose:$VerbosePreference
