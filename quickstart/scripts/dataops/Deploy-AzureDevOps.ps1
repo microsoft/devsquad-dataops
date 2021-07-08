@@ -21,6 +21,8 @@ if (! $validConfigFile)
 $branches = 'develop','qa','main'
 $config = LoadConfigurationFile -ConfigurationFile $ConfigurationFile -Verbose:$VerbosePreference
 
+CreateAzDevOpsVariableGroups -RepoConfiguration $config.RepoConfiguration -Verbose:$VerbosePreference
+
 $repoInfo = CreateAzureDevopsRepository -RepoConfiguration $config.RepoConfiguration -Verbose:$VerbosePreference
 
 $directory = CloneRepo -RepoInfo $repoInfo -UseSSH $UseSSH -UsePAT $UsePAT -Verbose:$VerbosePreference
@@ -36,5 +38,3 @@ foreach ($branch in $branches)
     CreateAzDevOpsRepoCommentPolicy -Branch $branch -RepoInfo $repoInfo -RepoConfiguration $config.RepoConfiguration -Verbose:$VerbosePreference
     CreateAzDevOpsRepoBuildPolicy -Branch $branch -RepoInfo $repoInfo -RepoConfiguration $config.RepoConfiguration -Verbose:$VerbosePreference
 }
-
-CreateAzDevOpsVariableGroups -RepoConfiguration $config.RepoConfiguration -Verbose:$VerbosePreference
