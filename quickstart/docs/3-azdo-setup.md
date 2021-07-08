@@ -5,7 +5,7 @@
 An artifact feed is required on the lab for publishing Python libraries with versioning.
 On your Azure DevOps project, go to the `Artifacts` section -> `Create Feed`, then set the name as `lib-packages`:
 
-![Artifact feed](./images/artifact-ffed.png)
+![Artifact feed](./images/artifact-feed.png)
 
 ## Create the environment variables
 
