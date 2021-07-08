@@ -9,7 +9,7 @@ trigger:
     - develop
   paths:
     include:
-    - adf
+    - data-platform/adf
 
 pool:
   vmImage: 'ubuntu-latest'

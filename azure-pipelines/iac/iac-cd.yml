@@ -6,8 +6,8 @@ trigger:
     - develop
   paths:
     include:
-    - databricks
-    - infrastructure
+    - infrastructure-as-code/databricks
+    - infrastructure-as-code/infrastructure
 
 variables:
 - template: templates/variable.environment.yml
