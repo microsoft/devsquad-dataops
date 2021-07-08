@@ -1,8 +1,7 @@
 
 # Create the pre-required Azure resources
 
-Using [PowerShell Core](https://docs.microsoft.com/en-us/powershell/scripting/insta
-ll/installing-powershell?view=powershell-7.1), run the following script to deploy the pre-required Azure resources:
+Using [PowerShell Core](https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell?view=powershell-7.1), run the following script to deploy the pre-required Azure resources:
 
 ```
 az login
