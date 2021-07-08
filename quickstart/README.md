@@ -27,6 +27,6 @@
 
 ## Getting Started
 
-* [Step 1: Setup the Configuration File](./docs/1-setup-config-file.md)
+* [Step 1: Create a Cloud Setup configuration file](./docs/1-create-cloud-setup-file.md)
 * [Step 2: Create the pre-required Azure resources](./docs/2-create-prereqs-azure.md)
-* [Step 3: Azure DevOps project setup](./docs/3-azdo-setup.md)
+* [Step 3: Prepare your Azure DevOps project](./docs/3-azdo-setup.md)

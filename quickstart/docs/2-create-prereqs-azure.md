@@ -19,4 +19,4 @@ The diagram below shows what Azure resources will be created after the execution
 
 ## Next Step
 
-* [Azure DevOps project setup](./3-azdo-setup.md)
+* [Prepare your Azure DevOps project](./3-azdo-setup.md)
