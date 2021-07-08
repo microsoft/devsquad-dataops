@@ -5,11 +5,12 @@ param(
     [Parameter(Mandatory)] [string] $SolutionName,
     [string] $SolutionTemplateFile = "./infrastructure-as-code/infrastructure/azuredeploy.json",
     [string] $SolutionParametersFile = "./infrastructure-as-code/infrastructure/parameters/parameters.$Environment.json",
-    [string] $TemplateSpecRgName = "rg-dataops-template-specs",
     [string] $VersionDescription = "",
     [string] $VersionBuildId = "",
     [string] $VersionAuthor = ""
 )
+
+[string] $TemplateSpecRgName = "rg-$SolutionName-template-specs"
 
 Write-Host "Start planning $SolutionName ($Version) on $Environment environment at $Location" -ForegroundColor Green
 
