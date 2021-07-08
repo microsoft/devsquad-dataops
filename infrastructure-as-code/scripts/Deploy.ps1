@@ -4,11 +4,12 @@ param(
     [Parameter(Mandatory)] [string] $Location,
     [Parameter(Mandatory)] [string] $SolutionName,
     [string] $SolutionParametersFile = "./infrastructure-as-code/infrastructure/parameters/parameters.$Environment.json",
-    [string] $TemplateSpecRgName = "rg-dataops-template-specs",
     [string] $DeploymentOutputFile
 )
 
 $ErrorActionPreference = "Stop"
+
+[string] $TemplateSpecRgName = "rg-$SolutionName-template-specs"
 
 Write-Host "Start deploying $SolutionName for $Version at $Location" -ForegroundColor Green
 
