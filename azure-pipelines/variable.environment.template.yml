@@ -3,13 +3,16 @@ variables:
   iacCdDbwVariableGroupPrefix: 'dataops-iac-dbw-cd-output'
   artifactFeed: <RepoConfiguration.AzureDevOpsProject>/lib-packages
   variableGroupName: lib-versions
-
+  
   ${{ if eq(variables['Build.SourceBranchName'], 'main') }}:
     environment: prod
     azureServiceConnection: spn-iac-prod
+    branch: 'refs/heads/main'
   ${{ if eq(variables['Build.SourceBranchName'], 'qa') }}:    
     environment: qa
     azureServiceConnection: spn-iac-qa
+    branch: 'refs/heads/qa'
   ${{ if and(ne(variables['Build.SourceBranchName'], 'main'), ne(variables['Build.SourceBranchName'], 'qa')) }}:
     environment: dev
     azureServiceConnection: spn-iac-dev
+    branch: 'refs/heads/develop'
