@@ -19,3 +19,7 @@ Run the following script to clone the `hol` repo, create the pipelines and servi
 ```
 ./quickstart/scripts/dataops/Deploy-AzureDevOps.ps1 -ConfigurationFile "./quickstart/outputs/hol.json" -UsePAT $true
 ```
+
+## Next Step
+
+* [Create Azure Databricks secrets scope for all environments](./4-create-databricks-secrets-scope.md)
