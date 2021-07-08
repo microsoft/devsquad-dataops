@@ -24,7 +24,3 @@ Run the following script to clone the `hol` repo, create the pipelines and servi
 ```
 ./quickstart/scripts/dataops/Deploy-AzureDevOps.ps1 -ConfigurationFile "./quickstart/outputs/hol.json" -UsePAT $true
 ```
-
-## Next Step
-
-* [Azure DevOps project setup](./3-azdo-setup.md)

@@ -16,3 +16,7 @@ Connect-AzAccount
 The diagram below shows what Azure resources will be created after the execution of the script:
 
 ![Azure resources](./images/azure-prereqs-script.png)
+
+## Next Step
+
+* [Azure DevOps project setup](./3-azdo-setup.md)
