@@ -36,7 +36,7 @@ Microsoft and the trademarks listed at <https://www.microsoft.com/en-us/legal/in
     - [Task 2: Azure Data Factory](#Task-2-Azure-Data-Factory)
     - [Task 3: Azure Databricks](#Task-3-Azure-Databricks)
   - [Exercise 2: Infrastructure As Code](#Exercise-2-Infrastructure-As-Code) (30 min) (Owner: Jaque)
-    - [Task 1: Understanding the IaC repository]()
+    - [Task 1: Understanding the IaC folder]()
     - [Task 2: Creating a new sandbox environment with Powershell]()
     - [Task 3: Checklist of IaC best practices]()
   - [Exercise 3: Git Workflow and CI/CD](#Exercise-3-Git-Workflow-and-CI/CD) (45 min) (Owner: Ana/Adrian)
@@ -279,6 +279,25 @@ In this task, you will explore the adf-dataops-eastus2-dev Azure Data Factory in
 ## Exercise 2: Infrastructure As Code
 
 Duration: 30 minutes
+
+In this exercise, you will explore and understand the structure and contents of the IaC folder, which contains all the scripts and templates necessary to correctly perform this and other exercises in this lab, using a best practices model.
+
+### Technology Overview 
+
+Infrastructure as Code (IaC) is the management of infrastructure (networks, virtual machines, load balancers, and connection topology) in a descriptive model, using the same versioning as DevOps team uses for source code. Like the principle that the same source code generates the same binary, an IaC model generates the same environment every time it is applied. IaC is a key DevOps practice and is used in conjunction with continuous delivery. (https://docs.microsoft.com/en-us/devops/deliver/what-is-infrastructure-as-code)
+
+### Task 1: Understanding the IaC folder
+
+In this task you will explore and understand the folder structure and scripts, templates contained in it for execution in IaC.
+
+### Task 2: Creating a new sandbox environment with Powershell
+
+In this task you will learn how to create your first sandbox environment, with Azure Powershell scripts.
+
+### Task 3: Checklist of IaC best practices
+
+In this task you will understand the best practices in creating, executing and managing scripts and templates in IaC.
+
 
 ## Exercise 3: Git Workflow and CI/CD
 
