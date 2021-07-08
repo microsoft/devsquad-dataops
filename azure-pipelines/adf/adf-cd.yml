@@ -15,27 +15,27 @@ pool:
   vmImage: 'ubuntu-latest'
 
 variables:
-- template: templates/variable.environment.yml
+- template: ../variable.environment.yml
   
 stages:
-- template: templates/adf/build.yml
+- template: templates/build.yml
   parameters:
     environment: ${{variables.environment}}
     iacCdVariableGroupPrefix: ${{variables.iacCdVariableGroupPrefix}}
     iacCdDbwVariableGroupPrefix: ${{variables.iacCdDbwVariableGroupPrefix}}
-    workingDirectory: 'adf'
+    workingDirectory: 'data-platform/adf'
 
-- template: templates/adf/deploy.yml
+- template: templates/deploy.yml
   parameters:
     environment: ${{variables.environment}}
     iacCdVariableGroupPrefix: ${{variables.iacCdVariableGroupPrefix}}
     iacCdDbwVariableGroupPrefix: ${{variables.iacCdDbwVariableGroupPrefix}}
     pipelineArtifactDirectory: $(System.DefaultWorkingDirectory)/_dataops-adf-cd
 
-- template: templates/adf/test.yml
+- template: templates/test.yml
   parameters:
     environment: ${{variables.environment}}
     iacCdVariableGroupPrefix: ${{variables.iacCdVariableGroupPrefix}}
     iacCdDbwVariableGroupPrefix: ${{variables.iacCdDbwVariableGroupPrefix}}
-    workingDirectory: src/bdd-adf-pipelines
+    workingDirectory: data-platform/src/bdd-adf-pipelines
     testResultsDirectory: $(System.DefaultWorkingDirectory)/results

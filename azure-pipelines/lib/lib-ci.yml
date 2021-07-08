@@ -4,13 +4,12 @@ pool:
   vmImage: "ubuntu-latest"
 
 variables:
-  artifactFeed: advworks-dataops/lib-packages
-  variableGroupName: lib-versions
+  - template: ../variable.environment.yml
   
 jobs:
 - template: templates/lib-build-publish.yml
   parameters:
-    artifactFeed: $(artifactFeed)
-    variableGroupName: $(variableGroupName)
+    artifactFeed: ${{variables.artifactFeed}}
+    variableGroupName: ${{variables.variableGroupName}}
     prereleaseAlias: alpha
     sourceBranchName: $(System.PullRequest.SourceBranch)

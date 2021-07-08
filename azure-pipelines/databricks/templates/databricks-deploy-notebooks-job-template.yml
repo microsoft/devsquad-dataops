@@ -24,7 +24,7 @@ stages:
           - checkout: self
           - task: PublishBuildArtifacts@1
             inputs:
-              PathtoPublish: notebooks
+              PathtoPublish: data-platform/notebooks
               ArtifactName: 'databricks-${{ parameters.environment }}'
             displayName: 'Publish Databricks Artifacts'
           - template: ./databricks-setup-environment-template.yml
@@ -37,6 +37,6 @@ stages:
             env:
               DATABRICKS_HOST: https://$(databricksWorkspaceUrl)
               DATABRICKS_TOKEN: $(DATABRICKS_TOKEN)
-              NOTEBOOKS_PATH: $(Pipeline.Workspace)/s/notebooks
+              NOTEBOOKS_PATH: $(Pipeline.Workspace)/s/data-platform/notebooks
               DATABRICKS_NOTEBOOK_PATH: '/'
             displayName: 'Deploy notebooks'

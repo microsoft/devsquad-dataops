@@ -56,7 +56,7 @@ stages:
         inputs:
           command: 'custom'
           workingDir: ${{ parameters.workingDirectory }}
-          customCommand: 'run build export $(Build.Repository.LocalPath)/${{ parameters.workingDirectory }} /subscriptions/$(SUBSCRIPTION_ID)/resourceGroups/$(resourceGroupCompute)/providers/Microsoft.DataFactory/factories/$(dataFactoryName) "../ArmTemplates"'
+          customCommand: 'run build export $(Build.Repository.LocalPath)/${{ parameters.workingDirectory }} /subscriptions/$(SUBSCRIPTION_ID)/resourceGroups/$(resourceGroupCompute)/providers/Microsoft.DataFactory/factories/$(dataFactoryName) "../../ArmTemplates"'
         displayName: 'Validate and Generate ARM template'
 
       # Publish the artifact to be used as a source for a release pipeline.
