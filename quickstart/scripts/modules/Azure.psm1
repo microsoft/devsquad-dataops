@@ -43,7 +43,7 @@ function CreateOrGetServicePrincipal
 
 	if (! $servicePrincipal)
 	{ 
-		$servicePrincipal = New-AzADServicePrincipal -DisplayName $Name -Role "Owner"
+		$servicePrincipal = New-AzADServicePrincipal -DisplayName $Name -SkipAssignment
 		LogInfo -Message "Service principal '$Name' created."
 	}
 	else
@@ -68,8 +68,9 @@ function SetupEnvironments {
 		$enviroment = $Configuration.environments[$envKey]
 		$servicePrincipal = $ServicePrincipals[$enviroment.servicePrincipalName]
 		
-		# Select the subscription
 		Set-AzContext -Subscription $enviroment.subscriptionId
+
+        AssignRoleIfNotExists -RoleName "Owner" -ObjectId $servicePrincipal.objectId -SubscriptionId $enviroment.subscriptionId
 
         SetupResourceGroups -Environment $envKey -Configuration $Configuration
 		SetupServiceConnection -Environment $enviroment -ServicePrincipal $servicePrincipal -Configuration $Configuration
@@ -121,4 +122,45 @@ function CreateOrGetResourceGroup
     }
 
 	return $resourceGroup
+}
+
+function AssignRoleIfNotExists 
+{
+    [cmdletbinding()]
+	[OutputType([void])]
+    param (
+        [Parameter(Mandatory)] [string] $RoleName,
+        [Parameter(Mandatory)] [string] $ObjectId,
+        [Parameter(Mandatory)] [string] $SubscriptionId
+    )
+
+    $scope = "/subscriptions/$SubscriptionId"
+    $roleAssignment = Get-AzRoleAssignment -ObjectId $ObjectId -RoleDefinitionName $RoleName -Scope $scope
+
+    if (! $roleAssignment)
+    {	
+        # Remove retry loop after https://github.com/Azure/azure-powershell/issues/2286 is fixed
+        $totalRetries = 30
+        $retryCount = $totalRetries
+        While ($True) {
+            Try {
+                New-AzRoleAssignment -ObjectId $ObjectId -RoleDefinitionName $RoleName -Scope $scope
+                break
+            }
+            Catch {
+                If ($retryCount -eq 0) {
+                    LogError -Message "An error occurred: $($_.Exception)`n$($_.ScriptStackTrace)"
+                    throw "The principal '$ObjectId' cannot be granted '$RoleName' role on the subscription '$SubscriptionId'. Please make sure the principal exists and try again later."
+                }
+                $retryCount--
+                LogWarning -Message "The principal '$ObjectId' cannot be granted '$RoleName' role on the subscription '$SubscriptionId'. Trying again (attempt $($totalRetries - $retryCount)/$totalRetries)"
+                Start-Sleep 10
+            }
+        }
+        LogInfo -Message "Role '$RoleName' assigned to principal '$ObjectId' on the subscription '$SubscriptionId'."
+    }
+    else
+    {
+        LogWarning -Message "Role '$RoleName' was already assigned to principal '$ObjectId' oon the subscription '$SubscriptionId'."
+    }
 }
