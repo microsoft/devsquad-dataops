@@ -16,6 +16,6 @@ variables:
 stages:
 - template: templates/databricks-deploy-library-job-template.yml
   parameters:
-    branch: 'refs/heads/develop'
-    environment: 'dev'
-    azureServiceConnection: 'spn-iac-dev'
+    branch: ${{variables.branch}}
+    environment: ${{variables.environment}}
+    azureServiceConnection: ${{variables.azureServiceConnection}}
