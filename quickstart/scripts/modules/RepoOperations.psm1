@@ -21,8 +21,12 @@ function ImportTemplateRepoToDomainRepo {
     git remote add template $templateGitUrl
     git fetch template
     git merge remotes/template/main
-    git branch -M $RepoConfiguration.DefaultBranchName
-    git push -u origin $RepoConfiguration.DefaultBranchName
+	
+	git push -u origin HEAD:main
+	git push -u origin HEAD:qa
+
+	git branch -M $RepoConfiguration.DefaultBranchName
+	git push origin HEAD
 	
     Set-Location -
 }
@@ -38,45 +42,36 @@ function UpdateIaCParameters {
 
     Set-Location $Directory
 
+	git checkout $Configuration.RepoConfiguration.DefaultBranchName
+
 	BeginScope -Scope "IaC parameters"
 
-	ReplaceTemplateTokens `
-		-Configuration $Configuration `
+	ReplaceTemplateTokens -Configuration $Configuration -RemoveInput `
 		-InputFile infrastructure-as-code/infrastructure/parameters/parameters.dev.template.json `
 		-OutputFile infrastructure-as-code/infrastructure/parameters/parameters.dev.json
 
-	ReplaceTemplateTokens `
-		-Configuration $Configuration `
+	ReplaceTemplateTokens -Configuration $Configuration -RemoveInput `
 		-InputFile infrastructure-as-code/infrastructure/parameters/parameters.qa.template.json `
 		-OutputFile infrastructure-as-code/infrastructure/parameters/parameters.qa.json 
 
-	ReplaceTemplateTokens `
-		-Configuration $Configuration `
+	ReplaceTemplateTokens -Configuration $Configuration -RemoveInput `
 		-InputFile infrastructure-as-code/infrastructure/parameters/parameters.prod.template.json `
 		-OutputFile infrastructure-as-code/infrastructure/parameters/parameters.prod.json 
 	
-	ReplaceTemplateTokens `
-		-Configuration $Configuration `
+	ReplaceTemplateTokens -Configuration $Configuration -RemoveInput `
 		-InputFile azure-pipelines/databricks/databricks-lib-cd.template.yml `
 		-OutputFile azure-pipelines/databricks/databricks-lib-cd.yml 
 	
-	ReplaceTemplateTokens `
-		-Configuration $Configuration `
+	ReplaceTemplateTokens -Configuration $Configuration -RemoveInput `
 		-InputFile azure-pipelines/variable.environment.template.yml `
 		-OutputFile azure-pipelines/variable.environment.yml 
 		
 	EndScope
 
-	git add infrastructure-as-code/infrastructure/parameters/parameters.dev.json
-	git add infrastructure-as-code/infrastructure/parameters/parameters.qa.json
-	git add infrastructure-as-code/infrastructure/parameters/parameters.prod.json
-	git add azure-pipelines/databricks/databricks-lib-cd.yml
-	git add azure-pipelines/variable.environment.yml 
-
+	git add .
 	git commit -m "Update IaC paramaters."
+    git push -u origin HEAD:$($Configuration.RepoConfiguration.DefaultBranchName)
 
-    git push -u origin $RepoConfiguration.DefaultBranchName
-	
     Set-Location -
 }
 
@@ -102,7 +97,8 @@ function ReplaceTemplateTokens {
 		[Parameter(Mandatory)] [string] $InputFile,
 		[Parameter(Mandatory)] [string] $OutputFile,
 		[string] $StartTokenPattern = '<',
-		[string] $EndTokenPattern = '>'
+		[string] $EndTokenPattern = '>',
+		[switch] $RemoveInput
 	)
 
 	CleanFileIfExists -File $OutputFile
@@ -123,6 +119,10 @@ function ReplaceTemplateTokens {
 		}
 
 		$line | Out-File -Append -FilePath $OutputFile
+	}
+
+	if ($RemoveInput) {
+		Remove-Item $InputFile
 	}
 
 	Write-Host "Done! ($totalTokens tokens replaced successfully)"
