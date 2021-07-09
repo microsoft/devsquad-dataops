@@ -52,9 +52,9 @@ Microsoft and the trademarks listed at <https://www.microsoft.com/en-us/legal/in
     - [Task 2: The Git workflow for data]()
     - [Task 3: Creating a new PR for the custom library]()
     - [Task 4: Custom libraries checklist]()
-  - [Exercise 5: Testing](#Exercise-5-Testing) (25 min) (Owner: Jesus)
-    - [Task 1: Understanding test types]()
-    - [Task 2: Understanding BDD tests]()
+  - [Exercise 5: Testing](#Exercise-5-Testing) (25 min)
+    - [Task 1: Understanding test types](#Task-1-Understanding-test-types)
+    - [Task 2: Understanding BDD tests](#Task-1-Understanding-BDD-tests)
     - [Task 3: Developing a new test]()
   - [Exercise 6: ML PLatform (optional)]() (30 min) (TBD)
   - [After the hands-on lab](#after-the-hands-on-lab)
@@ -288,10 +288,55 @@ Duration: 45 minutes
 
 Duration: 25 minutes
 
-## Exercise 5: Testing
+## Exercise 5: Testing  {#Exercise-5-Testing}
 
 Duration: 25 minutes
 
+### Task 1: Understanding test types
+
+  Testing data pipelines has unique challenges that makes it different from testing traditional software. You have data pipelines that pulls data from many source systems, ensure data quality (i.e. ensure that bad data is identified, then blocked, scrubbed, fixed, or just logged), combines this data, transforms and scrubs it. Then the data is stored in some processed state for consumption by downstream systems, analytics platforms, or data scientists. These pipelines often process data from *hundreds* or even *thousands* of sources. You run your pipelines and get *several* million new rows in your consumption layer.
+
+  Then you create full end-to-end functional tests for the pipelines. The pipelines are getting more complex over time, and the tests are becoming harder to understand and maintain. Then you start thinking:
+
+  * How to make the tests as readable as possible?
+  * How to improve tests maintainability?
+  * *How to effectively communicate the **current behavior** of the data pipelines with the team or across teams?*
+
+  Leveraging the concepts of Behavior-Driven Development (BDD) could be the answer for these questions. BDD uses **human-readable** descriptions of software user requirements as the basis for software tests, where we define a shared vocabulary between stakeholders, domain experts, and engineers. This process involves the definition of entities, events, and outputs that the users care about, and giving them names that everybody can agree on.
+
+  **Testing Strategy**
+
+  *Language and Frameworks*
+
+  Data engineers and data scientists are turning decisively to Python - according to the [O'Reilly annual usage analysis](https://www.oreilly.com/radar/oreilly-2020-platform-analysis/) - due to its applicability and its tools for data analysis and ML/AI.
+
+  For this reason, the tests in this repository are written in Python using the most used open-source BDD framework called [behave](https://github.com/behave/behave). The framework leverages the use of [Gherkin](https://cucumber.io/docs/gherkin/reference/) to write tests, a well-known language used in BDD designed to be human readable.
+
+  *Structure of tests*
+
+  Essentially the test files are structured in two levels:
+
+  * **Features**: Files where we specify the expected behavior of the data pipelines based on the existing requirements that can be understood by all people involved (e.g. data engineers, data scientists, business analysts). The specifications are written in Gherkin format.
+  * **Steps**: Files where we implement the scenarios defined on feature files. These files are written in Python.
+
+  >On the next Task of this lab, you will explore an example that it is already implemented as part of the full solution deployment. (See Exercise 3)
+
+### Task 2: Understanding BDD tests
+
+> This task has the succesful completion of Excersise 3 as prerequiste
+
+  1. Go to the repositoy that was created as part the Exercise 3, Task # and open the templates folder, were you will see 3 yml files.
+
+![](media/templates-folder.PNG 'Templastes Folder')
+
+  2. Open the test.yml file by clicking on it
+
+![](media/select-test-yml.PNG 'Test yml')
+
+  3. Indentify the script activity that runs the behave modulo and identify the different paramentes that are set before it is called
+
+![](media/behave-script.PNG 'behave activity')
+  
 ## After the hands-on lab
 
 Duration: 5 minutes
