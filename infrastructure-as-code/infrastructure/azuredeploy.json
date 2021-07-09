@@ -246,11 +246,7 @@
                 {
                   "secretName": "dataLakeName",
                   "secretValue": "[variables('dataLakeName')]"
-                },
-                {
-                  "secretName": "StorageAccountConnectionString",
-                  "secretValue": "[concat('DefaultEndpointsProtocol=https;AccountName=', variables('dataSourceStorageAccountName'), ';AccountKey=', listKeys(concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', parameters('resourceGroupData'), '/providers/Microsoft.Storage/storageAccounts/', variables('dataSourceStorageAccountName')), '2019-04-01').keys[0].value,';EndpointSuffix=core.windows.net')]"
-                }  
+                }
               ]
             }
           },
