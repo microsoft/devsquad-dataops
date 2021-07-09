@@ -62,7 +62,7 @@ stages:
                 -AzureDevOpsPAT "$(System.AccessToken)"
                 -AzureDevOpsOrganization $(System.TeamFoundationCollectionUri)
                 -AzureDevOpsProject "$(System.TeamProject)"
-                -GroupName "${{ parameters.solutionName }}-iac-cd-output-${{ parameters.environment }}"
+                -GroupName "dataops-iac-cd-output-${{ parameters.environment }}"
                 -DeploymentOutputFile "armOutput.json"
               pwsh: true
               showWarnings: true

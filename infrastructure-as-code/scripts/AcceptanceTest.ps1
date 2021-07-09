@@ -12,7 +12,7 @@ Write-Output $AzureDevOpsPAT | az devops login
 Write-Host "Set default Azure DevOps organization and project"
 az devops configure --defaults organization=$AzureDevOpsOrganization project="$AzureDevOpsProject"
 
-$GroupName = "$SolutionName-iac-cd-output-$Environment"
+$GroupName = "dataops-iac-cd-output-$Environment"
 $GroupId = $(az pipelines variable-group list --query "[?name=='$GroupName'].id" -o tsv)
 
 Write-Host "Getting variables from Variable Group $GroupName..." -ForegroundColor Green
