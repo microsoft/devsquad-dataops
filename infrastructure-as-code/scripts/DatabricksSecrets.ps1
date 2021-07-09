@@ -40,7 +40,7 @@ if(! $assigment){
 }
 
 Write-Host "Finished! Please configure databricks with the following values:" -ForegroundColor Blue
-Write-Host "`t Scope:`t`t core" -ForegroundColor Cyan
+Write-Host "`t Scope:`t`t dataops" -ForegroundColor Cyan
 Write-Host "`t DNS Name:`t $($kv.VaultUri)" -ForegroundColor Cyan
 Write-Host "`t Resource ID:`t $($kv.ResourceId)" -ForegroundColor Cyan
 
