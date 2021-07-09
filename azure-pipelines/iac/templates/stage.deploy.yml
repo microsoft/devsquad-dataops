@@ -44,6 +44,17 @@ stages:
               preferredAzurePowerShellVersion: $(azPowershellVersion)
 
           - task: AzurePowerShell@4
+            displayName: 'Update Key Vault Secrets'
+            inputs:
+              azureSubscription: ${{ parameters.azureServiceConnection }}
+              scriptType: filePath
+              scriptPath: infrastructure-as-code/scripts/UpdateKeyVaultSecrets.ps1
+              scriptArguments: >
+                -DeploymentOutputFile "armOutput.json"
+              azurePowerShellVersion: 'OtherVersion'
+              preferredAzurePowerShellVersion: $(azPowershellVersion)
+
+          - task: AzurePowerShell@4
             displayName: 'Upload Sample Files'
             inputs:
               azureSubscription: ${{ parameters.azureServiceConnection }}
