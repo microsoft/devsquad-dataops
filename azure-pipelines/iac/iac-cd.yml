@@ -10,25 +10,25 @@ trigger:
     - infrastructure-as-code/infrastructure
 
 variables:
-- template: templates/variable.environment.yml
+- template: ../variable.environment.yml
 
 stages:
 - template: templates/stage.plan.yml
   parameters:
-    environment: ${{variables.environmentName}}
+    environment: ${{variables.environment}}
     azureServiceConnection: ${{variables.azureServiceConnection}}
     location: ${{variables.location}}
     solutionName: ${{variables.solutionName}}
     
 - template: templates/stage.deploy.yml
   parameters:
-    environment: ${{variables.environmentName}}
+    environment: ${{variables.environment}}
     azureServiceConnection: ${{variables.azureServiceConnection}}
     location: ${{variables.location}}
     solutionName: ${{variables.solutionName}}
 
 - template: templates/stage.acceptance-test.yml
   parameters:
-    environment: ${{variables.environmentName}}
+    environment: ${{variables.environment}}
     azureServiceConnection: ${{variables.azureServiceConnection}}
     solutionName: ${{variables.solutionName}}
