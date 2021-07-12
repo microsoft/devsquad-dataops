@@ -39,9 +39,13 @@ if(! $assigment){
     New-AzRoleAssignment -ObjectId $principal.Id -Scope $lake.Id -RoleDefinitionName "Storage Blob Data Contributor" 
 }
 
-Write-Host "Finished! Please configure databricks with the following values:" -ForegroundColor Blue
-Write-Host "`t Scope:`t`t dataops" -ForegroundColor Cyan
-Write-Host "`t DNS Name:`t $($kv.VaultUri)" -ForegroundColor Cyan
-Write-Host "`t Resource ID:`t $($kv.ResourceId)" -ForegroundColor Cyan
+Write-Host "Creating the Key Vault secret scope on Databricks..." -ForegroundColor Green
+$accessToken = Get-AzAccessToken -ResourceUrl 2ff814a6-3304-4ab8-85cb-cd0e6f879c1d
+$env:DATABRICKS_TOKEN = $accessToken.Token
+$env:DATABRICKS_HOST = "https://$($dbw.Url)"
+$scopesList = databricks secrets list-scopes --output json | ConvertFrom-Json
+if (! $scopesList.scopes.name -contains "dataops") {
+    databricks secrets create-scope --scope 'dataops' --scope-backend-type AZURE_KEYVAULT --resource-id $kv.ResourceId --dns-name $kv.VaultUri
+}
 
-Start-Process "https://$($dbw.Url)#secrets/createScope"
+Write-Host "Finished!" -ForegroundColor Blue
