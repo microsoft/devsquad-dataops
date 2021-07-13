@@ -323,7 +323,11 @@ Duration: 25 minutes
 
 ### Task 2: Understanding BDD tests
 
-> This task has the succesful completion of Excersise 3 as prerequiste
+> **Prerequiste for this task:** Succesful completion of Excersise 3
+
+Objective of this Task: Review how a Pipeline test was configured and explore the results of the BDD execution.
+
+First review how the DevOps pipeline was defined:
 
   1. Go to the repositoy that was created as part the Exercise 3, Task # and open the templates folder, were you will see 3 yml files.
 
@@ -336,7 +340,26 @@ Duration: 25 minutes
   3. Indentify the script activity that runs the behave modulo and identify the different paramentes that are set before it is called
 
 ![](media/behave-script.PNG 'behave activity')
+
+Now lets review the DevOps pipeline execution results:
   
+  1. Go to DevOps Pipelines from the project defined on Execise 3 and select the Pipeline with the name "*\<your lab prefix>*-adf-cd" by clciking on it.
+
+![](media/last-pipeline-run.PNG 'Last Pipeline Run') 
+
+  2. You will see a list of resent runs of the selected pipeline, click on the lates run
+
+  3. At the stages secction select the "Run behavior tests" stage
+
+ ![](media/pipeline-stages-run.PNG 'Pipeline Stages') 
+  
+  4. Review the Azure DevOps execution results for "Run behavior tests"\\"TEST: Run behave features"
+
+  ![](media/pipeline-run-results.PNG 'Pipeline Results')
+
+  <p>Here you see the results of running the BDD test using <b>behave</b></p>
+
+> On the next optional task you could explore how to build your own Data Pipelien BDD test
 ## After the hands-on lab
 
 Duration: 5 minutes
