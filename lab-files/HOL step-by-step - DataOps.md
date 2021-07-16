@@ -360,6 +360,15 @@ Now lets review the DevOps pipeline execution results:
   <p>Here you see the results of running the BDD test using <b>behave</b></p>
 
 > On the next optional task you could explore how to build your own Data Pipeline BDD test
+### Task 3: Developing a new test (Optional)
+
+Objective of this Task: Explore how Behavior Driven Development is implemented with "behave" framework
+
+> **Prerequiste for this task:** Have Visual Studio Code (VS Code) installed and configured to run Python 3.7 projects - this setup is out of scope of this lab
+
+  1. Go to your Development environment were you have installed VS Code and clone the data-platform repo that is part of the HOL
+
+  2. Go to src directory and read the readme.md
 
 ## After the hands-on lab
 
