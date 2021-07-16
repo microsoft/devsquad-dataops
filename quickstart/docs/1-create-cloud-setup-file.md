@@ -2,9 +2,12 @@
 
 1. Open the terminal and create a new config file based on an existing template:
 
-```
-cp quickstart/configs/cloud-setup/template.json quickstart/configs/cloud-setup/hol.json
-```
+    ```bash
+    cd hol
+    ./quickstart/scripts/cloud-setup/Replace-TemplateArgs.ps1 -projectName "<myProjectName>" -projectAlias "<myProjectAlias>" -orgName "<myOrgName>" -subscriptionId "<mySubscriptionId>"
+    ```
+
+    - *Observation: Be sure to execute command above under the `./hol` directory*
 
 2. Open the file `quickstart/configs/cloud-setup/hol.json` using your favorite editor and replace the following values:
 
