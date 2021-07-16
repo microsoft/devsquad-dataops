@@ -360,6 +360,7 @@ Now lets review the DevOps pipeline execution results:
   <p>Here you see the results of running the BDD test using <b>behave</b></p>
 
 > On the next optional task you could explore how to build your own Data Pipeline BDD test
+
 ## After the hands-on lab
 
 Duration: 5 minutes
