@@ -19,7 +19,6 @@ param (
     [string]$configsTemplate = 'quickstart/configs/cloud-setup/template.json',
 
     # ID of the Azure Subscription where you want to create this HOL resources
-    [parameter(mandatory=$true)]
     [string]$configsOutput = 'quickstart/configs/cloud-setup/hol.json'
 )
 
