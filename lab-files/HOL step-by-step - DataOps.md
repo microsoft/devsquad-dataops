@@ -282,7 +282,7 @@ Duration: 30 minutes
 
 In this exercise, you will explore and understand the structure and contents of the IaC folder, which contains all the scripts and templates necessary to correctly perform this and other exercises in this lab, using a best practices model.
 
-### Technology Overview 
+### Technology Overview - Infrastructure As Code Practice
 
 Infrastructure as Code (IaC) is the management of infrastructure (networks, virtual machines, load balancers, and connection topology) in a descriptive model, using the same versioning as DevOps team uses for source code. Like the principle that the same source code generates the same binary, an IaC model generates the same environment every time it is applied. IaC is a key DevOps practice and is used in conjunction with continuous delivery. (https://docs.microsoft.com/en-us/devops/deliver/what-is-infrastructure-as-code)
 
@@ -347,6 +347,37 @@ To proceed with the execution of the other exercises below, you must understand 
 			ResourceGroup.Tests.ps1
 	GitVersion.yml
 ```
+### Technology Overview - Azure Resource Manager Templates
+
+To implement infrastructure as code for your Azure solutions, use Azure Resource Manager templates (ARM templates). The template is a JavaScript Object Notation (JSON) file that defines the infrastructure and configuration for your project. The template uses declarative syntax, which lets you state what you intend to deploy without having to write the sequence of programming commands to create it. In the template, you specify the resources to deploy and the properties for those resources. (https://docs.microsoft.com/en-us/azure/azure-resource-manager/templates/overview)
+
+# Folder [infrastructure]
+
+```
+|infrastructure|
+		|linkedTemplates|
+			|compute|
+				template.json
+			|data|
+				template.json
+			|ml|
+				template.json
+			|roleAssigments|
+				compute.json
+				data.json
+		|parameters|
+			parameters.dev.json
+			parameters.dev.template.json
+			parameters.prod.json
+			parameters.prod.template.json
+			parameters.qa.json
+			parameters.qa.template.json
+		azuredeploy.json
+```
+# File: azuredeploy.json
+Main template, with declared parameters, variables and resources. Here we use linkedTemplates.
+
+
 
 ### Task 2: Creating a new sandbox environment with Powershell
 
