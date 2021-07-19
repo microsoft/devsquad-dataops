@@ -294,7 +294,8 @@ To proceed with the execution of the other exercises below, you must understand 
 
 ![](media/infrastructure-as-code-folder.PNG 'infrastructure as code')
 
-####|infrastructure-as-code|
+<blockquote>
+|infrastructure-as-code|
   |databricks|
 		|dev|
 			interactive.json
@@ -345,6 +346,7 @@ To proceed with the execution of the other exercises below, you must understand 
 			DataLake.Tests.ps1
 			ResourceGroup.Tests.ps1
 	GitVersion.yml
+  </blockquote>
 
 ### Task 2: Creating a new sandbox environment with Powershell
 
