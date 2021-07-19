@@ -294,17 +294,18 @@ To proceed with the execution of the other exercises below, you must understand 
 
 ![](media/infrastructure-as-code-folder.PNG 'infrastructure as code')
 
-- [infrastructure-as-code]
-  - [databricks]
-	  - [dev]
-		  interactive.json
-		- [prod]
-		  interactive.json
-		- [qa]
-		  interactive.json
-		- [sandbox]
-    	    core.json
-	| infrastructure |
+```
+|infrastructure-as-code|
+	|databricks|
+		|dev|
+			interactive.json
+		|prod|
+			interactive.json
+		|qa|
+			interactive.json
+		|sandbox|
+			core.json
+	|infrastructure|
 		|linkedTemplates|
 			|compute|
 				template.json
@@ -345,7 +346,7 @@ To proceed with the execution of the other exercises below, you must understand 
 			DataLake.Tests.ps1
 			ResourceGroup.Tests.ps1
 	GitVersion.yml
-
+```
 
 ### Task 2: Creating a new sandbox environment with Powershell
 
