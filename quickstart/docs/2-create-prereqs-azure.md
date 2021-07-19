@@ -7,7 +7,7 @@ An environment variable called `AZURE_DEVOPS_EXT_PAT` that stores a [PAT (Person
 
 To do so, create the PAT on your new Azure DevOps project then run the following command:
 
-```
+```powershell
 $env:AZURE_DEVOPS_EXT_PAT="<my pat goes here>"
 ```
 
@@ -17,13 +17,13 @@ A PowerShell command execution is required to connect to Azure with your authent
 
 If you are running PowerShell on **Windows**, simply run:
 
-```
+```powershell
 Connect-AzAccount
 ```
 
 Otherwise, run the same command with the `-UseDeviceAuthentication` flag enabled:
 
-```
+```powershell
 Connect-AzAccount -UseDeviceAuthentication
 ```
 
@@ -31,7 +31,7 @@ Connect-AzAccount -UseDeviceAuthentication
 
 Using [PowerShell Core](https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell?view=powershell-7.1), run the following script to deploy the pre-required Azure resources:
 
-```
+```powershell
 ./quickstart/scripts/cloud-setup/Deploy-AzurePreReqs.ps1 -ConfigurationFile "quickstart/configs/cloud-setup/hol.json"
 ```
 
@@ -43,4 +43,4 @@ The diagram below shows what Azure resources will be created after the execution
 
 ## Next Step
 
-* [Prepare your Azure DevOps project](./3-azdo-setup.md)
+* [Prepare your Azure DevOps project](./3a-azdo-setup-basic.md)

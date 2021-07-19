@@ -7,25 +7,26 @@ On your Azure DevOps project, go to the `Artifacts` section -> `Create Feed`, th
 
 ![Artifact feed](./images/artifact-feed.png)
 
-## Create the environment variables
-
-An environment variable called `AZURE_DEVOPS_EXT_PAT_TEMPLATE` that stores a [PAT (Personal Access Token)](https://docs.microsoft.com/en-us/azure/devops/organizations/accounts/use-personal-access-tokens-to-authenticate?view=azure-devops&tabs=preview-page) with **Code (read)** [scope](https://docs.microsoft.com/en-us/azure/devops/integrate/get-started/authentication/oauth?view=azure-devops#scopes) is required to allow you to clone this repository to your new Azure DevOps project that will be used for this lab.
-
-To do so, create a PAT on the `advworks-dataops` project (not on your new Azure DevOps project) then run the following command:
-
-```
-$env:AZURE_DEVOPS_EXT_PAT_TEMPLATE="<my pat goes here>"
-```
-
 ## Project setup
+
+Initial setup of git configuration and environment variables:
+
+```powershell
+# You don't need to change any of the following values below
+git config --global user.email "hol@microsoft.com"
+git config --global user.name "HOL Setup User"
+$env:AZURE_DEVOPS_EXT_PAT_TEMPLATE="2je7narfoc2rusvewdjpfnlcn3pyponyrpsko3w5b6z26zj4wpoa"
+```
 
 Run the following script to clone the `hol` repo, create the pipelines and service connections inside your new Azure DevOps.
 
 >  Note the file name is the one inside the output directory and the name is the same name of the _projectName_ that was replaced in the first config file.
 
-```
+```powershell
 ./quickstart/scripts/dataops/Deploy-AzureDevOps.ps1 -ConfigurationFile "./quickstart/outputs/hol.json" -UsePAT $true
 ```
+
+- (Optional) If you are using this project as a Hands-On Lab, feel free to proceed to the next step of the quickstart.If you are using this project as a template for dataops, check [this documentation](./3b-azdo-setup-advanced.md) for understanding more details about the `AZURE_DEVOPS_EXT_PAT_TEMPLATE` environment variable. 
 
 ## Next Step
 
