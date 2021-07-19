@@ -296,13 +296,13 @@ To proceed with the execution of the other exercises below, you must understand 
 
 - [infrastructure-as-code]
   - [databricks]
-		  - [dev]
-			    interactive.json
-		  - [prod]
-			    interactive.json
-		  - [qa]
-			    interactive.json
-		  - [sandbox]
+	  - [dev]
+		  interactive.json
+		- [prod]
+		  interactive.json
+		- [qa]
+		  interactive.json
+		- [sandbox]
     	    core.json
 	| infrastructure |
 		|linkedTemplates|
