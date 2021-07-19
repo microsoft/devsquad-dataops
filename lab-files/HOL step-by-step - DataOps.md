@@ -290,6 +290,10 @@ Infrastructure as Code (IaC) is the management of infrastructure (networks, virt
 
 In this task you will explore and understand the folder structure and scripts, templates contained in it for execution in IaC.
 
+To proceed with the execution of the other exercises below, you must understand the structure of the "infrastructure-as-code" folder, as well as its content of templates and scripts.
+
+![](media/infrastructure-as-code-folder.PNG 'infrastructure as code')
+
 ### Task 2: Creating a new sandbox environment with Powershell
 
 In this task you will learn how to create your first sandbox environment, with Azure Powershell scripts.
