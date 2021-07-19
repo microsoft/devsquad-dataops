@@ -7,7 +7,7 @@ param (
 $filter = ("rg-" + $projectAlias + "-")
 
 $myResources = Get-AzResourceGroup | ? ResourceGroupName -match $filter | Select-Object ResourceGroupName
-$myResources
+Write-Output $myResources
 
 $answer = read-host -prompt "Found missing roles. Press 'y' to delete them."
 $yesList = 'yes','y'
