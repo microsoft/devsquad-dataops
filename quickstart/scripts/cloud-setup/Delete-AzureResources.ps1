@@ -6,8 +6,8 @@ param (
 
 $filter = ("rg-" + $projectAlias + "-")
 
-Get-AzResourceGroup | ? ResourceGroupName -match $filter | Select-Object ResourceGroupName
-
+$myprocss = Start-Process "Get-AzResourceGroup | ? ResourceGroupName -match $filter | Select-Object ResourceGroupName"
+$myprocss.WaitForExit()
 
 $answer = read-host -prompt "Found missing roles. Press 'y' to delete them."
 $yesList = 'yes','y'
