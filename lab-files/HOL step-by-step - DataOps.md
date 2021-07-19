@@ -294,16 +294,16 @@ To proceed with the execution of the other exercises below, you must understand 
 
 ![](media/infrastructure-as-code-folder.PNG 'infrastructure as code')
 
-**|infrastructure-as-code|**
-	**|databricks|**
-		**|dev|**
-			interactive.json
-		|prod|
-			interactive.json
-		|qa|
-			interactive.json
-		|sandbox|
-			core.json
+#|infrastructure-as-code|
+##	|databricks|
+###		|dev|
+####			interactive.json
+###		|prod|
+####			interactive.json
+###		|qa|
+####			interactive.json
+###		|sandbox|
+####			core.json
 	|infrastructure|
 		|linkedTemplates|
 			|compute|
