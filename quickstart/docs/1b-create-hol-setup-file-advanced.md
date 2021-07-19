@@ -4,7 +4,7 @@
    
     ```bash
     # URL Pattern: https://<anything>:<PAT>@dev.azure.com/<yourOrgName>/<yourProjectName>/_git/<yourRepoName>
-    git clone https://holsetup:2je7narfoc2rusvewdjpfnlcn3pyponyrpsko3w5b6z26zj4wpoa@dev.azure.com/csu-devsquad/advworks-dataops/_git/ho
+    git clone https://holsetup:2je7narfoc2rusvewdjpfnlcn3pyponyrpsko3w5b6z26zj4wpoa@dev.azure.com/csu-devsquad/advworks-dataops/_git/hol
     cd hol
     ```
 

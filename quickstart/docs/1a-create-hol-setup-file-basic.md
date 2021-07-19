@@ -3,7 +3,7 @@
 1. Open the terminal, clone the source code of the lab and go to the `hol` directory.
    
     ```bash
-    git clone https://holsetup:2je7narfoc2rusvewdjpfnlcn3pyponyrpsko3w5b6z26zj4wpoa@dev.azure.com/csu-devsquad/advworks-dataops/_git/ho
+    git clone https://holsetup:2je7narfoc2rusvewdjpfnlcn3pyponyrpsko3w5b6z26zj4wpoa@dev.azure.com/csu-devsquad/advworks-dataops/_git/hol
     cd hol
     ```
 
