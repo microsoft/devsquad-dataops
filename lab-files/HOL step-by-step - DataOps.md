@@ -376,8 +376,15 @@ To implement infrastructure as code for your Azure solutions, use Azure Resource
 ```
 # File: azuredeploy.json
 Main template, with declared parameters, variables and resources. Here we use linkedTemplates.
+*NOTE*: We have the option of using separate parameter files as a good practice when using IaC templates, without the need to change directly in the main template.
 
+# Folder: linkedTemplates
+In linkedTemplates we have templates with "parts" of declared resources that are not declared in the main Template, in order to reuse and can link with other templates.
+*NOTE*: linkedTemplates is a widely used practice, for better organization and handling of templates of different types of resources and being able to link them to any template.
 
+# Folder: parameters
+Parameters folder and directory with templates files with parameters and values to be used by linkedTemplates and main template, without the need to change directly in the main template.
+*NOTE*: Using templates parameters is optional and can be used directly in the main template. However, following a model of good practice, the use separately is indicated.
 
 ### Task 2: Creating a new sandbox environment with Powershell
 
