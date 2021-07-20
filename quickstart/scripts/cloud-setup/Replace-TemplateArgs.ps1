@@ -24,7 +24,7 @@ param (
 
 (Get-Content $configsTemplate) `
     -replace '<projectName>', $projectName `
-    -replace '<projectAlias>', $projectAlias `
+    -replace '<projectAlias>', $projectAlias.ToLower() `
     -replace '<orgName>', $orgName `
     -replace '<subscriptionId>', $subscriptionId |
   Out-File $configsOutput
