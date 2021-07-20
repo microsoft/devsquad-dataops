@@ -27,7 +27,8 @@ $yesList = 'yes','y'
 
 if ($yesList -contains $answer.ToLower()) {
     Get-AzResourceGroup | Where-Object ResourceGroupName -match $filter | Remove-AzResourceGroup -AsJob -Force
-    Get-AzADServicePrincipal -DisplayName ("SP-"+$projectName+"-DevTest") | Remove-AzADServicePrincipal -Force
+    Get-AzADServicePrincipal -DisplayName ("SP-"+$projectName+"-DevTest") | ForEach-Object { Remove-AzADServicePrincipal -ApplicationId $_.ApplicationId -Force }
+
 } else {
     Write-Host "[Command Skipped] Your resources were not deleted."
 }
