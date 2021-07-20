@@ -282,13 +282,550 @@ Duration: 30 minutes
 
 In this exercise, you will explore and understand the structure and contents of the IaC folder, which contains all the scripts and templates necessary to correctly perform this and other exercises in this lab, using a best practices model.
 
-### Technology Overview 
+### Technology Overview - Infrastructure As Code Practice
 
 Infrastructure as Code (IaC) is the management of infrastructure (networks, virtual machines, load balancers, and connection topology) in a descriptive model, using the same versioning as DevOps team uses for source code. Like the principle that the same source code generates the same binary, an IaC model generates the same environment every time it is applied. IaC is a key DevOps practice and is used in conjunction with continuous delivery. (https://docs.microsoft.com/en-us/devops/deliver/what-is-infrastructure-as-code)
 
 ### Task 1: Understanding the IaC folder
 
 In this task you will explore and understand the folder structure and scripts, templates contained in it for execution in IaC.
+
+To proceed with the execution of the other exercises below, you must understand the structure of the "infrastructure-as-code" folder, as well as its content of templates and scripts.
+
+![](media/infrastructure-as-code-folder.PNG 'infrastructure as code')
+
+```
+|infrastructure-as-code|
+	|databricks|
+		|dev|
+			interactive.json
+		|prod|
+			interactive.json
+		|qa|
+			interactive.json
+		|sandbox|
+			core.json
+	|infrastructure|
+		|linkedTemplates|
+			|compute|
+				template.json
+			|data|
+				template.json
+			|ml|
+				template.json
+			|roleAssigments|
+				compute.json
+				data.json
+		|parameters|
+			parameters.dev.json
+			parameters.dev.template.json
+			parameters.prod.json
+			parameters.prod.template.json
+			parameters.qa.json
+			parameters.qa.template.json
+		azuredeploy.json
+	|scripts|
+		AcceptanceTest.ps1
+		DatabricksClusters.ps1
+		DatabricksSecrets.ps1
+		Deploy.ps1
+		Lint.ps1
+		Plan.ps1
+		PublishOutputs.ps1
+		Sandbox.ps1
+		Setup.ps1
+		UploadSampleData.ps1
+	|tests|
+		|Compute|
+			Databricks.Tests.ps1
+			DataFactory.Tests.ps1
+			KeyVault.Tests.ps1
+			ResourceGroup.Tests.ps1
+			RoleAssigments.Tests.ps1
+		|Data|
+			DataLake.Tests.ps1
+			ResourceGroup.Tests.ps1
+	GitVersion.yml
+```
+### Technology Overview - Azure Resource Manager Templates
+
+To implement infrastructure as code for your Azure solutions, use Azure Resource Manager templates (ARM templates). The template is a JavaScript Object Notation (JSON) file that defines the infrastructure and configuration for your project. The template uses declarative syntax, which lets you state what you intend to deploy without having to write the sequence of programming commands to create it. In the template, you specify the resources to deploy and the properties for those resources. (https://docs.microsoft.com/en-us/azure/azure-resource-manager/templates/overview)
+
+# Folder [infrastructure]
+
+```
+|infrastructure|
+		|linkedTemplates|
+			|compute|
+				template.json
+			|data|
+				template.json
+			|ml|
+				template.json
+			|roleAssigments|
+				compute.json
+				data.json
+		|parameters|
+			parameters.dev.json
+			parameters.dev.template.json
+			parameters.prod.json
+			parameters.prod.template.json
+			parameters.qa.json
+			parameters.qa.template.json
+		azuredeploy.json
+```
+# File: azuredeploy.json
+Main template, with declared parameters, variables and resources. Here we use linkedTemplates.
+*NOTE*: We have the option of using separate parameter files as a good practice when using IaC templates, without the need to change directly in the main template.
+
+```
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "environment": {
+      "type": "string",
+      "metadata": {
+        "description": "Environment where resources will be deployed"
+      }
+    },
+    "solutionName": {
+      "type": "string",
+      "metadata": {
+        "description": "Solution name"
+      }
+    },    
+    "location": {
+      "type": "string",
+      "metadata": {
+        "description": "Region where the resource is provisioned"
+      }
+    }, 
+    "resourceGroupData": {
+      "type": "string",
+      "metadata": {
+        "description": "Resource group where 'Data' resources will be provisioned"
+      }
+    },
+    "resourceGroupCompute": {
+      "type": "string",
+      "metadata": {
+        "description": "Resource group where 'Compute' resources will be provisioned"
+      }
+    },
+    "resourceGroupMachineLearning": {
+      "type": "string",
+      "metadata": {
+        "description": "Resource group where 'Machine Learning' resources will be provisioned"
+      }
+    },
+    "resourceGroupManagedDatabricks": {
+      "type": "string",
+      "metadata": {
+        "description": "SKU type name for the dataLake"
+      }
+    },
+    "dataLakeSkuName": {
+      "type": "string",
+      "metadata": {
+        "description": "SKU type name for the datalake"
+      }
+    },
+    "dataFactoryAccountName": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "Azure DevOps account name"
+      }
+    },
+    "dataFactoryProjectName": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "Project name in Azure DevOps account"
+      }
+    },
+    "dataFactoryRepositoryName": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "Azure DevOps project repository name for DataFactory"
+      }
+    },
+    "dataFactoryCollaborationBranch": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "Collaboration branch: develop"
+      }
+    },
+    "dataFactoryRootFolder": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "Root folder of the datafactory: /adf"
+      }
+    },
+    "keyVaultSecretsAdminObjectId": {
+      "type": "string",
+      "metadata": {
+        "description": "ObjectId of the person creating the secrets"
+      }
+    }
+  },
+  "functions": [
+    {
+      "namespace": "naming",
+      "members": {
+        "default": {
+          "parameters": [
+            {
+              "name": "resourcePurpose",
+              "type": "string"
+            },
+            {
+              "name": "uniqueStr",
+              "type": "string"
+            },
+            {
+              "name": "environment",
+              "type": "string"
+            },
+            {
+              "name": "solutionName",
+              "type": "string"
+            }            
+          ],
+          "output": {
+            "type": "string",
+            "value": "[concat(parameters('resourcePurpose'), '-', parameters('solutionName'), '-', parameters('uniqueStr'), '-',  parameters('environment'))]"
+          }
+        },
+        "clean": {
+          "parameters": [
+            {
+              "name": "resourcePurpose",
+              "type": "string"
+            },
+            {
+              "name": "uniqueStr",
+              "type": "string"
+            },
+            {
+              "name": "environment",
+              "type": "string"
+            },
+            {
+              "name": "solutionName",
+              "type": "string"
+            }            
+          ],
+          "output": {
+            "type": "string",
+            "value": "[concat(parameters('resourcePurpose'), parameters('solutionName'), parameters('uniqueStr'), parameters('environment'))]"
+          }
+        }
+      }
+    }
+  ],
+  "variables": {
+    "envMapping": {
+      "eastus": "eastus",
+      "brazilsouth": "brzsouth"
+    },
+    "uniqueStr": "[substring(uniqueString(subscription().subscriptionId), 0, 6)]",
+    "dataDeploymentName": "[concat('data-', deployment().name)]",
+    "computeDeploymentName": "[concat('compute-', deployment().name)]",
+    "mlDeploymentName": "[concat('ml-', deployment().name)]",
+    "dataRoleAssigmentsDeploymentName": "[concat('data-roleAssigments-', deployment().name)]",
+    "computeRoleAssigmentsDeploymentName": "[concat('compute-roleAssigments-', deployment().name)]",
+    "dataSourceStorageAccountName": "[naming.clean('stg',variables('uniqueStr'), parameters('environment'), parameters('solutionName'))]",
+    "dataLakeName": "[naming.clean('lake',variables('uniqueStr'), parameters('environment'), parameters('solutionName'))]",
+    "databricksName": "[naming.default('dbw',variables('uniqueStr'), parameters('environment'), parameters('solutionName'))]",
+    "dataFactoryName": "[naming.default('adf',variables('uniqueStr'), parameters('environment'), parameters('solutionName'))]",
+    "keyVaultName": "[naming.default('kv',variables('uniqueStr'), parameters('environment'), parameters('solutionName'))]",
+    "amlWorkspaceName": "[naming.default('mlw',variables('uniqueStr'), parameters('environment'), parameters('solutionName'))]",
+    "amlKeyVaultName": "[naming.default('kvm',variables('uniqueStr'), parameters('environment'), parameters('solutionName'))]",
+    "amlStorageAccountName": "[naming.clean('stml',variables('uniqueStr'), parameters('environment'), parameters('solutionName'))]",
+    "amlApplicationInsightsName": "[naming.default('appi-ml',variables('uniqueStr'), parameters('environment'), parameters('solutionName'))]",
+    "amlContainerRegistryName": "[naming.clean('crml',variables('uniqueStr'), parameters('environment'), parameters('solutionName'))]"
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2020-06-01",
+      "name": "[variables('dataDeploymentName')]",
+      "resourceGroup": "[parameters('resourceGroupData')]",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "relativePath": "linkedTemplates/data/template.json"
+        },
+        "parameters": {
+          "location": {
+            "value": "[parameters('location')]"
+          },
+          "dataSourceStorageAccountName": {
+            "value": "[variables('dataSourceStorageAccountName')]"
+          },          
+          "dataLakeName": {
+            "value": "[variables('dataLakeName')]"
+          },
+          "dataLakeSkuName": {
+            "value": "[parameters('dataLakeSkuName')]"
+          }
+        }
+      }         
+    },
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2020-06-01",
+      "name": "[variables('computeDeploymentName')]",
+      "resourceGroup": "[parameters('resourceGroupCompute')]",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "relativePath": "linkedTemplates/compute/template.json"
+        },
+        "parameters": {
+          "environment": {
+            "value": "[parameters('environment')]"
+          },
+          "location": {
+            "value": "[parameters('location')]"
+          },
+          "dataFactoryName": {
+            "value": "[variables('dataFactoryName')]"
+          },
+          "dataFactoryAccountName": {
+            "value": "[parameters('dataFactoryAccountName')]"
+          },
+          "dataFactoryProjectName": {
+            "value": "[parameters('dataFactoryProjectName')]"
+          },
+          "dataFactoryRepositoryName": {
+            "value": "[parameters('dataFactoryRepositoryName')]"
+          },
+          "dataFactoryCollaborationBranch": {
+            "value": "[parameters('dataFactoryCollaborationBranch')]"
+          },
+          "dataFactoryRootFolder": {
+            "value": "[parameters('dataFactoryRootFolder')]"
+          },
+          "resourceGroupManagedDatabricks": {
+            "value": "[parameters('resourceGroupManagedDatabricks')]"
+          },
+          "databricksName": {
+            "value": "[variables('databricksName')]"
+          },
+          "keyVaultName": {
+            "value": "[variables('keyVaultName')]"
+          },
+          "keyVaultSecrets": {
+            "value": {
+              "secrets": [           
+                {
+                  "secretName": "dataLakeName",
+                  "secretValue": "[variables('dataLakeName')]"
+                },
+                {
+                  "secretName": "StorageAccountConnectionString",
+                  "secretValue": "[concat('DefaultEndpointsProtocol=https;AccountName=', variables('dataSourceStorageAccountName'), ';AccountKey=', listKeys(concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', parameters('resourceGroupData'), '/providers/Microsoft.Storage/storageAccounts/', variables('dataSourceStorageAccountName')), '2019-04-01').keys[0].value,';EndpointSuffix=core.windows.net')]"
+                }  
+              ]
+            }
+          },
+          "keyVaultSecretsAdminObjectId": {
+            "value": "[parameters('keyVaultSecretsAdminObjectId')]"
+          }        
+        }
+      },
+      "dependsOn": [
+        "[variables('dataDeploymentName')]"
+      ]
+    },
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2020-06-01",
+      "name": "[variables('dataRoleAssigmentsDeploymentName')]",
+      "resourceGroup": "[parameters('resourceGroupData')]",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "relativePath": "linkedTemplates/roleAssigments/data.json"
+        },
+        "parameters": {
+          "dataLakeName": {
+            "value": "[variables('dataLakeName')]"
+          },
+          "dataFactoryPrincipalId": {
+            "value": "[reference(variables('computeDeploymentName')).outputs.dataFactoryPrincipalId.value]"
+          }
+        }
+      },
+      "dependsOn": [
+        "[variables('computeDeploymentName')]"
+      ]
+    },
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2020-06-01",
+      "name": "[variables('computeRoleAssigmentsDeploymentName')]",
+      "resourceGroup": "[parameters('resourceGroupCompute')]",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "relativePath": "linkedTemplates/roleAssigments/compute.json"
+        },
+        "parameters": {
+          "databricksName": {
+            "value": "[variables('databricksName')]"
+          },
+          "dataFactoryPrincipalId": {
+            "value": "[reference(variables('computeDeploymentName')).outputs.dataFactoryPrincipalId.value]"
+          }
+        }
+      },
+      "dependsOn": [
+        "[variables('computeDeploymentName')]"
+      ]
+    },
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2020-06-01",
+      "name": "[variables('mlDeploymentName')]",
+      "resourceGroup": "[parameters('resourceGroupMachineLearning')]",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "relativePath": "linkedTemplates/ml/template.json"
+        },
+        "parameters": {
+          "location": {
+            "value": "[parameters('location')]"
+          },
+          "amlWorkspaceName": {
+            "value": "[variables('amlWorkspaceName')]"
+          },
+          "amlKeyVaultName": {
+            "value": "[variables('amlKeyVaultName')]"
+          },
+          "amlStorageAccountName": {
+            "value": "[variables('amlStorageAccountName')]"
+          },
+          "amlApplicationInsightsName": {
+            "value": "[variables('amlApplicationInsightsName')]"
+          },
+          "amlContainerRegistryName": {
+            "value": "[variables('amlContainerRegistryName')]"
+          }
+        }
+      }         
+    }
+  ],
+  "outputs": {
+    "location": {
+      "type": "string",
+      "value": "[parameters('location')]"
+    },
+    "resourceGroupData": {
+      "type": "string",
+      "value": "[parameters('resourceGroupData')]"
+    },
+    "resourceGroupCompute": {
+      "type": "string",
+      "value": "[parameters('resourceGroupCompute')]"
+    },
+    "resourceGroupML": {
+      "type": "string",
+      "value": "[parameters('resourceGroupMachineLearning')]"
+    },
+    "dataSourceStorageAccountName": {
+      "type": "string",
+      "value": "[variables('dataSourceStorageAccountName')]"
+    },    
+    "dataLakeName": {
+      "type": "string",
+      "value": "[variables('dataLakeName')]"
+    },
+    "dataLakeSkuName": {
+      "type": "string",
+      "value": "[parameters('dataLakeSkuName')]"
+    },
+    "dataFactoryName": {
+      "type": "string",
+      "value": "[variables('dataFactoryName')]"
+    },
+    "databricksName": {
+      "type": "string",
+      "value": "[variables('databricksName')]"
+    },
+    "databricksWorkspaceUrl": {
+      "type": "string",
+      "value": "[reference(variables('computeDeploymentName')).outputs.databricksWorkspaceUrl.value]"
+    },
+    "keyVaultName": {
+      "type": "string",
+      "value": "[variables('keyVaultName')]"
+    },
+    "amlWorkspaceName": {
+      "type": "string",
+      "value": "[variables('amlWorkspaceName')]"
+    },
+    "amlKeyVaultName": {
+      "type": "string",
+      "value": "[variables('amlKeyVaultName')]"
+    },
+    "amlStorageAccountName": {
+      "type": "string",
+      "value": "[variables('amlStorageAccountName')]"
+    },
+    "amlApplicationInsightsName": {
+      "type": "string",
+      "value": "[variables('amlApplicationInsightsName')]"
+    },
+    "amlContainerRegistryName": {
+      "type": "string",
+      "value": "[variables('amlContainerRegistryName')]"
+    }
+  }
+}
+```
+
+# Folder: linkedTemplates
+```
+|linkedTemplates|
+			|compute|
+				template.json
+			|data|
+				template.json
+			|ml|
+				template.json
+			|roleAssigments|
+				compute.json
+				data.json
+```
+
+In linkedTemplates we have templates with "parts" of declared resources that are not declared in the main Template, in order to reuse and can link with other templates.
+*NOTE*: linkedTemplates is a widely used practice, for better organization and handling of templates of different types of resources and being able to link them to any template.
+
+![](media/compute-template-json.PNG 'compute-linkedTemplate')
+
+# Folder: parameters
+```
+|parameters|
+			parameters.dev.json
+			parameters.dev.template.json
+			parameters.prod.json
+			parameters.prod.template.json
+			parameters.qa.json
+			parameters.qa.template.json
+```
+
+Parameters folder and directory with templates files with parameters and values to be used by linkedTemplates and main template, without the need to change directly in the main template.
+*NOTE*: Using templates parameters is optional and can be used directly in the main template. However, following a model of good practice, the use separately is indicated.
+
+![](media/parameters-dev-json.PNG 'parameters-dev-json')
 
 ### Task 2: Creating a new sandbox environment with Powershell
 
@@ -297,6 +834,20 @@ In this task you will learn how to create your first sandbox environment, with A
 ### Task 3: Checklist of IaC best practices
 
 In this task you will understand the best practices in creating, executing and managing scripts and templates in IaC.
+
+1. Codify everything
+
+2. Document as little as possible
+
+3. Maintain version control
+Version your templates in a code repository, such as Azure Repos, GitHub, etc.
+By versioning your templates you can control and reuse them with your development team or infrastructure at any time, in addition to ensuring the version history.
+
+4. Continuously test, integrate, and deploy
+
+5. Make your infrastructure code modular
+
+6. Make your infrastructure immutable (when possible)
 
 
 ## Exercise 3: Git Workflow and CI/CD
