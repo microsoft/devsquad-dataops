@@ -394,19 +394,19 @@ In this task you will learn how to create your first sandbox environment, with A
 
 In this task you will understand the best practices in creating, executing and managing scripts and templates in IaC.
 
-# 1. Codify everything
+1. Codify everything
 
-# 2. Document as little as possible
+2. Document as little as possible
 
-# 3. Maintain version control
+3. Maintain version control
 Version your templates in a code repository, such as Azure Repos, GitHub, etc.
 By versioning your templates you can control and reuse them with your development team or infrastructure at any time, in addition to ensuring the version history.
 
-# 4. Continuously test, integrate, and deploy
+4. Continuously test, integrate, and deploy
 
-# 5. Make your infrastructure code modular
+5. Make your infrastructure code modular
 
-# 6. Make your infrastructure immutable (when possible)
+6. Make your infrastructure immutable (when possible)
 
 
 ## Exercise 3: Git Workflow and CI/CD
