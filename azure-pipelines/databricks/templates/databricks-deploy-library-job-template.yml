@@ -35,6 +35,8 @@ stages:
               azureServiceConnection: ${{ parameters.azureServiceConnection }}
           - script: | 
               echo "DBFS URL ${DATABRICKS_HOST}"
+              echo "Delete previous versions od the library in cluster ${DATABRICKS_LIB_PATH}"
+              databricks fs rm -r "${DATABRICKS_LIB_PATH}/dataopslib*.whl"
               echo "Copy library in cluster from ${PYPI_REPO} to ${DATABRICKS_LIB_PATH}"
               databricks fs cp --overwrite -r "${PYPI_REPO}" "${DATABRICKS_LIB_PATH}"
             env:
