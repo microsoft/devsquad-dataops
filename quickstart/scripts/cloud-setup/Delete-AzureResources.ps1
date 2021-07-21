@@ -26,10 +26,13 @@ $answer = read-host -prompt "`nPress 'y' to delete all the resources listed abov
 $yesList = 'yes','y'
 
 if ($yesList -contains $answer.ToLower()) {
-    Get-AzResourceGroup | Where-Object ResourceGroupName -match $filter | Remove-AzResourceGroup -AsJob -Force
-    Get-AzADServicePrincipal -DisplayName ("SP-"+$projectName+"-DevTest") | ForEach-Object { Remove-AzADServicePrincipal -ApplicationId $_.ApplicationId -Force }
-
+    if ($myServicePrincipals.Count -gt 0){
+        Get-AzADServicePrincipal -DisplayName ("SP-"+$projectName+"-DevTest") | ForEach-Object { Remove-AzADServicePrincipal -ApplicationId $_.ApplicationId -Force }
+        Get-AzADApplication -DisplayName ("SP-"+$projectName+"-DevTest") | ForEach-Object { Remove-AzADApplication -ApplicationId $_.ApplicationId -Force }
+    }
+    if ($myResourceGroups.Count -gt 0){
+        Get-AzResourceGroup | Where-Object ResourceGroupName -match $filter | Remove-AzResourceGroup -AsJob -Force
+    }
 } else {
     Write-Host "[Command Skipped] Your resources were not deleted."
 }
-
