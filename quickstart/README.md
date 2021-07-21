@@ -6,7 +6,7 @@
 
 ## Getting Started
 
-* [Step 1: Create a Cloud Setup configuration file](./docs/1-create-cloud-setup-file.md)
+* [Step 1: Create a Cloud Setup configuration file](./docs/1a-create-hol-setup-file-basic.md)
 * [Step 2: Create the pre-required Azure resources](./docs/2-create-prereqs-azure.md)
-* [Step 3: Prepare your Azure DevOps project](./docs/3-azdo-setup.md)
+* [Step 3: Prepare your Azure DevOps project](./docs/3a-azdo-setup-basic.md)
 * [Step 4: Create Azure Databricks secrets scope for all environments](./docs/4-create-databricks-secrets-scope.md)
