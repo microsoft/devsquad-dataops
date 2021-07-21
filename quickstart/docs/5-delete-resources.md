@@ -1,31 +1,22 @@
 # After the Hands-On Lab
 
 
-1. Use the following code snippets to delete all you Azure resources:
+1. Execute the following script to delete all your Azure resources created on this Hands-On Lab.
 
-    - Resource Groups:
+    ```poweershell
+    ./quickstart/scripts/dataops/Delete-AzureResources.ps
+    ```
 
-        ```powershell
-        # Use a filter to select resource groups by substring.
-        # Replace <projectAlias> by the alias used to create your resource groups.
-        $filter = 'rg-<projectAlias>-'
-        
-        # Find Resource Groups by Filter -> Verify Selection
-        Get-AzResourceGroup | ? ResourceGroupName -match $filter | Select-Object ResourceGroupName
-        
-        # Async Delete ResourceGroups by Filter. Uncomment the following line if you understand what you are doing. :-)
-        # Get-AzResourceGroup | ? ResourceGroupName -match $filter | Remove-AzResourceGroup -AsJob -Force
-        ```
+    - You will be prompted to provide your `projectName` and `projectAlias`:
 
-    - Service Principal:
 
-        ```powershell
-        # Find the service principal created for the lab
-        Get-AzADServicePrincipal -DisplayName SP-<projectName>-DevTest
-        
-        # Delete the Service Principal. Uncomment the following line if you understand what you are doing. :-)
-        # Get-AzADServicePrincipal -DisplayName SP-<projectName>-DevTest | Remove-AzADServicePrincipal
-        ```
+        |Argument|Description|
+        |-----|-----------|
+        |_projectName_|Name of the Azure DevOps project used for this Hands-On Lab|
+        |_projectAlias_|An unique string with less than 8 characteres that was used as part of your resource group names|
+
+
+2. Open [Azure DevOps](https://dev.azure.com) and delete the following resources:
 
     - Azure DevOps Artifact Feed:
         - Delete the Artifact feed: `Artifacts` -> `lib-packages` -> `Feed Settings` -> `Delete Feed`
