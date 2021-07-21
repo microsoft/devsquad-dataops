@@ -13,21 +13,13 @@ $env:AZURE_DEVOPS_EXT_PAT="<my pat goes here>"
 
 ## Connect to Azure account
 
-A PowerShell command execution is required to connect to Azure with your authenticated account.
-
-If you are running PowerShell on **Windows**, simply run:
-
-```powershell
-Connect-AzAccount
-```
-
-Otherwise, run the same command with the `-UseDeviceAuthentication` flag enabled:
+The PowerShell command below is required to connect you to Azure with your authenticated account.
 
 ```powershell
 Connect-AzAccount -UseDeviceAuthentication
 ```
 
-## Run the script
+## Run the deployment script
 
 Using [PowerShell Core](https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell?view=powershell-7.1), run the following script to deploy the pre-required Azure resources:
 
