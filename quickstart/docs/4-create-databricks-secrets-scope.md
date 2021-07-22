@@ -9,7 +9,15 @@ After completing the [Preparing your Azure DevOps project](./3-azdo-setup.md) st
  - infrastructure-as-code/infrastructure
 ```
 
->**Note**: Create Environments to qa and prod in Azure Devops before to make the Pull Request (PR), it will be necessary modify branch policies to make the merge only with your approval. 
+>**Note**: Create Environments to `qa`, `prod`, `databricks-qa` and `databricks-prod` in Azure Devops before to make the Pull Request (PR).
+
+![](images/environments-qa-prod.PNG)
+![](images/environments.PNG)
+
+>**Note**: It will be necessary modify branch policies to make the merge only with one reviewer and it can be the owner, click check `Allow requestors to approve their own changes` (only for the laboratory). 
+
+![](images/branch-policies-own-owner.PNG)
+
 
 Right after, open a PR from `develop` to `qa` to promote the code changes to the QA environment. Please wait again for the creation of the QA infrastructure.
 Repeat the process one last time, opening a PR from `qa` to `main` to promote the code changes to the PROD environment. Please wait again for the creation of the PROD infrastructure.
