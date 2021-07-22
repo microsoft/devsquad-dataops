@@ -28,6 +28,14 @@ Then, run the PowerShell script located at `infrastructure-as-code/scripts` to c
 
 >**Note**: To get $clientSecret it is necessary to create a second client secret in the services principal (the first was used in the service connection configuration in the project in DevOps), it could be used for all environments.
 
+![](images/SP-secret.PNG)
+
+>**Note**: Remember copy it because only is showen one time.
+
+![](images/copy-value-clientsecret.PNG)
+
+
+
 ```
 $clientSecret = ConvertTo-SecureString -AsPlainText
 
@@ -40,3 +48,10 @@ $clientSecret = ConvertTo-SecureString -AsPlainText
   -DataLakeName "<adls_name>" `
   -DatabricksName "<databricks_name>"
 ```
+>**Note**: To see Key names in secret scope dataops
+
+```
+databricks secrets list --scope dataops
+```
+
+![](images/scope-dataops.PNG)
