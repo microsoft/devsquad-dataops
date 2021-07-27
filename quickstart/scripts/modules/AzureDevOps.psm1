@@ -17,6 +17,7 @@ function CreateAzDevOpsVariableGroups {
     CreateAzureDevOpsVariable -VariableGroupName "lib-versions" -AzureDevOpsOrganizationURI $RepoConfiguration.AzureDevOpsOrganizationURI -AzureDevOpsProject $RepoConfiguration.AzureDevOpsProject -VariableName "MAJOR" -VariableValue "0"
     CreateAzureDevOpsVariable -VariableGroupName "lib-versions" -AzureDevOpsOrganizationURI $RepoConfiguration.AzureDevOpsOrganizationURI -AzureDevOpsProject $RepoConfiguration.AzureDevOpsProject -VariableName "MINOR" -VariableValue "1"
     CreateAzureDevOpsVariable -VariableGroupName "lib-versions" -AzureDevOpsOrganizationURI $RepoConfiguration.AzureDevOpsOrganizationURI -AzureDevOpsProject $RepoConfiguration.AzureDevOpsProject -VariableName "PATCH" -VariableValue "0"
+    CreateAzureDevOpsVariable -VariableGroupName "lib-versions" -AzureDevOpsOrganizationURI $RepoConfiguration.AzureDevOpsOrganizationURI -AzureDevOpsProject $RepoConfiguration.AzureDevOpsProject -VariableName "VERSION" -VariableValue ""
 }
 
 function GetAzureDevOpsVariableGroup {

@@ -35,10 +35,13 @@ stages:
               azureServiceConnection: ${{ parameters.azureServiceConnection }}
           - script: | 
               echo "DBFS URL ${DATABRICKS_HOST}"
-              echo "Delete previous versions od the library in cluster ${DATABRICKS_LIB_PATH}"
-              databricks fs rm -r "${DATABRICKS_LIB_PATH}/dataopslib*.whl"
-              echo "Copy library in cluster from ${PYPI_REPO} to ${DATABRICKS_LIB_PATH}"
-              databricks fs cp --overwrite -r "${PYPI_REPO}" "${DATABRICKS_LIB_PATH}"
+              echo "Move previous versions of the library in cluster from ${DATABRICKS_LIB_PATH}/new_version/ ${DATABRICKS_LIB_PATH}/old_version"
+              databricks fs mkdirs "${DATABRICKS_LIB_PATH}/old_version"
+              databricks fs mkdirs "${DATABRICKS_LIB_PATH}/new_version"
+              databricks fs cp --overwrite -r "${DATABRICKS_LIB_PATH}/new_version/" "${DATABRICKS_LIB_PATH}/old_version/"
+              databricks fs rm -r "${DATABRICKS_LIB_PATH}/new_version/dataops*.whl"
+              echo "Copy library in cluster from ${PYPI_REPO} to ${DATABRICKS_LIB_PATH}/new_version/"
+              databricks fs cp --overwrite -r "${PYPI_REPO}" "${DATABRICKS_LIB_PATH}/new_version/"
             env:
               DATABRICKS_HOST: https://$(databricksWorkspaceUrl)
               DATABRICKS_TOKEN: $(DATABRICKS_TOKEN)
