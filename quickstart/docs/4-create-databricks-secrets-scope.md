@@ -2,7 +2,22 @@
 
 ## Infrastructure Pipeline
 
-After completing the [Preparing your Azure DevOps project](./3-azdo-setup.md) step, make sure the Infrastructure as Code CD pipeline `dataops-iac-cd` is executed successfully when triggered from the `develop` branch.
+After completing the [Preparing your Azure DevOps project](./3-azdo-setup.md) step, make sure the Infrastructure as Code CI pipeline `dataops-iac-ci` is executed successfully when triggered from the `develop` branch. The CD pipeline should be executed by the trigger when some file in these paths is modified:
+
+```
+- infrastructure-as-code/databricks
+ - infrastructure-as-code/infrastructure
+```
+
+>**Note**: Create Environments to `qa`, `prod`, `databricks-qa` and `databricks-prod` in Azure Devops before to make the Pull Request (PR).
+
+![](images/environments-qa-prod.PNG)
+![](images/environments.PNG)
+
+>**Note**: It will be necessary modify branch policies to make the merge only with one reviewer and it can be the owner, click check `Allow requestors to approve their own changes` (only for the laboratory). 
+
+![](images/branch-policies-own-owner.PNG)
+
 
 Right after, open a PR from `develop` to `qa` to promote the code changes to the QA environment. Please wait again for the creation of the QA infrastructure.
 Repeat the process one last time, opening a PR from `qa` to `main` to promote the code changes to the PROD environment. Please wait again for the creation of the PROD infrastructure.
@@ -10,6 +25,16 @@ Repeat the process one last time, opening a PR from `qa` to `main` to promote th
 ## Databricks Secrets Scope
 
 Then, run the PowerShell script located at `infrastructure-as-code/scripts` to create the Databricks secrets scope for **each environment**:
+
+>**Note**: To get $clientSecret it is necessary to create a second client secret in the services principal (the first was used in the service connection configuration in the project in DevOps), it could be used for all environments.
+
+![](images/SP-secret.PNG)
+
+>**Note**: Remember copy it because only is showen one time.
+
+![](images/copy-value-clientsecret.PNG)
+
+
 
 ```
 $clientSecret = ConvertTo-SecureString -AsPlainText
@@ -23,3 +48,10 @@ $clientSecret = ConvertTo-SecureString -AsPlainText
   -DataLakeName "<adls_name>" `
   -DatabricksName "<databricks_name>"
 ```
+>**Note**: To see Key names in secret scope dataops
+
+```
+databricks secrets list --scope dataops
+```
+
+![](images/scope-dataops.PNG)
