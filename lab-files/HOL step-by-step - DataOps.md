@@ -421,8 +421,6 @@ In this task you will learn how to create your first sandbox environment, with A
 
 In this task you will understand the best practices in creating, executing and managing scripts and templates in IaC.
 
-# Code Review Checklist: Infrastructure as Code
-
 1. [ ] Does this code correctly implement the Azure resources and their properties?
 2. [ ] Are the names of Azure resources correctly parameterized for all environments?
 3. [ ] Are all Azure resources being implemented in the correct modules (e.g. data, compute)?
