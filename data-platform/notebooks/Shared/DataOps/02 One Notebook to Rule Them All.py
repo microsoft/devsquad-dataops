@@ -1,5 +1,8 @@
 # Databricks notebook source
-dbutils.library.install('dbfs:/FileStore/pypi-libs/dataopslib-0.5.1-py2.py3-none-any.whl')
+
+# Installing Library DataOpsLib
+print("Library to install ... " + dbutils.fs.ls("dbfs:/FileStore/pypi-libs/new_version/")[0][0])
+dbutils.library.install(dbutils.fs.ls("dbfs:/FileStore/pypi-libs/new_version/")[0][0])
 
 # COMMAND ----------
 

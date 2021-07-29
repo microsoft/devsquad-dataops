@@ -1,4 +1,3 @@
-
 parameters:
 - name: libraryDirectory
   type: string
@@ -142,9 +141,14 @@ jobs:
 
       - script: |
           python setup.py bdist_wheel
+          ls dist/
+          file=$(ls dist/)
+          echo "$file"
+          az pipelines variable-group variable update --group-id $groupId --name VERSION --value "$file"
         displayName: "Build the library"
         workingDirectory: ${{ parameters.libraryDirectory }}
         env:
+          groupId: $(variable_group_id)
           package_version: $(package_version)
 
       - task: TwineAuthenticate@0
@@ -156,7 +160,7 @@ jobs:
         workingDirectory: ${{ parameters.libraryDirectory }}
         displayName: "Publish the library"
 
-      - script: |
+      - script: |        
           az pipelines variable-group variable update --group-id $groupId --name MINOR --value $minor
           az pipelines variable-group variable update --group-id $groupId --name PATCH --value $patch
         displayName: "Update versions on variable group"
