@@ -2,12 +2,8 @@
 
 ## Infrastructure Pipeline
 
-After completing the [Preparing your Azure DevOps project](./3-azdo-setup.md) step, make sure the Infrastructure as Code CI pipeline `dataops-iac-ci` is executed successfully when triggered from the `develop` branch. The CD pipeline should be executed by the trigger when some file in these paths is modified:
+After completing the [Preparing your Azure DevOps project](./3-azdo-setup.md) step, make sure the CI/CD pipelines exits in Azure Devops.
 
-```
-- infrastructure-as-code/databricks
- - infrastructure-as-code/infrastructure
-```
 
 >**Note**: Create Environments to `qa`, `prod`, `databricks-qa` and `databricks-prod` in Azure Devops before to make the Pull Request (PR).
 
