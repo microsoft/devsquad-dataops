@@ -1,6 +1,7 @@
 - [Exercise 3: Git Workflow and CI/CD](#Exercise-3-Git-Workflow-and-CI/CD) (45 min) (Owner: Ana/Adrian)
   - [Task 1: Understanding all repositories]()
       # Git Repositories 
+      
       ## Overview/Problem Statement
 
       This documentation contains the definition of the structure of folders that the laboratory has, but in a real projects you will have Git repositories for Infrastructure as Code, Data Engineering, Azure Pipelines and Documentation.
@@ -387,19 +388,76 @@
 
     <br/><br/>
 
-  - [Task 4: Commiting and releasing a feature to ADF]()  
+  - [Task 4: CI/CD Pipelines]()
 
-    <br/><br/>
+      # CI/CD Pipeline IaC
+      ## Overview/Problem Statement
+      This documentation contains the definition of the pipelines for infrastructure as code.
+       
+      ```
+      <project-name>
+      │
+      └───<alias>-iac-ci
+      │
+      └───<alias>-iac-cd
+      ```
+  
+      ## Goals/In-Scope
+      
+      * Understand the functionality of the pipeline CI and CD in IaC.
 
-  - [Task 5: CI Pipelines]()
+      ## Non-goals / Out-of-Scope
 
-  <br/><br/>
+      * Does not include the creation of pipelines.
+      * Source code on the repositories.
 
-  - [Task 6: CD Pipelines]()
+      ## Proposed Design
+      
+      ### `<alias>-iac-ci`
+      
+      This pipeline is the owner to create ARM template that will be used in the CD pipeline to create the resources in the differents resource groups.
+
+      ```
+      stages:
+      - stage: validate
+        displayName: 'Validate'
+        jobs:
+        - job: lint
+          displayName: 'Lint'
+          pool:
+            vmImage: 'Ubuntu-20.04'
+          steps:
+          - template: step.install-arm-template-toolkit.yml
+            parameters:
+              ttkFolder: ./ttk
+          - task: PowerShell@2
+            displayName: Run ARM Template Test Tookit
+            inputs:
+              pwsh: true
+              targetType: 'filePath'
+              filePath: infrastructure-as-code/scripts/Lint.ps1
+              arguments: >
+                -TtkFolder "./ttk"
+      ```
+
+      This pipeline has a build policy in the branchs:
+
+      ![](./media/iac-ci.PNG)
+
+      If we have any change in the folder `infrastructure-as-code` folder, the pipeline start automatically.
+
+      ### `<alias>-iac-cd`
+
+      
+
+      # CI/CD Pipeline Library
+      # CI/CD Pipeline Databricks
+      # CI/CD Pipeline ADF
+
 
   <br/><br/>
     
-  - [Task 7: Checklist of branching strategy (?) racionality]()
+  - [Task 5: Checklist of branching strategy (?) racionality]()
 
       # Code Review Checklist: Data Engineering
 
