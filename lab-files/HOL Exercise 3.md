@@ -198,7 +198,7 @@
 
     # CI/CD Pipeline Library
 
-    Now, we need to create the custom library that we use in the notebooks of databricks, then we have the CI and CD Pipeline for the lib.  When these pipelines finished the execution, you could see the artifact in the feed `lib-packages` that you create in the [step 3 of the quickstart](..\quickstart\docs\3a-azdo-setup-basic.md).
+    Now, we need to create the custom library that we use in the notebooks of databricks, then we have the CI and CD Pipeline for the lib.  When these pipelines finished the execution, you could see the artifact in the feed `lib-packages` that you create in the [step 3 of the quickstart](../quickstart/docs/3a-azdo-setup-basic.md).
 
     ![](./media/Pipelines-lib.PNG)
 
@@ -208,11 +208,11 @@
 
     Execute the CI pipeline of the library to create the version `alpha` of the library.
 
-    ![](.\media\Run-CIPipeline-lib.PNG)
+    ![](./media/Run-CIPipeline-lib.PNG)
 
     When this pipeline finished in artifacts you can see the version.
 
-    ![](.\media\alpbaVersionlib.PNG)
+    ![](./media/alpbaVersionlib.PNG)
 
     >**Note**: The number in the version is variable depends of the Build Id.
 
@@ -220,11 +220,11 @@
 
     In the CD Pipeline you can to see the different stages by environment, we will to execute the CD Pipeline to left the version `beta` enable to be used in the databricks notebook.
 
-    ![](.\media\Run-CDPipeline-lib.PNG)
+    ![](./media/Run-CDPipeline-lib.PNG)
 
     When this pipeline finished in artifacts you can see the version.
 
-    ![](.\media\betaVersionlib.PNG)
+    ![](./media/betaVersionlib.PNG)
 
     >**Note**: The number in the version is variable depends of the Build Id.
 
@@ -238,27 +238,27 @@
 
     This pipeline make the check of the notebooks in databricks.
 
-    ![](.\media\Run-CIPipeline-Databricks.PNG)
+    ![](./media/Run-CIPipeline-Databricks.PNG)
 
     ## CD Pipeline Lib
 
     This pipeline upload the current version library to the `dbfs` of databriks.
 
-    ![](.\media\Run-CDPipeline-Databricks-Lib.PNG)
+    ![](./media/Run-CDPipeline-Databricks-Lib.PNG)
 
     You could see in the environments that the status in `databricks-dev` changed.
 
-    ![](.\media\environments-DEV-Databricks.PNG)
+    ![](./media/environments-DEV-Databricks.PNG)
 
     ## CD Pipeline Notebooks
 
     This pipeline upload the current notebooks to the shared folder in databricks.
 
-    ![](.\media\Run-CDPipeline-Databricks-Notebooks.PNG)
+    ![](./media/Run-CDPipeline-Databricks-Notebooks.PNG)
 
     You could see in the environments that the status in `databricks-dev` changed.
 
-    ![](.\media\environments-DEV-Databricks-Notebooks.PNG)
+    ![](./media/environments-DEV-Databricks-Notebooks.PNG)
 
     # CD Pipeline ADF
 
@@ -268,13 +268,13 @@
 
     >**Note**: The first time that this pipeline is executed it fails, because it is necessary that ADF pipeline finished sucessful the first time to create some folders in the container in the datalake that are necessaries to check the integrity of the data.
 
-    ![](.\media\Run-CDPipeline-ADF.PNG)
+    ![](./media/Run-CDPipeline-ADF.PNG)
 
     When the ADF Pipeline finished, you could execute again this CD Pipeline. you can check it, open ADF resource in the Azure Portal, and the in monitor the pipeline running.
 
-    ![](.\media\ADFPipelineRunning.PNG)
+    ![](./media/ADFPipelineRunning.PNG)
 
-    ![](.\media\Run-CDPipeline-ADFGood.PNG)
+    ![](./media/Run-CDPipeline-ADFGood.PNG)
 
     Now that you understand the workflow, you can start with the other environments.
 
@@ -286,7 +286,7 @@
 
     >**Note**: It will be necessary modify branch policies to make the merge only with one reviewer and it can be the owner, click check `Allow requestors to approve their own changes` (only for the laboratory). 
 
-    ![](.\media\branch-policies-own-owner.PNG)
+    ![](./media/branch-policies-own-owner.PNG)
 
     Repeat the process one last time, opening a PR from `qa` to `main` to promote the code changes to the PROD environment. Please wait again for the creation of the PROD infrastructure.
 
