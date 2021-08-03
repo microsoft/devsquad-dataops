@@ -146,7 +146,7 @@
 
     This pipeline was executed manually, but it has in the branch policies configurated to start automatically if any change occur in branch in the folder `infrastructure-as-code`:
 
-    ![](./media/branch-policies-own-owner.PNG)
+    ![](./media/branch-policies-builder.PNG)
 
 
     ## **Run CD Pipeline**: 
@@ -284,11 +284,25 @@
 
     Open a PR from `develop` to `qa` to promote the code changes to the QA environment. Please wait again for the creation of the QA infrastructure.
 
+    ![](./media/PRDEV2QA.PNG)
+
     >**Note**: It will be necessary modify branch policies to make the merge only with one reviewer and it can be the owner, click check `Allow requestors to approve their own changes` (only for the laboratory). 
 
     ![](./media/branch-policies-own-owner.PNG)
 
-    Repeat the process one last time, opening a PR from `qa` to `main` to promote the code changes to the PROD environment. Please wait again for the creation of the PROD infrastructure.
+    ![](./media/PRDEV2QA-1.PNG)
+
+    When you make the merge you could be that the CI Pipeline of IaC start automatically.
+
+    ![](./media/PRDEV2QA-2.PNG)
+
+    >**Note:** Remember to configure the scope and run the pipeline of Lib for `qa` environment.
+
+     ![](./media/rcVersionlib.PNG)
+
+    Repeat the process one last time, opening a PR from `qa` to `main` to promote the code changes to the PROD environment. Please wait again for the creation of the PROD infrastructure.  In artifact you can see the final version of the library for production.
+
+    ![](./media/Versionlib.PNG)
 
   <br/><br/>
     
