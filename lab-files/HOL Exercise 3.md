@@ -1,19 +1,33 @@
 - [Exercise 3: Git Workflow and CI/CD](#Exercise-3-Git-Workflow-and-CI/CD) (45 min) (Owner: Ana/Adrian)
   - [Task 1: Understanding all folders]()
 
-    This documentation contains the definition of the structure of folders that the laboratory has, but in a real projects you will have Git repositories for Infrastructure as Code, Data Engineering, Azure Pipelines and Documentation.
+    This laboratory have a repository with different folders by component: Infraestructure as Code, Data Engineering, Azure Pipelines and others, in a real projects you will have git repositories by component.
 
-    Infrastructure as code and data engineering are treated as different scopes in terms of tools, languages and patterns. For this reason, the proposal is having dedicated repositories for these workstreams. Furthermore, a repository that consolidates all technical decisions across workstreams has been considered.
-
-    ![Git repos](./media/89-git-repositories.png)
-
-    In our laboratory, we have this structure of folders (Simulating Repositories):
+    The structure of folders that we have is:
     ```
     <project-name>
     │
     └───azure-pipelines: CI/CD pipelines
+        │
+        └───adf
+        │
+        └───databricks
+        │
+        └───iac
+        │      
+        └───lib
     │   
-    └───data-platform: Data Engineering (Detail in Exercise 4 and 5)
+    └───data-platform: Data Engineering
+        │
+        └───adf
+        │
+        └───notebooks
+        │
+        └───src
+            │            
+            └───bdd-adf-pipelines (Detail in Exercise 5)
+            │            
+            └───dataopslib (Detail in Exercise 4)          
     │   
     └───infrastructure-as-code: Infrastructure as Code (Detail in Exercise 2)
     │   
@@ -24,6 +38,10 @@
     └───setup-data: Source of Data
     ```
 
+    Infrastructure as code and data engineering are treated as different scopes in terms of tools, languages and patterns. For this reason, the proposal is having dedicated repositories for these workstreams. Furthermore, a repository that consolidates all technical decisions across workstreams has been considered.
+
+    ![Git repos](./media/89-git-repositories.png)
+
     ## Environments
 
     We are working with three environments `dev`, `qa` and `prod`, and this environments are related with the branchs:
@@ -33,11 +51,23 @@
     * The `develop` branch has the stable version for the **Development** environment.
     * The `feature` or `fix` branches have *preview* versions that will be reviewed by code reviewers through the Pull Request process before merging into the `develop` branch.
 
+    <br/>
+
+    **Setting Azure Devops Project:** before to start to execute the pipelines and execute the git workflow, it is necessary to create the environments in Azure Devops for the IaC and Databricks environments.
+
+    ![](media/environments-qa-prod.PNG)
+
+
+    >**Note**: Create Environments to `qa`, `prod`, `databricks-qa` and `databricks-prod` in Azure Devops before to make any Pull Request (PR).
+    
+    ![](media/environments.PNG)
+
+
     ## Infrastructure as code git workflow
 
     ![Git workflow](./media/91-git-workflow.png)
 
-    <br/><br/>
+    <br/>
 
     ## Data Engineering git workflow
 
@@ -46,16 +76,19 @@
     * Databricks Notebooks
     * Library
 
+    <br/>
+
     ### **Databricks Notebooks**
 
     ![Git workflow for Databricks Notebooks](./media/92-git-workflow-databricks-notebooks.png)
 
+    <br/>
 
     ### **Library**
 
     ![Git workflow for Databricks Notebooks](./media/92-git-workflow-library.png)
 
-    <br/><br/>
+    <br/>
 
   - [Task 2: Understanding naming conventions for branches and commits]()
 
@@ -85,56 +118,177 @@
 
   - [Task 4: CI/CD Pipelines]()
 
-      # CI/CD Pipeline IaC
-      ```
-      <project-name>
-      │
-      └───<alias>-iac-ci
-      │
-      └───<alias>-iac-cd
-      ```
+    Now we will start to work with the pipelines and understant the funcionality that these have.
 
-      ## `alias`-iac-ci
+    # CI/CD Pipeline IaC
+
+    After completing the [Preparing your Azure DevOps project](../quickstart/docs/3a-azdo-setup-basic.md) step, make sure the CI/CD pipelines exists in Azure Devops.
+
+    >**Note**: `dataops` word as part of the name is the alias that you assign to the project.
+
+    ![](./media/pipelines.PNG)
+
+    In the quickstart the process create the pipelines to IaC, the customized library dataops, databricks and azure data factory.  Now we will see the IaC pipelines.
+
+    ![](./media/Pipelines-IaC.PNG)
+
+    >**Note**: `dataops` word as part of the name is the alias that you assign to the project.
+
+    ## CI Pipeline
       
-      This pipeline is the owner to create ARM template that will be used in the CD pipeline to create the resources in the differents resource groups.
+    This pipeline is the owner to create ARM template that will be used in the CD pipeline to create the resources in the differents resource groups by environment.
 
-      ```
-      stages:
-      - stage: validate
-        displayName: 'Validate'
-        jobs:
-        - job: lint
-          displayName: 'Lint'
-          pool:
-            vmImage: 'Ubuntu-20.04'
-          steps:
-          - template: step.install-arm-template-toolkit.yml
-            parameters:
-              ttkFolder: ./ttk
-          - task: PowerShell@2
-            displayName: Run ARM Template Test Tookit
-            inputs:
-              pwsh: true
-              targetType: 'filePath'
-              filePath: infrastructure-as-code/scripts/Lint.ps1
-              arguments: >
-                -TtkFolder "./ttk"
-      ```
+    ## **Run CI Pipeline**: 
 
-      This pipeline has a build policy in the branchs:
+    ![](./media/Run-CIPipeline-Iac.PNG)
 
-      ![](./media/iac-ci.PNG)
+    ![](./media/CI-Iac.PNG)
 
-      If we have any change in the folder `infrastructure-as-code` folder, the pipeline start automatically.
+    This pipeline was executed manually, but it has in the branch policies configurated to start automatically if any change occur in branch in the folder `infrastructure-as-code`:
 
-      ### `<alias>-iac-cd`
+    ![](./media/branch-policies-own-owner.PNG)
 
 
+    ## **Run CD Pipeline**: 
 
-      # CI/CD Pipeline Library
-      # CI/CD Pipeline Databricks
-      # CI/CD Pipeline ADF
+    ![](./media/Run-CDPipeline-Iac.PNG)
 
+    When you execute the CD Pipeline of IaC you can see in the Azure Devops that you environment status will change, when this pipeline finished the execution, you can validate if you see the resources created in the resource group of development environment.
+
+    ![](./media/RGComputeDev.PNG)
+    ![](./media/RGDataDev.PNG)
+
+    >**Note**: Name of the Resource Groups and Resources depends of the alias and the suscription id.
+
+    With this resources created, you can configure the scope in databricks.
+
+    ## Databricks Secrets Scope
+
+    When you have the resources created in the environment, it is time to configure the scope secrets in databricks, to do that, run the PowerShell script located at `infrastructure-as-code/scripts` to create the Databricks secrets scope for **each environment**:
+
+    >**Note**: To get `$clientSecret` it is necessary to create a second client secret in the services principal (the first was used in the service connection configuration in the project in DevOps), it could be used for all environments.
+
+    ![](./media/SP-secret.PNG)
+
+    >**Note**: Remember copy the value because only is showen one time.
+
+    ![](./media/copy-value-clientsecret.PNG)
+
+    Now, you should to change some parameters with your information and execute this script, and how the resources in development environment were created then we can create the scope in databricks dev.
+
+    ```
+    $clientSecret = ConvertTo-SecureString -AsPlainText
+
+    ./DatabricksSecrets.ps1 `
+      -ClientID "<client_id>" `
+      -ClientSecret $clientSecret `
+      -DataResourceGroup "<data_resource_group_name>" `
+      -ComputeResourceGroup "<compute_resource_group_name>" `
+      -KeyVaultName "<kv_name>" `
+      -DataLakeName "<adls_name>" `
+      -DatabricksName "<databricks_name>"
+    ```
+    >**Note**: To see Key names in secret scope dataops execute the follow command.
+
+    ```
+    databricks secrets list --scope dataops
+    ```
+
+    ![](./media/scope-dataops.PNG)
+
+    # CI/CD Pipeline Library
+
+    Now, we need to create the custom library that we use in the notebooks of databricks, then we have the CI and CD Pipeline for the lib.  When these pipelines finished the execution, you could see the artifact in the feed `lib-packages` that you create in the [step 3 of the quickstart](..\quickstart\docs\3a-azdo-setup-basic.md).
+
+    ![](./media/Pipelines-lib.PNG)
+
+    >**Note**: `vic` word as part of the name is the alias that you assign to the project.
+
+    ## CI Pipeline
+
+    Execute the CI pipeline of the library to create the version `alpha` of the library.
+
+    ![](.\media\Run-CIPipeline-lib.PNG)
+
+    When this pipeline finished in artifacts you can see the version.
+
+    ![](.\media\alpbaVersionlib.PNG)
+
+    >**Note**: The number in the version is variable depends of the Build Id.
+
+    ## CD Pipeline
+
+    In the CD Pipeline you can to see the different stages by environment, we will to execute the CD Pipeline to left the version `beta` enable to be used in the databricks notebook.
+
+    ![](.\media\Run-CDPipeline-lib.PNG)
+
+    When this pipeline finished in artifacts you can see the version.
+
+    ![](.\media\betaVersionlib.PNG)
+
+    >**Note**: The number in the version is variable depends of the Build Id.
+
+    # CI/CD Pipeline Databricks
+
+    Now you could see the pipelines that work with databricks in the aspect of the custom library and the notebooks that will be executed in databricks.
+
+    ![](./media/Pipelines-databricks.PNG)
+
+    ## CI Pipeline
+
+    This pipeline make the check of the notebooks in databricks.
+
+    ![](.\media\Run-CIPipeline-Databricks.PNG)
+
+    ## CD Pipeline Lib
+
+    This pipeline upload the current version library to the `dbfs` of databriks.
+
+    ![](.\media\Run-CDPipeline-Databricks-Lib.PNG)
+
+    You could see in the environments that the status in `databricks-dev` changed.
+
+    ![](.\media\environments-DEV-Databricks.PNG)
+
+    ## CD Pipeline Notebooks
+
+    This pipeline upload the current notebooks to the shared folder in databricks.
+
+    ![](.\media\Run-CDPipeline-Databricks-Notebooks.PNG)
+
+    You could see in the environments that the status in `databricks-dev` changed.
+
+    ![](.\media\environments-DEV-Databricks-Notebooks.PNG)
+
+    # CD Pipeline ADF
+
+    This pipeline check the integrity on the data and trigger the ADF Pipeline identifying some problems in it but this process doesnt wait that this pipeline finished.
+
+    ![](./media/Pipelines-ADF.PNG)
+
+    >**Note**: The first time that this pipeline is executed it fails, because it is necessary that ADF pipeline finished sucessful the first time to create some folders in the container in the datalake that are necessaries to check the integrity of the data.
+
+    ![](.\media\Run-CDPipeline-ADF.PNG)
+
+    When the ADF Pipeline finished, you could execute again this CD Pipeline. you can check it, open ADF resource in the Azure Portal, and the in monitor the pipeline running.
+
+    ![](.\media\ADFPipelineRunning.PNG)
+
+    ![](.\media\Run-CDPipeline-ADFGood.PNG)
+
+    Now that you understand the workflow, you can start with the other environments.
+
+    # Git Workflow to QA and Prod
+
+    When the all pipelines were executed in development branch and you validate the behavior, you can start to execution of the git workflow  doing Pull Request, remember create the scope in databricks by each environment.
+
+    Open a PR from `develop` to `qa` to promote the code changes to the QA environment. Please wait again for the creation of the QA infrastructure.
+
+    >**Note**: It will be necessary modify branch policies to make the merge only with one reviewer and it can be the owner, click check `Allow requestors to approve their own changes` (only for the laboratory). 
+
+    ![](.\media\branch-policies-own-owner.PNG)
+
+    Repeat the process one last time, opening a PR from `qa` to `main` to promote the code changes to the PROD environment. Please wait again for the creation of the PROD infrastructure.
 
   <br/><br/>
     
