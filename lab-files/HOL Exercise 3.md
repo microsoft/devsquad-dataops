@@ -300,7 +300,9 @@
 
      ![](./media/rcVersionlib.PNG)
 
-    Repeat the process one last time, opening a PR from `qa` to `main` to promote the code changes to the PROD environment. Please wait again for the creation of the PROD infrastructure.
+    Repeat the process one last time, opening a PR from `qa` to `main` to promote the code changes to the PROD environment. Please wait again for the creation of the PROD infrastructure.  In artifact you can see the final version of the library for production.
+
+    ![](./media/Versionlib.PNG)
 
   <br/><br/>
     
