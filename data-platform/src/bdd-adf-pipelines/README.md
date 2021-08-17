@@ -28,24 +28,26 @@ Essentially the test files are structured in two levels:
 ## Prerequisites
 
 * An Azure account with an active subscription ([Create one for free](https://azure.microsoft.com/en-us/free/?ref=microsoft.com&utm_source=microsoft.com&utm_medium=docs&utm_campaign=visualstudio) 😁)
-* [Python 3.4+](https://www.python.org/downloads/)
+* [Python 3.4+](https://www.python.org/downloads/) installed and working on you developing environment. Use of Visual Studio Code is recomended.
 
 ## Getting Started
 
-Navigate on the `src` directory and create a virtual environment:
+If using Visual Studio Code open a bash Terminal.
+Navigate to the `src` directory under this current path (data-platform/src) and create a virtual environment:
 
 ```sh
 python3 -m venv env
-source env/bin/activate
+source env/bin/activate/scripts/activate
 ```
 
-Then install the required packages:
+Navigate to the `bdd-adf-pipelines` directory and then install the required packages:
 
 ```sh
+cd bdd-adf-pipelines
 pip3 install -r requirements.txt
 ```
 
-Create the following environment variables:
+Create the following environment variables using the values for your lab Azure environment:
 
 ```sh
 export CLIENT_ID="<your client id>"
@@ -54,13 +56,21 @@ export SUBSCRIPTION_ID="<your subscription id>"
 export TENANT_ID="<your tenant id>"
 export ADF_NAME="<adf name>"
 export RESOURCE_GROUP_NAME="<client id>"
+export STORAGE_ACCOUNT_NAME="<your storage account>"
+export STORAGE_ACCOUNT_KEY="<your storeage account key>"
 ```
+
+>The storage account was created on the Exercise 3, review Task 4 to see it's name and get the Accoutn Key from the Portal.
 
 Then run the following command to start the BDD tests:
 
 ```sh
 behave
 ```
+
+The result should look similar to the next image:
+
+![Behave Results](/lab-files/media/behave-results.PNG 'Behave Results')
 
 ## References
 

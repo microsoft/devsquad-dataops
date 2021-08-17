@@ -52,10 +52,10 @@ Microsoft and the trademarks listed at <https://www.microsoft.com/en-us/legal/in
     - [Task 2: The Git workflow for data]()
     - [Task 3: Creating a new PR for the custom library]()
     - [Task 4: Custom libraries checklist]()
-  - [Exercise 5: Testing](#Exercise-5-Testing) (25 min)
-    - [Task 1: Understanding test types](#Task-1-Understanding-test-types)
-    - [Task 2: Understanding BDD tests](#Task-1-Understanding-BDD-tests)
-    - [Task 3: Developing a new test]()
+  - [Exercise 5: Testing](#exercise-5-testing) (25 min)
+    - [Task 1: Understanding test types](#task-1-understanding-test-types)
+    - [Task 2: Understanding BDD tests](#task-2-understanding-bdd-tests)
+    - [Task 3: Developing a new test](#task-3-developing-a-new-test)
   - [Exercise 6: ML PLatform (optional)]() (30 min) (TBD)
   - [After the hands-on lab](#after-the-hands-on-lab)
     - [Task 1: Delete resource group](#task-1-delete-resource-group)
@@ -858,7 +858,7 @@ Duration: 45 minutes
 
 Duration: 25 minutes
 
-## Exercise 5: Testing  {#Exercise-5-Testing}
+## Exercise 5: Testing
 
 Duration: 25 minutes
 
@@ -930,15 +930,13 @@ Now lets review the DevOps pipeline execution results:
   <p>Here you see the results of running the BDD test using <b>behave</b></p>
 
 > On the next optional task you could explore how to build your own Data Pipeline BDD test
-### Task 3: Developing a new test (Optional)
 
-> **Prerequiste for this task:** Have Visual Studio Code (VS Code) installed and configured to run Python 3.7 projects - this setup is out of scope of this lab
+### Task 3: Developing a new test 
+> This Task is Optional. It's objective is to get you familiarize on how Behave works and how it can be used to test Pipeline execution results.
 
-Objective of this Task: Explore how Behavior Driven Development is implemented with "behave" framework
+**Pre-requisits:** Have an environment to run Python 3.4+, either on your local host or on a Virtual Machine like the "Data Sience Windows VM" on Azure.
 
-  1. Go to your Development environment were you have installed VS Code and clone the data-platform repo that is part of the HOL
-
-  2. Go to src directory and read the readme.md
+Follow the instructions indicated [here](..\data-platform\src\bdd-adf-pipelines\README.md#motivation). After completion return to this page to continue with the lab.
 
 ## After the hands-on lab
 
