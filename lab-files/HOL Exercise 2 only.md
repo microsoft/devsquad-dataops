@@ -17,7 +17,7 @@ To proceed with the execution of the other exercises below, you must understand 
 ![](media/infrastructure-as-code-folder.PNG 'infrastructure as code')
 
 ```
-|infrastructure-as-code|
+|infrastructure-as-code| ---> Principal folder
 	|databricks|
 		|dev|
 			interactive.json
@@ -27,7 +27,7 @@ To proceed with the execution of the other exercises below, you must understand 
 			interactive.json
 		|sandbox|
 			core.json
-	|infrastructure|
+	|infrastructure| ---> Azure Resource Manager templates
 		|linkedTemplates|
 			|compute|
 				template.json
@@ -38,7 +38,7 @@ To proceed with the execution of the other exercises below, you must understand 
 			|roleAssigments|
 				compute.json
 				data.json
-		|parameters|
+		|parameters| ---> Azure Resource Manager templates parameters
 			parameters.dev.json
 			parameters.dev.template.json
 			parameters.prod.json
@@ -46,7 +46,7 @@ To proceed with the execution of the other exercises below, you must understand 
 			parameters.qa.json
 			parameters.qa.template.json
 		azuredeploy.json
-	|scripts|
+	|scripts| ---> Scripts file with objective to execute and create our infrastrucure with help from ARM templates
 		AcceptanceTest.ps1
 		DatabricksClusters.ps1
 		DatabricksSecrets.ps1
@@ -57,7 +57,7 @@ To proceed with the execution of the other exercises below, you must understand 
 		Sandbox.ps1
 		Setup.ps1
 		UploadSampleData.ps1
-	|tests|
+	|tests| ---> After of execution, these scripts can to validate if have anything incorrect in the process of creation
 		|Compute|
 			Databricks.Tests.ps1
 			DataFactory.Tests.ps1
