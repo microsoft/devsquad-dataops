@@ -8,6 +8,10 @@ In this exercise, you will explore and understand the structure and contents of 
 
 Infrastructure as Code (IaC) is the management of infrastructure (networks, virtual machines, load balancers, and connection topology) in a descriptive model, using the same versioning as DevOps team uses for source code. Like the principle that the same source code generates the same binary, an IaC model generates the same environment every time it is applied. IaC is a key DevOps practice and is used in conjunction with continuous delivery. (https://docs.microsoft.com/en-us/devops/deliver/what-is-infrastructure-as-code)
 
+### Technology Overview - Azure Resource Manager Templates
+
+To implement infrastructure as code for your Azure solutions, use Azure Resource Manager templates (ARM templates). The template is a JavaScript Object Notation (JSON) file that defines the infrastructure and configuration for your project. The template uses declarative syntax, which lets you state what you intend to deploy without having to write the sequence of programming commands to create it. In the template, you specify the resources to deploy and the properties for those resources. (https://docs.microsoft.com/en-us/azure/azure-resource-manager/templates/overview)
+
 ### Task 1: Understanding the IaC folder
 
 In this task you will explore and understand the folder structure and scripts, templates contained in it for execution in IaC.
@@ -69,71 +73,33 @@ To proceed with the execution of the other exercises below, you must understand 
 			ResourceGroup.Tests.ps1
 	GitVersion.yml
 ```
-### Technology Overview - Azure Resource Manager Templates
-
-To implement infrastructure as code for your Azure solutions, use Azure Resource Manager templates (ARM templates). The template is a JavaScript Object Notation (JSON) file that defines the infrastructure and configuration for your project. The template uses declarative syntax, which lets you state what you intend to deploy without having to write the sequence of programming commands to create it. In the template, you specify the resources to deploy and the properties for those resources. (https://docs.microsoft.com/en-us/azure/azure-resource-manager/templates/overview)
 
 # Folder [infrastructure]
 
-```
-|infrastructure|
-		|linkedTemplates|
-			|compute|
-				template.json
-			|data|
-				template.json
-			|ml|
-				template.json
-			|roleAssigments|
-				compute.json
-				data.json
-		|parameters|
-			parameters.dev.json
-			parameters.dev.template.json
-			parameters.prod.json
-			parameters.prod.template.json
-			parameters.qa.json
-			parameters.qa.template.json
-		azuredeploy.json
-```
 # File: azuredeploy.json
+
+![](media/iac-folder-infrastructure.PNG 'infrastructure-folder')
+
 Main template, with declared parameters, variables and resources. Here we use linkedTemplates.
 *NOTE*: We have the option of using separate parameter files as a good practice when using IaC templates, without the need to change directly in the main template.
 
+
 # Folder: linkedTemplates
-```
-|linkedTemplates|
-			|compute|
-				template.json
-			|data|
-				template.json
-			|ml|
-				template.json
-			|roleAssigments|
-				compute.json
-				data.json
-```
+
+![](media/iac-folder-linkedtemplates.PNG 'linkedTemplate-folder')
 
 In linkedTemplates we have templates with "parts" of declared resources that are not declared in the main Template, in order to reuse and can link with other templates.
 *NOTE*: linkedTemplates is a widely used practice, for better organization and handling of templates of different types of resources and being able to link them to any template.
 
-![](media/compute-template-json.PNG 'compute-linkedTemplate')
 
 # Folder: parameters
-```
-|parameters|
-			parameters.dev.json
-			parameters.dev.template.json
-			parameters.prod.json
-			parameters.prod.template.json
-			parameters.qa.json
-			parameters.qa.template.json
-```
+
+![](media/iac-folder-parameters.PNG 'parameters-folder')
 
 Parameters folder and directory with templates files with parameters and values to be used by linkedTemplates and main template, without the need to change directly in the main template.
 *NOTE*: Using templates parameters is optional and can be used directly in the main template. However, following a model of good practice, the use separately is indicated.
 
-![](media/parameters-dev-json.PNG 'parameters-dev-json')
+
 
 ### Task 2: Creating a new sandbox environment with Powershell
 
