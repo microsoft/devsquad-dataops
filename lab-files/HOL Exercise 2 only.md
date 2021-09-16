@@ -132,7 +132,7 @@ Parameters folder and directory with templates files with parameters and values 
 
 Example of a parameters declaration in this template.
 
-![](media/iac-parameters.PNG 'iac-parameters')
+![](media/parameters-dev-json.PNG 'iac-parameters')
 
 
 # Folder [databricks]
