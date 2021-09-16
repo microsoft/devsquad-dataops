@@ -76,7 +76,7 @@ To proceed with the execution of the other exercises below, you must understand 
 
 # Folder [infrastructure]
 
-# File: azuredeploy.json
+## File: azuredeploy.json
 
 ![](media/iac-folder-infrastructure.PNG 'infrastructure-folder')
 
@@ -84,7 +84,7 @@ Main template, with declared parameters, variables and resources. Here we use li
 *NOTE*: We have the option of using separate parameter files as a good practice when using IaC templates, without the need to change directly in the main template.
 
 
-# Folder: linkedTemplates
+## Folder: linkedTemplates
 
 ![](media/iac-folder-linkedtemplates.PNG 'linkedTemplate-folder')
 
@@ -92,11 +92,11 @@ In linkedTemplates we have templates with "parts" of declared resources that are
 *NOTE*: linkedTemplates is a widely used practice, for better organization and handling of templates of different types of resources and being able to link them to any template.
 
 
-# Sub-Folders and Files: linkedTemplates
+## Sub-Folders and Files: linkedTemplates
 
 ![](media/iac-folder-linkedtemplates-subfolders.PNG 'linkedTemplate-sub-folders')
 
-# File: template.json (subfolders 1, 2, 3)
+## File: template.json (subfolders 1, 2, 3)
 
 For each subfolder (1, 2, 3) we have this file "similar" to the azuredeploy.json file, but with the declaration being carried out only with the resources corresponding to the subfolder type, for example: subfolder compute, we have a template file. json with only compute-related resources declared which will link to the main template next (azuredeploy.json).
 
@@ -108,7 +108,7 @@ Example of a resource declaration in this template.
 
 ![](media/iac-linkedtemplates-template-compute.PNG 'lkd-template-compute')
 
-# File: compute.json, data.json (subfolder 4)
+## File: compute.json, data.json (subfolder 4)
 
 For subfolder 4 we have two templates named "compute" and "data" responsible and with declared instructions to apply and allow access to each resource to be created, correctly.
 
@@ -123,14 +123,34 @@ Example of a resource declaration in this template.
 ![](media/iac-service-principal.PNG 'iac-service-principal')
 
 
-# Folder: parameters
+## Folder: parameters
 
 ![](media/iac-folder-parameters.PNG 'parameters-folder')
 
 Parameters folder and directory with templates files with parameters and values to be used by linkedTemplates and main template, without the need to change directly in the main template.
 *NOTE*: Using templates parameters is optional and can be used directly in the main template. However, following a model of good practice, the use separately is indicated.
 
+Example of a parameters declaration in this template.
 
+![](media/iac-parameters.PNG 'iac-parameters')
+
+
+# Folder [databricks]
+TO DO
+
+# Folder [scripts]
+
+In this folder you'll find all the scripts responsible for executing and creating resources, along with the ARM templates.
+Some scripts are referenced with ARM templates, "calling" them to perform some necessary steps for the correct creation of resources and infrastructure.
+
+However, we have a correct order for this execution as described below.
+
+**ATUALIZAR IMAGEM**
+![](media/iac-scripts.PNG 'iac-scripts')
+
+
+# Folder [tests]
+TO DO 
 
 ### Task 2: Creating a new sandbox environment with Powershell
 
