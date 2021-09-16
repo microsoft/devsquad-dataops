@@ -92,6 +92,37 @@ In linkedTemplates we have templates with "parts" of declared resources that are
 *NOTE*: linkedTemplates is a widely used practice, for better organization and handling of templates of different types of resources and being able to link them to any template.
 
 
+# Sub-Folders and Files: linkedTemplates
+
+![](media/iac-folder-linkedtemplates-subfolders.PNG 'linkedTemplate-sub-folders')
+
+# File: template.json (subfolders 1, 2, 3)
+
+For each subfolder (1, 2, 3) we have this file "similar" to the azuredeploy.json file, but with the declaration being carried out only with the resources corresponding to the subfolder type, for example: subfolder compute, we have a template file. json with only compute-related resources declared which will link to the main template next (azuredeploy.json).
+
+Computing resources: Virtual machine, network interface, Public IP, Key Vault, DataBricks, DataFactory
+Data resources: DataLake Storage Account
+ML resources: Machine Learning Services
+
+Example of a resource declaration in this template.
+
+![](media/iac-linkedtemplates-template-compute.PNG 'lkd-template-compute')
+
+# File: compute.json, data.json (subfolder 4)
+
+For subfolder 4 we have two templates named "compute" and "data" responsible and with declared instructions to apply and allow access to each resource to be created, correctly.
+
+To apply a correct role and permission to a resource, Azure uses features from Azure Active Directory, such as Service Principal.
+
+### Technology Overview - Azure AD Service Principal
+
+An Azure service principal is an identity created for use with applications, hosted services, and automated tools to access Azure resources. This access is restricted by the roles assigned to the service principal, giving you control over which resources can be accessed and at which level. For security reasons, it's always recommended to use service principals with automated tools rather than allowing them to log in with a user identity. (https://docs.microsoft.com/en-us/cli/azure/create-an-azure-service-principal-azure-cli)
+
+Example of a resource declaration in this template.
+
+![](media/iac-service-principal.PNG 'iac-service-principal')
+
+
 # Folder: parameters
 
 ![](media/iac-folder-parameters.PNG 'parameters-folder')
