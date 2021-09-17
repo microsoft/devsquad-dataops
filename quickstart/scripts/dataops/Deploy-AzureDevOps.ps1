@@ -30,11 +30,11 @@ ImportTemplateRepoToDomainRepo -Branches $branches -RepoConfiguration $config.Re
 
 CreateAzDevOpsYamlPipelines -DefaultBranch $branches[0] -RepoConfiguration $config.RepoConfiguration -Verbose:$VerbosePreference
 
+UpdateIaCParameters -Branch $branches[0] -Configuration $config -Directory $directory[0] -Verbose:$VerbosePreference
+
 foreach ($branch in $branches)
 {
     CreateAzDevOpsRepoApprovalPolicy -Branch $branch -RepoInfo $repoInfo -RepoConfiguration $config.RepoConfiguration -Verbose:$VerbosePreference
     CreateAzDevOpsRepoCommentPolicy -Branch $branch -RepoInfo $repoInfo -RepoConfiguration $config.RepoConfiguration -Verbose:$VerbosePreference
     CreateAzDevOpsRepoBuildPolicy -Branch $branch -RepoInfo $repoInfo -RepoConfiguration $config.RepoConfiguration -Verbose:$VerbosePreference
 }
-
-UpdateIaCParameters -Branch $branches[0] -Configuration $config -Directory $directory[0] -Verbose:$VerbosePreference

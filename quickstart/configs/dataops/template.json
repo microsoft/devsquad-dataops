@@ -16,7 +16,7 @@
                 "SourceYamlPath": "azure-pipelines/iac/iac-ci.yml",
                 "BuildPolicy": {
                     "Name": "<project.alias>-iac-ci build policy",
-                    "PathFilter": "/infrastructure-as-code/*"
+                    "PathFilter": "/infrastructure-as-code/**"
                 }
             },
             {
