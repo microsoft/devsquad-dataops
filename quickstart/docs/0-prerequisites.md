@@ -20,7 +20,7 @@
 
         ![Azure DevOps Build Service](./images/quickstart-buildservice-3.png)
 
-        > In case the Build Service user is not present on this list, click on `+ Add` and search for `projectName Build Service`, assigning the `Administrator` role.
+        > In case the Build Service user is not present on this list, click on `+ Add` and search for `<projectName> Build Service`, assigning the `Administrator` role.
 
 4. Make sure the Organization where the project is created in the Azure DevOps is [connected with the Azure Active Directory](https://docs.microsoft.com/en-us/azure/devops/organizations/accounts/connect-organization-to-azure-ad?view=azure-devops
 ) of the Azure Subscription that will be used in the lab.
