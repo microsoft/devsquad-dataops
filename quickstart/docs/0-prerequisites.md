@@ -49,4 +49,4 @@
 
 ## Next Step
 
-* [Create the a setup file](./1a-create-hol-setup-file-basic.md)
+* [Create a setup file](./1a-create-hol-setup-file-basic.md)
