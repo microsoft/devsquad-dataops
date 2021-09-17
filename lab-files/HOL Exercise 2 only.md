@@ -136,21 +136,37 @@ Example of a parameters declaration in this template.
 
 
 # Folder [databricks]
-TO DO
+
+In this file you will find declared settings related to the Databricks resource which will be used in executing the scripts (below) and provisioning your infrastructure, as well as its necessary resources.
+
+![](media/iac-folder-databricks.PNG 'iac-databricks')
+
+Example of a configuration declaration in this template.
+
+![](media/iac-file-corejson-databricks.PNG 'iac-databricks-corejson')
 
 # Folder [scripts]
 
 In this folder you'll find all the scripts responsible for executing and creating resources, along with the ARM templates.
 Some scripts are referenced with ARM templates, "calling" them to perform some necessary steps for the correct creation of resources and infrastructure.
 
-However, we have a correct order for this execution as described below.
+However, we have a correct order for this execution as described in next task.
 
-**ATUALIZAR IMAGEM**
 ![](media/iac-scripts.PNG 'iac-scripts')
 
 
 # Folder [tests]
-TO DO 
+
+After running using ARM templates, scripts and other configuration items and provisioning your infrastructure and resources, we must apply tests in order to validate if everything is ok.
+
+These tests must be run through the scripts described below.
+
+You can practice a little more on this topic in Exercise 5: Testing.
+
+However, we have a correct order for this execution as described in next task.
+
+![](media/iac-folder-subfolder-tests.PNG 'iac-tests')
+
 
 ### Task 2: Creating a new sandbox environment with Powershell
 
@@ -159,6 +175,13 @@ In this task you will learn how to create your first sandbox environment, with A
 ### Task 3: Checklist of IaC best practices
 
 In this task you will understand the best practices in creating, executing and managing scripts and templates in IaC.
+Using a checklist to review what has been or will be executed is extremely important, with the objective of validating and verifying what may be "missing" in your environment and that is essential for use.
+
+At each complete rerun of the steps, you should use this checklist described below to "check" each item/box you have already validated and is ok.
+In case of failure in one of the steps below, go back and validate the necessary to proceed.
+NEVER "skip" a step in order to gain agility in the process. Each step is essential and important for you to have the most assertive environment possible and not have future problems :)
+
+Whenever possible, review the reference documents listed at the end of these task for use of resources through best practice.
 
 1. [ ] Does this code correctly implement the Azure resources and their properties?
 2. [ ] Are the names of Azure resources correctly parameterized for all environments?
