@@ -43,7 +43,7 @@ $Providers | Register-AzResourceProvider -ProviderNamespace { $_ }
 
 if ($Environment -eq "sandbox") {
     Write-Host "Creating Sandbox parameters file..." -ForegroundColor Green
-    $devParamsFile = ".\infrastructure\parameters\parameters.dev.json"
+    $devParamsFile = ".\infrastructure\parameters\parameters.dev.template.json"
     $sandboxParamsFile = ".\infrastructure\parameters\parameters.sandbox.json"
     $sandboxParams = Get-Content -Path $devParamsFile -Raw
     $sandboxParams = $sandboxParams.Replace('-dev', '-sandbox')
