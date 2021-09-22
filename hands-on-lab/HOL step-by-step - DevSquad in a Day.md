@@ -51,6 +51,7 @@ Microsoft and the trademarks listed at <https://www.microsoft.com/en-us/legal/in
   - [Exercise 5: Semantic Versioning of Data Engineering Libraries](#exercise-5-semantic-versioning-of-data-engineering-libraries) (20 min)
     - [Task 1: Exploring the Databricks Notebook](#task-1-exploring-the-databricks-notebook)
 	- [Task 2: Exploring the Python custom libraries](#task-2-exploring-the-python-custom-libraries)
+    - [Task 3: Code Review Checklist: Data Engineering](task-3-code-review-checklist-data-engineering)
   - [Exercise 6: Testing](#exercise-6-testing)  (20 min)
     - [Task 1: Understanding test types](#task-1-understanding-test-types)
 	- [Task 2: Understanding BDD tests](#task-2-understanding-bdd-tests)
