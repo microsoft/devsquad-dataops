@@ -39,11 +39,10 @@ Execute all these steps below to setup your evironment before running the Hands-
 
 1. Open the [Azure Cloud Shell](https://shell.azure.com) and select the **PowerShell** option.
 
-    - When using the Azure Cloud Shell, be sure you are logged in Azure with the subscription you want to use for the hands-on lab.
-
+    > When using the Azure Cloud Shell, be sure you are logged in Azure with the subscription you want to use for the hands-on lab.
 
 2. **On the Azure PowerShell terminal:** clone the source code of the lab and go to the `hol` directory.
-   
+
     ```powershell
     git clone https://github.com/microsoft/devsquad-in-a-day.git
     
@@ -136,16 +135,18 @@ Execute all these steps below to setup your evironment before running the Hands-
 
 ## Step 5: Create the Hands-On Lab VM
 
-1. **On the Azure PowerShell terminal**: run `Deploy-LabVM.ps1` to create a VM inside your Azure subscription that is pre-configured with all the tools that will be needed for executing the Hands-On Lab.
+1. Deploy a pre-configured VM that contains all the tools required for executing the Hands-On Lab.
+
+    - **On the Azure PowerShell terminal**: run `Deploy-LabVM.ps1`.
     
-    ```powershell
-    ./quickstart/scripts/labvm/Deploy-LabVM.ps1
-    ```
+        ```powershell
+        ./quickstart/scripts/labvm/Deploy-LabVM.ps1
+        ```
 
     - When prompted for the `sourceSas` parameter, provide the following value: `https://stlabvm.blob.core.windows.net/vhd/labvm-001.vhd?sp=r&st=2021-09-21T19:04:44Z&se=2021-09-25T03:04:44Z&spr=https&sv=2020-08-04&sr=b&sig=qJATNoRXYE34IBybuAMTaMzWyPTr8mZSp3EiYFoRnLk%3D`
 
 
-2. After the VM is created, assign a new password to the user `labuser`.
+2. Access the VM resource and assign a new password to the user `labuser`.
     
     ![Reset VM password](./docs/images/vm-lab-reset-password.png)
 
