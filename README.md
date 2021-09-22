@@ -25,7 +25,7 @@ In this workshop, you will deploy a DataOps reference arquitecture, for understa
 
 1. Follow these [quickstart instructions](./quickstart/README.md) to setup your lab environment before starting the Hands-On Lab.
 
-2. Follow the [Hands-On Lab instructions](./hands-on-lab/HOL%20step-by-step%20-%20DataOps.md).
+2. Follow the [Hands-On Lab instructions](./hands-on-lab/HOL%20step-by-step%20-%20DevSquad%20in%20a%20Day.md#).
 
 ## Azure services and related products
 
