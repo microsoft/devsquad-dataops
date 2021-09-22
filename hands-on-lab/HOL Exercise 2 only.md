@@ -12,6 +12,8 @@ Infrastructure as Code (IaC) is the management of infrastructure (networks, virt
 
 To implement infrastructure as code for your Azure solutions, use Azure Resource Manager templates (ARM templates). The template is a JavaScript Object Notation (JSON) file that defines the infrastructure and configuration for your project. The template uses declarative syntax, which lets you state what you intend to deploy without having to write the sequence of programming commands to create it. In the template, you specify the resources to deploy and the properties for those resources. (https://docs.microsoft.com/en-us/azure/azure-resource-manager/templates/overview)
 
+You can use pre-configured templates as the basis for your infrastructure provisioning using the repository on GitHub: (https://github.com/Azure/azure-quickstart-templates).
+
 ### Task 1: Understanding the IaC folder
 
 In this task you will explore and understand the folder structure and scripts, templates contained in it for execution in IaC.
@@ -83,6 +85,11 @@ To proceed with the execution of the other exercises below, you must understand 
 Main template, with declared parameters, variables and resources. Here we use linkedTemplates.
 *NOTE*: We have the option of using separate parameter files as a good practice when using IaC templates, without the need to change directly in the main template.
 
+### Technology Overview - Azure Resource Manager Templates - Linked Templates
+
+To deploy complex solutions, you can break your Azure Resource Manager template (ARM template) into many related templates, and then deploy them together through a main template. The related templates can be separate files or template syntax that is embedded within the main template. This article uses the term linked template to refer to a separate template file that is referenced via a link from the main template. It uses the term nested template to refer to embedded template syntax within the main template.
+
+(https://docs.microsoft.com/en-us/azure/azure-resource-manager/templates/linked-templates?tabs=azure-powershell).
 
 ## Folder: linkedTemplates
 
@@ -172,6 +179,8 @@ However, we have a correct order for this execution as described in next task.
 
 In this task you will learn how to create your first sandbox environment, with Azure Powershell scripts.
 
+![](media/iac-ordem-scripts.PNG 'iac-ordem-scripts')
+
 ### Task 3: Checklist of IaC best practices
 
 In this task you will understand the best practices in creating, executing and managing scripts and templates in IaC.
@@ -199,4 +208,5 @@ Whenever possible, review the reference documents listed at the end of these tas
 * [Azure Resource Manager Templates - Best Practices Guide](https://github.com/Azure/azure-quickstart-templates/blob/master/1-CONTRIBUTION-GUIDE/best-practices.md)
 * [The PowerShell Best Practices and Style Guide](https://github.com/PoshCode/PowerShellPracticeAndStyle)
 * [Effective code Reviews](https://www.evoketechnologies.com/blog/code-review-checklist-perform-effective-code-reviews/)
+* [Terraform with Azure - Overview](https://docs.microsoft.com/en-us/azure/developer/terraform/overview)
 
