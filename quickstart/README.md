@@ -1,6 +1,6 @@
 # Setup the Hands-On Lab
 
-Execute all these steps below to setup your evironment for running the Hands-On Lab.
+Execute all these steps below to setup your evironment before running the Hands-On Lab.
 
 ## Step 1: Azure DevOps Setup
 
