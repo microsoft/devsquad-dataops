@@ -6,7 +6,15 @@ Execute all these steps below to setup your evironment before running the Hands-
 
 1. Create a new [Azure Azure DevOps Project](https://docs.microsoft.com/en-us/azure/devops/organizations/projects/create-project?view=azure-devops&tabs=preview-page).
 
-2. [Install](https://docs.microsoft.com/en-us/azure/devops/marketplace/install-extension?view=azure-devops&tabs=browser) the [GitTools extension](https://marketplace.visualstudio.com/items?itemName=gittools.gittools&targetId=0d8e54d4-e229-47bd-9dc5-9be0f116a5c0&utm_source=vstsproduct&utm_medium=ExtHubManageList) in the Organization level of the new Azure DevOps project.
+    - **Visibility:** `Private`
+
+    - **Work item process:** `Agile`
+
+    ![New Azure DevOps project](./docs/images/project-creation.png)
+
+2. [Install the GitTools extension](https://marketplace.visualstudio.com/items?itemName=gittools.gittools&targetId=0d8e54d4-e229-47bd-9dc5-9be0f116a5c0&utm_source=vstsproduct&utm_medium=ExtHubManageList) in the Organization level of the new Azure DevOps project.
+
+    ![Instal GitTools extension](./docs/images/install-git-tools.png)
 
 3. Authorize the project **Build Service** to be an Administrator of Variable Groups:
 
