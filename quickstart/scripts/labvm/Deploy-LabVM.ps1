@@ -1,6 +1,5 @@
 param (
-    [parameter(mandatory=$true)]
-    [string]$sourceSas,
+    [string]$sourceVhd = 'https://stlabvm.blob.core.windows.net/vhd/labvm-001.vhd',
 
     # Size of the VHD snapshot in bytes
     [long]$vhdSizeBytes = 136367309312,
@@ -29,7 +28,7 @@ $disk = Get-AzDisk -ResourceGroupName $resourceGroupName -DiskName $diskName
 
 Write-Host "[DevSquad In a Day] Copying the lab VM snapshot to your subscription"
 
-azcopy copy $sourceSas $diskSas.AccessSAS --blob-type PageBlob
+azcopy copy $sourceVhd $diskSas.AccessSAS --blob-type PageBlob
 
 Revoke-AzDiskAccess -ResourceGroupName $resourceGroupName -DiskName $diskName
 
