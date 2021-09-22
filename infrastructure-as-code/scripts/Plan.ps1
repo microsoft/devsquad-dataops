@@ -30,8 +30,7 @@ if (!$template) {
         Author = $VersionAuthor
     }
 
-    $template = New-AzTemplateSpec -ResourceGroupName $TemplateSpecRgName -Name $SolutionName -Version $Version  -Location $rg.Location `
-        -TemplateFile $SolutionTemplateFile -VersionDescription "$VersionDescription" -Tag $metadata -Force
+    $template = New-AzTemplateSpec -Name $SolutionName -Version $Version -ResourceGroupName $TemplateSpecRgName -Location $rg.Location -TemplateFile $SolutionTemplateFile -VersionDescription "$VersionDescription" -Tag $metadata -Force
 }
 
 Write-Host "Previewing template deployment changes..." -ForegroundColor Green
