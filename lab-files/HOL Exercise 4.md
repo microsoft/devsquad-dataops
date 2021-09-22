@@ -52,10 +52,10 @@ Microsoft and the trademarks listed at <https://www.microsoft.com/en-us/legal/in
     - [Task 2: The Git workflow for data]()
     - [Task 3: Creating a new PR for the custom library]()
     - [Task 4: Custom libraries checklist]()
-  - [Exercise 5: Testing](#exercise-5-testing) (25 min)
-    - [Task 1: Understanding test types](#task-1-understanding-test-types)
-    - [Task 2: Understanding BDD tests](#task-2-understanding-bdd-tests)
-    - [Task 3: Developing a new test](#task-3-developing-a-new-test)
+  - [Exercise 5: Testing](#Exercise-5-Testing) (25 min)
+    - [Task 1: Understanding test types](#Task-1-Understanding-test-types)
+    - [Task 2: Understanding BDD tests](#Task-1-Understanding-BDD-tests)
+    - [Task 3: Developing a new test]()
   - [Exercise 6: ML PLatform (optional)]() (30 min) (TBD)
   - [After the hands-on lab](#after-the-hands-on-lab)
     - [Task 1: Delete resource group](#task-1-delete-resource-group)
@@ -378,6 +378,420 @@ To implement infrastructure as code for your Azure solutions, use Azure Resource
 Main template, with declared parameters, variables and resources. Here we use linkedTemplates.
 *NOTE*: We have the option of using separate parameter files as a good practice when using IaC templates, without the need to change directly in the main template.
 
+```
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "environment": {
+      "type": "string",
+      "metadata": {
+        "description": "Environment where resources will be deployed"
+      }
+    },
+    "solutionName": {
+      "type": "string",
+      "metadata": {
+        "description": "Solution name"
+      }
+    },    
+    "location": {
+      "type": "string",
+      "metadata": {
+        "description": "Region where the resource is provisioned"
+      }
+    }, 
+    "resourceGroupData": {
+      "type": "string",
+      "metadata": {
+        "description": "Resource group where 'Data' resources will be provisioned"
+      }
+    },
+    "resourceGroupCompute": {
+      "type": "string",
+      "metadata": {
+        "description": "Resource group where 'Compute' resources will be provisioned"
+      }
+    },
+    "resourceGroupMachineLearning": {
+      "type": "string",
+      "metadata": {
+        "description": "Resource group where 'Machine Learning' resources will be provisioned"
+      }
+    },
+    "resourceGroupManagedDatabricks": {
+      "type": "string",
+      "metadata": {
+        "description": "SKU type name for the dataLake"
+      }
+    },
+    "dataLakeSkuName": {
+      "type": "string",
+      "metadata": {
+        "description": "SKU type name for the datalake"
+      }
+    },
+    "dataFactoryAccountName": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "Azure DevOps account name"
+      }
+    },
+    "dataFactoryProjectName": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "Project name in Azure DevOps account"
+      }
+    },
+    "dataFactoryRepositoryName": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "Azure DevOps project repository name for DataFactory"
+      }
+    },
+    "dataFactoryCollaborationBranch": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "Collaboration branch: develop"
+      }
+    },
+    "dataFactoryRootFolder": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "Root folder of the datafactory: /adf"
+      }
+    },
+    "keyVaultSecretsAdminObjectId": {
+      "type": "string",
+      "metadata": {
+        "description": "ObjectId of the person creating the secrets"
+      }
+    }
+  },
+  "functions": [
+    {
+      "namespace": "naming",
+      "members": {
+        "default": {
+          "parameters": [
+            {
+              "name": "resourcePurpose",
+              "type": "string"
+            },
+            {
+              "name": "uniqueStr",
+              "type": "string"
+            },
+            {
+              "name": "environment",
+              "type": "string"
+            },
+            {
+              "name": "solutionName",
+              "type": "string"
+            }            
+          ],
+          "output": {
+            "type": "string",
+            "value": "[concat(parameters('resourcePurpose'), '-', parameters('solutionName'), '-', parameters('uniqueStr'), '-',  parameters('environment'))]"
+          }
+        },
+        "clean": {
+          "parameters": [
+            {
+              "name": "resourcePurpose",
+              "type": "string"
+            },
+            {
+              "name": "uniqueStr",
+              "type": "string"
+            },
+            {
+              "name": "environment",
+              "type": "string"
+            },
+            {
+              "name": "solutionName",
+              "type": "string"
+            }            
+          ],
+          "output": {
+            "type": "string",
+            "value": "[concat(parameters('resourcePurpose'), parameters('solutionName'), parameters('uniqueStr'), parameters('environment'))]"
+          }
+        }
+      }
+    }
+  ],
+  "variables": {
+    "envMapping": {
+      "eastus": "eastus",
+      "brazilsouth": "brzsouth"
+    },
+    "uniqueStr": "[substring(uniqueString(subscription().subscriptionId), 0, 6)]",
+    "dataDeploymentName": "[concat('data-', deployment().name)]",
+    "computeDeploymentName": "[concat('compute-', deployment().name)]",
+    "mlDeploymentName": "[concat('ml-', deployment().name)]",
+    "dataRoleAssigmentsDeploymentName": "[concat('data-roleAssigments-', deployment().name)]",
+    "computeRoleAssigmentsDeploymentName": "[concat('compute-roleAssigments-', deployment().name)]",
+    "dataSourceStorageAccountName": "[naming.clean('stg',variables('uniqueStr'), parameters('environment'), parameters('solutionName'))]",
+    "dataLakeName": "[naming.clean('lake',variables('uniqueStr'), parameters('environment'), parameters('solutionName'))]",
+    "databricksName": "[naming.default('dbw',variables('uniqueStr'), parameters('environment'), parameters('solutionName'))]",
+    "dataFactoryName": "[naming.default('adf',variables('uniqueStr'), parameters('environment'), parameters('solutionName'))]",
+    "keyVaultName": "[naming.default('kv',variables('uniqueStr'), parameters('environment'), parameters('solutionName'))]",
+    "amlWorkspaceName": "[naming.default('mlw',variables('uniqueStr'), parameters('environment'), parameters('solutionName'))]",
+    "amlKeyVaultName": "[naming.default('kvm',variables('uniqueStr'), parameters('environment'), parameters('solutionName'))]",
+    "amlStorageAccountName": "[naming.clean('stml',variables('uniqueStr'), parameters('environment'), parameters('solutionName'))]",
+    "amlApplicationInsightsName": "[naming.default('appi-ml',variables('uniqueStr'), parameters('environment'), parameters('solutionName'))]",
+    "amlContainerRegistryName": "[naming.clean('crml',variables('uniqueStr'), parameters('environment'), parameters('solutionName'))]"
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2020-06-01",
+      "name": "[variables('dataDeploymentName')]",
+      "resourceGroup": "[parameters('resourceGroupData')]",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "relativePath": "linkedTemplates/data/template.json"
+        },
+        "parameters": {
+          "location": {
+            "value": "[parameters('location')]"
+          },
+          "dataSourceStorageAccountName": {
+            "value": "[variables('dataSourceStorageAccountName')]"
+          },          
+          "dataLakeName": {
+            "value": "[variables('dataLakeName')]"
+          },
+          "dataLakeSkuName": {
+            "value": "[parameters('dataLakeSkuName')]"
+          }
+        }
+      }         
+    },
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2020-06-01",
+      "name": "[variables('computeDeploymentName')]",
+      "resourceGroup": "[parameters('resourceGroupCompute')]",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "relativePath": "linkedTemplates/compute/template.json"
+        },
+        "parameters": {
+          "environment": {
+            "value": "[parameters('environment')]"
+          },
+          "location": {
+            "value": "[parameters('location')]"
+          },
+          "dataFactoryName": {
+            "value": "[variables('dataFactoryName')]"
+          },
+          "dataFactoryAccountName": {
+            "value": "[parameters('dataFactoryAccountName')]"
+          },
+          "dataFactoryProjectName": {
+            "value": "[parameters('dataFactoryProjectName')]"
+          },
+          "dataFactoryRepositoryName": {
+            "value": "[parameters('dataFactoryRepositoryName')]"
+          },
+          "dataFactoryCollaborationBranch": {
+            "value": "[parameters('dataFactoryCollaborationBranch')]"
+          },
+          "dataFactoryRootFolder": {
+            "value": "[parameters('dataFactoryRootFolder')]"
+          },
+          "resourceGroupManagedDatabricks": {
+            "value": "[parameters('resourceGroupManagedDatabricks')]"
+          },
+          "databricksName": {
+            "value": "[variables('databricksName')]"
+          },
+          "keyVaultName": {
+            "value": "[variables('keyVaultName')]"
+          },
+          "keyVaultSecrets": {
+            "value": {
+              "secrets": [           
+                {
+                  "secretName": "dataLakeName",
+                  "secretValue": "[variables('dataLakeName')]"
+                },
+                {
+                  "secretName": "StorageAccountConnectionString",
+                  "secretValue": "[concat('DefaultEndpointsProtocol=https;AccountName=', variables('dataSourceStorageAccountName'), ';AccountKey=', listKeys(concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', parameters('resourceGroupData'), '/providers/Microsoft.Storage/storageAccounts/', variables('dataSourceStorageAccountName')), '2019-04-01').keys[0].value,';EndpointSuffix=core.windows.net')]"
+                }  
+              ]
+            }
+          },
+          "keyVaultSecretsAdminObjectId": {
+            "value": "[parameters('keyVaultSecretsAdminObjectId')]"
+          }        
+        }
+      },
+      "dependsOn": [
+        "[variables('dataDeploymentName')]"
+      ]
+    },
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2020-06-01",
+      "name": "[variables('dataRoleAssigmentsDeploymentName')]",
+      "resourceGroup": "[parameters('resourceGroupData')]",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "relativePath": "linkedTemplates/roleAssigments/data.json"
+        },
+        "parameters": {
+          "dataLakeName": {
+            "value": "[variables('dataLakeName')]"
+          },
+          "dataFactoryPrincipalId": {
+            "value": "[reference(variables('computeDeploymentName')).outputs.dataFactoryPrincipalId.value]"
+          }
+        }
+      },
+      "dependsOn": [
+        "[variables('computeDeploymentName')]"
+      ]
+    },
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2020-06-01",
+      "name": "[variables('computeRoleAssigmentsDeploymentName')]",
+      "resourceGroup": "[parameters('resourceGroupCompute')]",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "relativePath": "linkedTemplates/roleAssigments/compute.json"
+        },
+        "parameters": {
+          "databricksName": {
+            "value": "[variables('databricksName')]"
+          },
+          "dataFactoryPrincipalId": {
+            "value": "[reference(variables('computeDeploymentName')).outputs.dataFactoryPrincipalId.value]"
+          }
+        }
+      },
+      "dependsOn": [
+        "[variables('computeDeploymentName')]"
+      ]
+    },
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2020-06-01",
+      "name": "[variables('mlDeploymentName')]",
+      "resourceGroup": "[parameters('resourceGroupMachineLearning')]",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "relativePath": "linkedTemplates/ml/template.json"
+        },
+        "parameters": {
+          "location": {
+            "value": "[parameters('location')]"
+          },
+          "amlWorkspaceName": {
+            "value": "[variables('amlWorkspaceName')]"
+          },
+          "amlKeyVaultName": {
+            "value": "[variables('amlKeyVaultName')]"
+          },
+          "amlStorageAccountName": {
+            "value": "[variables('amlStorageAccountName')]"
+          },
+          "amlApplicationInsightsName": {
+            "value": "[variables('amlApplicationInsightsName')]"
+          },
+          "amlContainerRegistryName": {
+            "value": "[variables('amlContainerRegistryName')]"
+          }
+        }
+      }         
+    }
+  ],
+  "outputs": {
+    "location": {
+      "type": "string",
+      "value": "[parameters('location')]"
+    },
+    "resourceGroupData": {
+      "type": "string",
+      "value": "[parameters('resourceGroupData')]"
+    },
+    "resourceGroupCompute": {
+      "type": "string",
+      "value": "[parameters('resourceGroupCompute')]"
+    },
+    "resourceGroupML": {
+      "type": "string",
+      "value": "[parameters('resourceGroupMachineLearning')]"
+    },
+    "dataSourceStorageAccountName": {
+      "type": "string",
+      "value": "[variables('dataSourceStorageAccountName')]"
+    },    
+    "dataLakeName": {
+      "type": "string",
+      "value": "[variables('dataLakeName')]"
+    },
+    "dataLakeSkuName": {
+      "type": "string",
+      "value": "[parameters('dataLakeSkuName')]"
+    },
+    "dataFactoryName": {
+      "type": "string",
+      "value": "[variables('dataFactoryName')]"
+    },
+    "databricksName": {
+      "type": "string",
+      "value": "[variables('databricksName')]"
+    },
+    "databricksWorkspaceUrl": {
+      "type": "string",
+      "value": "[reference(variables('computeDeploymentName')).outputs.databricksWorkspaceUrl.value]"
+    },
+    "keyVaultName": {
+      "type": "string",
+      "value": "[variables('keyVaultName')]"
+    },
+    "amlWorkspaceName": {
+      "type": "string",
+      "value": "[variables('amlWorkspaceName')]"
+    },
+    "amlKeyVaultName": {
+      "type": "string",
+      "value": "[variables('amlKeyVaultName')]"
+    },
+    "amlStorageAccountName": {
+      "type": "string",
+      "value": "[variables('amlStorageAccountName')]"
+    },
+    "amlApplicationInsightsName": {
+      "type": "string",
+      "value": "[variables('amlApplicationInsightsName')]"
+    },
+    "amlContainerRegistryName": {
+      "type": "string",
+      "value": "[variables('amlContainerRegistryName')]"
+    }
+  }
+}
+```
+
 # Folder: linkedTemplates
 ```
 |linkedTemplates|
@@ -421,22 +835,19 @@ In this task you will learn how to create your first sandbox environment, with A
 
 In this task you will understand the best practices in creating, executing and managing scripts and templates in IaC.
 
-1. [ ] Does this code correctly implement the Azure resources and their properties?
-2. [ ] Are the names of Azure resources correctly parameterized for all environments?
-3. [ ] Are all Azure resources being implemented in the correct modules (e.g. data, compute)?
-4. [ ] Are there acceptance tests that cover the newly added code and do they pass in the CI/CD pipelines?
-5. [ ] Do the tests for this code correctly test the code?
-6. [ ] Is the code documented well?
-7. [ ] Have secrets been stripped before committing?
-8. [ ] Is PII and EUII treated correctly? In particular, make sure the code is not logging objects or strings that might contain PII (e.g. request headers).
-9. [ ] Is the deployment of the code scripted such that it is repeatable and ideally declarative?
-10. [ ] Is the PR a relatively small change? Optimal PR sizes for code reviews are typically described in terms like embodying less than three days of work or having [200 or fewer changed lines of code](https://smallbusinessprogramming.com/optimal-pull-request-size/). If not, suggest smaller user stories or more frequent PRs in the future to reduce the amount of code being reviewed in one PR.
+1. Codify everything
 
-## Additional references
+2. Document as little as possible
 
-* [Azure Resource Manager Templates - Best Practices Guide](https://github.com/Azure/azure-quickstart-templates/blob/master/1-CONTRIBUTION-GUIDE/best-practices.md)
-* [The PowerShell Best Practices and Style Guide](https://github.com/PoshCode/PowerShellPracticeAndStyle)
-* [Effective code Reviews](https://www.evoketechnologies.com/blog/code-review-checklist-perform-effective-code-reviews/)
+3. Maintain version control
+Version your templates in a code repository, such as Azure Repos, GitHub, etc.
+By versioning your templates you can control and reuse them with your development team or infrastructure at any time, in addition to ensuring the version history.
+
+4. Continuously test, integrate, and deploy
+
+5. Make your infrastructure code modular
+
+6. Make your infrastructure immutable (when possible)
 
 
 ## Exercise 3: Git Workflow and CI/CD
@@ -447,7 +858,94 @@ Duration: 45 minutes
 
 Duration: 25 minutes
 
-## Exercise 5: Testing
+In the DataOps culture, the data engineer team moves at lightning speed using highly optimized methodology, tools, and processes. One of the most important productivity methodologies is the ability to reuse codes. When we talk about reusing code, we mean about the approach to reuse data engineering codes that are responsible to do default data transformations for your data sets. 
+
+When we talk about data engineering approach in a data analytics project, automatically we think about [Notebooks](https://en.wikipedia.org/wiki/Notebook_interface). Use notebooks is good to analyze, make experimentations and apply techniques of curate data in the pipelines. However oftentimes in a project it can become a manually task, as a copy and paste codes across notebooks.  To address necessities like this, optimize the processes and save the time, we can develop custom libraries to abstract these data engineering practices, and use them around the notebooks.
+
+In this exercise you will learn how to implement a semantic versioning using a custom library in Python.
+
+### Exploring the Databricks Notebook
+
+Open the **02 One Notebook to Rule them all** notebook (located in the Workspace Databricks, under Notebook’s area) and run it step by step to complete this first step. Some of the most important tasks you will perform are:
+	•  Install and import a custom python library
+	•  Prepare and apply data quality in the flight delays and whether data sets.
+	• Transform and combining dates columns between flights delay and whether forecast data set using the custom python library
+
+**IMPORTANT NOTE**
+_Please note that each of these tasks will be addressed through several cells in the notebook. You don’t need to change them only execute and analyze the transformation operations._
+
+### Exploring the Python custom libraries. 
+
+In previous exercise we explored the databricks notebook, and we used a custom library responsible for the main transformations in the data sets of flights delays and whether. Now, let’s to explore and understand some approaches to creating custom libraries in data analytics projects.
+
+**IMPORTANT NOTE**
+_Please note that we will use existing custom libraries in the repository, won’t be necessary to develop a new library to this exercise._
+
+**For the remainder of this guide, the following pre-requirements will be necessary to execute and validate the library locally:**
+
+*	Python 3.x
+*	Docker + Docker Compose
+*	Java SDK
+*	Visual Studio Code
+
+1. Open the HOL directory in your prompt and execute **“code .”**  to open the Visual Studio Code:
+
+_[Image]_
+
+
+2. From the left explorer view, open the **“data-platform/src”** directory structure. 
+
+
+_[Image]_
+
+3. Inside the structure you will have all items necessary to develop and validate a custom library. To proceed with the validation, we will investigate the existing library used in the databricks notebook. For that, open the **“spark”** directory and click on the file **“data_transformation.py”**
+
+_[Image]_
+
+4. If you look in the code library, will notice that there is a lot of functions that is used in the databricks notebooks to address data cleanings and transformations. Let’s look at one of them. Press *CTRL+F* type **“make_datetime_column”** and click OK. You will see that in this part of the code, we are using is a pretty common practice for some datasets:
+
+_[Image]_
+
+
+5.	From the left menu explorer, you will see others library, but before to execute and test them locally you will need to setup the configuration of the environment. For that, follow the steps **6** and **7**.
+
+
+6. Create a virtual environment and install the required packages:
+
+    ```sh
+      python3 -m venv dataopslib_env
+      source dataopslib_env/bin/activate
+
+      pip3 install -r requirements.txt
+    ```
+
+7. Open the `spark` folder on your terminal and run the Docker compose to start an Apache Spark instance locally:
+
+    ```sh
+       docker-compose up
+    ```
+
+
+8. Now we already have the environment prepared and to start the execution of some existing libraries. Choose more one sample to test, open the samples folder, click on the file **“sample_read_csv.py”** and press F5.
+
+
+_[Image]_
+
+9. Now let's imagine that we need to add a new function to address new functionalities in our pipeline. We could add this new feature in the library and promote that to our pipeline. Here the intention is just to show how is the process to promote to QA, so let’s to add a simple code:
+
+    ```
+    def `make_datetime_column_new`(df: DataFrame, columnName: str, year: str, month: str, day: str,
+                         hour: Union[str, None] = None, minute: Union[str, None] = None,
+                         second: Union[str, None] = None, time: [str, None] = None,
+                         timeFormat: str = 'HH:mm:ss') -> DataFrame:
+     ```
+
+
+10. Until we were able to abstract certain functions inside a library and reuse them in the notebooks. But now, let’s imagine that we need to create a new feature for this library, or maybe fix a bug, how to versioning this code? Let's to learn that in the next exercise.
+
+_[Image]_
+
+## Exercise 5: Testing  {#Exercise-5-Testing}
 
 Duration: 25 minutes
 
@@ -519,13 +1017,15 @@ Now lets review the DevOps pipeline execution results:
   <p>Here you see the results of running the BDD test using <b>behave</b></p>
 
 > On the next optional task you could explore how to build your own Data Pipeline BDD test
+### Task 3: Developing a new test (Optional)
 
-### Task 3: Developing a new test 
-> This Task is Optional. It's objective is to get you familiarize on how Behave works and how it can be used to test Pipeline execution results.
+> **Prerequiste for this task:** Have Visual Studio Code (VS Code) installed and configured to run Python 3.7 projects - this setup is out of scope of this lab
 
-**Pre-requisits:** Have an environment to run Python 3.4+, either on your local host or on a Virtual Machine like the "Data Sience Windows VM" on Azure.
+Objective of this Task: Explore how Behavior Driven Development is implemented with "behave" framework
 
-Follow the instructions indicated [here](..\data-platform\src\bdd-adf-pipelines\README.md#motivation). After completion return to this page to continue with the lab.
+  1. Go to your Development environment were you have installed VS Code and clone the data-platform repo that is part of the HOL
+
+  2. Go to src directory and read the readme.md
 
 ## After the hands-on lab
 
