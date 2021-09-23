@@ -49,6 +49,8 @@ Execute all these steps below to setup your evironment before running the Hands-
 
     > When using the Azure Cloud Shell, be sure you are logged in Azure with the subscription you want to use for the hands-on lab.
 
+    ![Open Azure cloud shell](./docs/images/open-cloud-powershell.png)
+
 2. **On the Azure PowerShell terminal:** clone the source code of the lab and go to the `hol` directory.
 
     ```powershell
@@ -99,6 +101,8 @@ Execute all these steps below to setup your evironment before running the Hands-
     -  **On the Azure PowerShell terminal**: run the `Deploy-AzurePreReqs.ps1` script to deploy the pre-required Azure resources:
 
         ```powershell
+        az config set extension.use_dynamic_install=yes_without_prompt
+
         ./quickstart/scripts/cloud-setup/Deploy-AzurePreReqs.ps1 -ConfigurationFile "quickstart/configs/cloud-setup/hol.json"
         ```
 
@@ -124,7 +128,7 @@ Execute all these steps below to setup your evironment before running the Hands-
         # You don't need to change any of the following values below
         git config --global user.email "hol@microsoft.com"
         git config --global user.name "HOL Setup User"
-        $env:AZURE_DEVOPS_EXT_PAT_TEMPLATE="2je7narfoc2rusvewdjpfnlcn3pyponyrpsko3w5b6z26zj4wpoa"
+        $env:AZURE_DEVOPS_EXT_PAT_TEMPLATE="zmmxgs34zsj3i62fmq4xi457q4aynakerpl64ya2fedko42ojmsa"
         ```
 
         > This command configures git and defines an environment variable that will be used to setup your Azure DevOps project.
@@ -173,4 +177,4 @@ Execute all these steps below to setup your evironment before running the Hands-
 
 - *Before* starting the Hands-On Lab, you should follow all the steps provided on this quickstart tutorial.
 
-- For starting the Hands-On Lab, follow [these instructions](./hands-on-lab/HOL%20step-by-step%20-%20DevSquad%20in%20a%20Day.md#).
+- For starting the Hands-On Lab, follow [these instructions](../hands-on-lab/HOL%20step-by-step%20-%20DevSquad%20in%20a%20Day.md#).
