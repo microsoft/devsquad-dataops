@@ -34,7 +34,8 @@ Sep 2021
   - [Exercise 5: Semantic Versioning of Data Engineering Libraries](#exercise-5-semantic-versioning-of-data-engineering-libraries) (20 min)
     - [Task 1: Exploring the Databricks Notebook](#task-1-exploring-the-databricks-notebook)
 	- [Task 2: Exploring the Python custom libraries](#task-2-exploring-the-python-custom-libraries)
-    - [Task 3: Code Review Checklist: Data Engineering](task-3-code-review-checklist-data-engineering)
+    - [Task 3: The Git Workflow for Data Engineering](#task-3-the-git-worflow-for-data-engineering)
+    - [Task 4: Code Review Checklist: Data Engineering](task-4-code-review-checklist-data-engineering)
   - [Exercise 6: Testing](#exercise-6-testing)  (20 min)
     - [Task 1: Understanding test types](#task-1-understanding-test-types)
 	- [Task 2: Understanding BDD tests](#task-2-understanding-bdd-tests)
@@ -770,36 +771,103 @@ _Please note that we will use existing custom libraries in the repository, won�
 
 1. Open the HOL directory in your prompt and execute **“code .”**  to open the Visual Studio Code:
 
-_[Image]_
+![](./media/task2_01-Exploring-Python-Custom-Libraries.png'Code')  
 
+2. From the left explorer view, open the **“data-platform/src/dataopslib/dataopslib””** directory structure. 
 
-2. From the left explorer view, open the **“data-platform/src”** directory structure. 
+![](./media/task2_02-Exploring-Python-Custom-Libraries.png'Spark')  
 
+3. Inside the structure you will see the codes used for the development of libraries that are current used in the databricks notebook. 
+For that, open the **“spark”** directory and click on the file **“data_transformation.py”**
 
-_[Image]_
-
-3. Inside the structure you will have all items necessary to develop and validate a custom library. To proceed with the validation, we will investigate the existing library used in the databricks notebook. For that, open the **“spark”** directory and click on the file **“data_transformation.py”**
-
-_[Image]_
+![](./media/task2_03-Exploring-Python-Custom-Libraries.png'Data Transformations1')
 
 4. If you look in the code library, will notice that there is a lot of functions that is used in the databricks notebooks to address data cleanings and transformations. Let’s look at one of them. Press *CTRL+F* type **“make_datetime_column”** and click OK. You will see that in this part of the code, we are using is a pretty common practice for some datasets:
 
-_[Image]_
+```
+def make_datetime_column(df: DataFrame, columnName: str, year: str, month: str, day: str,
+                         hour: Union[str, None] = None, minute: Union[str, None] = None,
+                         second: Union[str, None] = None, time: [str, None] = None,
+                         timeFormat: str = 'HH:mm:ss') -> DataFrame:
+    """Buils a new `Timestamp` column based on string columns containing each of the parts of the date. If time-related columns are indicated,
+    time is constructed based on local time zone. If not, a `DateTime` column is constructed. Missing values are rounded down to the minute/hour.
+
+    Parameters
+    ----------
+    df : DataFrame
+        The dataframe where the data is contained
+    columnName : str
+        the column to build
+    year : str
+        Column containing the year
+    month : str
+        Column containing the month
+    day : str
+        Column containing the day
+    hour : Union[str, None], optional
+        Column containing the hour, by default None
+    minute : Union[str, None], optional
+        Column containing the minute, by default None
+    second : Union[str, None], optional
+        Column containing the second, by default None
+    time: Union[str, None], optional
+        Column containing the time part to construct the date column. This argument can't be combined with `hour`/`minute`/`second`
+    timeFormat: str, optional
+        When `time` is indicated, `timeFormat` represents the format where time column is stored, by default 'HH:mm:ss'
+    Returns
+    -------
+    DataFrame
+        The dataframe with the new column appended.
+    """
+    if timeFormat and not time:
+        raise ValueError("You can't specify timeFormat if time is missing.")
+    if time and (hour or minute or second):
+        raise ValueError("You can't specify both time and hour/minute/second. Either use one or the others")
+    if not second:
+        logger.info("Seconds not specified. Minutes will be rounded down")
+        second = f.lit("00")
+    if not minute:
+        logger.info("Minutes not specified. Hours will be rounded down")
+        minute = f.lit("00")
+
+    if not (hour or time):
+        logger.info(f"Building a date column from columns '{year}', '{month}' and '{day}'")
+        return parse_to_date_column(concat_columns(df, columnName, year, month, day, union_char='-'), columnName, 'yyyy-M-d')
+    else:
+        logger.info('Building a datetime column from columns {}'.format([year, month, day, hour, minute, second, time]))
+        df = concat_columns(df, '__date_part', year, month, day, union_char='-')
+        if not time:
+            df = concat_columns(df, '__time_part', hour, minute, second, union_char=':')
+        else:
+            df = parse_to_time_column(df, time, timeFormat, '__time_part')
+
+        df = concat_columns(df, columnName, '__date_part', '__time_part', union_char=' ')
+        df = parse_to_datetime_column(df, columnName, 'yyyy-M-d HH:mm:ss', columnName)
+        df = drop_columns(df, '__date_part', '__time_part')
+
+        return df
+```
+
+
+
 
 
 5.	From the left menu explorer, you will see others library, but before to execute and test them locally you will need to setup the configuration of the environment. For that, follow the steps **6** and **7**.
 
 
-6. Create a virtual environment and install the required packages:
+6. Open **data_platform/src/dataopslib** create a virtual environment and install the required packages:
 
     ```sh
       python3 -m venv dataopslib_env
       source dataopslib_env/bin/activate
 
+	  code . 
+	  
+      pip3 install wheel
       pip3 install -r requirements.txt
     ```
 
-7. Open the `spark` folder on your terminal and run the Docker compose to start an Apache Spark instance locally:
+7. Open **data_platform/src/spark** folder on your terminal and run the Docker compose to start an Apache Spark instance locally:
 
     ```sh
        docker-compose up
@@ -808,24 +876,52 @@ _[Image]_
 
 8. Now we already have the environment prepared and to start the execution of some existing libraries. Choose more one sample to test, open the samples folder, click on the file **“sample_read_csv.py”** and press F5.
 
-
-_[Image]_
-
-9. Now let's imagine that we need to add a new function to address new functionalities in our pipeline. We could add this new feature in the library and promote that to our pipeline. Here the intention is just to show how is the process to promote to QA, so let’s to add a simple code:
-
-```
-def `make_datetime_column_new`(df: DataFrame, columnName: str, year: str, month: str, day: str,
-					hour: Union[str, None] = None, minute: Union[str, None] = None,
-					second: Union[str, None] = None, time: [str, None] = None,
-					timeFormat: str = 'HH:mm:ss') -> DataFrame:
-```
+![](./media/task2_04-Exploring-Python-Custom-Libraries.png'SampleRead')  
 
 
 10. Until we were able to abstract certain functions inside a library and reuse them in the notebooks. But now, let’s imagine that we need to create a new feature for this library, or maybe fix a bug, how to versioning this code? Let's to learn that in the next exercise.
 
-_[Image]_
+### **Task 3: The Git Workflow for Data Engineering**
 
-### **Task 3: Code Review Checklist: Data Engineering**
+In the [Exercise 2](#exercise-2-git-workflow) we saw about the Data Engineering git workflow, which basically has two independent workflows:  **Databricks Notebooks** and **Library**. The two are very closely related, but as our purpose here is to learn more about how this semantic versioning approach for custom libraries works, let’s into a little bit deeper  to understand first how the library workflows. 
+
+![](./media/task03_01-library-workflow.png'Library-workflow')  
+
+The first thing that we need to understand looking to the picture above is that we are considering the best practices of Software Engineering for our practices of Data Engineering. We need to have in our mind that libraries for data engineering have also a specify lifecycle, because the data engineers also are working for introducing new capabilities for theses libraries and because of that it’s important to have a good versioning strategy. For those who has more familiarity with software versioning concept and knows the terms MAJOR MINOR and PATH it is a similar approach, but for those who doesn’t know, take look to a simple summary about it.
+
+
+    
+* **Patch Version:** are exchangeable, meaning notebooks and environments consumers can upgrade or downgrade freely.
+    * **Example:** Bug fix, Performance improvement, environment, or internal tweaks.
+	* **Policy:** Notebooks or Spark clusters should have this library updated to improve the utilization in a specific situation.
+	* **
+* **Minor Version:** are backward compatible, notebooks and environments consumers can upgrade freely.
+    * **Example:** New features.
+	* **Policy:** Update the notebooks, jobs, or environment to get some new functions. Nothing will break
+	* **
+* **Major Version:** means a complete refactoring on the package and the change breaking backward compatibility.
+    * **Example:** Change a transformation function or removed an old function and replace by new one.
+	* **Policy:** Test all environments or notebooks post update.
+	* **
+
+These definition can be done using a lot of different ways, but here we are considering a combination of these three **<semVer=MAJOR.MINOR.PATCH>** into three different prefixes such as ***Alpha Version(a)***, ***Beta Version(b)*** and ***Release Candidate Version(RC).***
+
+
+
+>. In the **Azure DevOps Portal**, open the **Artifacts** and click in **dataopslib**. 
+
+![](./media/task03_02-artifacts.png'Library-workflow')  
+
+>2. In **Overview**, you can analyze the main information’s of the library that you explored in the previous task. 
+
+![](./media/task03_02-artifactsliboverview.png'Library-workflow') 
+
+
+>3. Clicking in **versions** you can check the list of the previous version. We can noticed that the currently version in the pipeline, already was a ***Alpha Version(a)*** **(0.1.0a5, 0.1.0a14, 0.1.a23)**, also after this become a ***Beta Version(b)*** **(0.1.0b6)** and subsequently a ***Release Candidate(r)*** **(0.1.0rc15)** until be deployment in production **(0.1.0).**  
+
+![](./media/task03_04-artifactsliboverview.png'Library-workflow') 
+
+### **Task 4: Code Review Checklist: Data Engineering**
 
 #### **Custom Library**
 
