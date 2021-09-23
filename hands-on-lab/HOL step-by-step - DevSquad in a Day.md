@@ -329,20 +329,31 @@ We are working with three environments `dev`, `qa` and `prod`, and this environm
 
 <br/>
 
->**Setting Azure Devops Project:** before to start to execute the pipelines and execute the git workflow, it is necessary to create the environments in Azure Devops for the IaC and Databricks environments.
+>**Setting Azure Devops Project:** before starting to execute the pipelines and the git workflow, it is necessary to create environments in Azure Devops for the IaC and Databricks environments. Environments can be created inside the Pipelines menu of Azure DevOps.
 
 ![](./media/environments-qa-prod.PNG)
 
 
->**Note**: Create Environments to `qa`, `prod`, `databricks-qa` and `databricks-prod` in Azure Devops before to make any Pull Request (PR).
+>**Note**: Create Environments for `dev`, `qa`, `prod`, `databricks-dev`, `databricks-qa` and `databricks-prod` in Azure Devops before making any Pull Request (PR).
     
 ![](./media/environments.PNG)
 
 ### **Task 3: Git workflow**
 
+Version control has a general workflow that most developers use when writing code and sharing it with the team.
+
+These steps are:
+
+1. Get a local copy of code if they don't have one yet.
+2. Make changes to code to fix bugs or add new features.
+3. Once the code is ready, make it available for review by your team.
+4. Once the code is reviewed, merge it into the team's shared codebase.
+
 <br/>
 
 #### **Infrastructure as code**
+
+On this lab, we've used the following git workflow for promoting IaC code to production.
 
 ![Git workflow](./media/91-git-workflow.png)
 
@@ -353,7 +364,7 @@ We are working with three environments `dev`, `qa` and `prod`, and this environm
 Data Engineering has two independent workflows:
 
 * Databricks Notebooks
-* Library
+* PySpark Library
 
 <br/>
 
@@ -397,7 +408,7 @@ The proposal is to use a **Production-first** strategy, where one of the *defini
 
 ### **Task 1: Executing CI/CD Pipeline IaC**
 
-Now we will start to work with the pipelines and understant the funcionality that these have.  After completing the [Preparing your Azure DevOps project](../quickstart/docs/3a-azdo-setup-basic.md) step, make sure the CI/CD pipelines exists in Azure Devops.
+Now we will start to work with the pipelines and understand the funcionality that these have.  After completing the [quickstart](../quickstart/README.md) step, make sure the CI/CD pipelines already exists in Azure DevOps.
 
 >**Note**: `dataops` word as part of the name is the alias that you assign to the project.
 
@@ -409,7 +420,7 @@ In the quickstart the process create the pipelines to IaC, the customized librar
 
 >**Note**: `dataops` word as part of the name is the alias that you assign to the project.
 
-**CI Pipeline:** This pipeline is the owner to create ARM template that will be used in the CD pipeline to create the resources in the differents resource groups by environment.
+**CI Pipeline:** This pipeline is responsible for creating ARM templates that will be used in the CD pipeline to deploy resources in differents resource groups per environment.
 
 ##### **Execute CI Pipeline:** 
 
@@ -417,7 +428,7 @@ In the quickstart the process create the pipelines to IaC, the customized librar
 
 ![](./media/CI-Iac.PNG)
 
-This pipeline was executed manually, but it has in the branch policies configurated to start automatically if any change occur in branch in the folder `infrastructure-as-code`:
+This pipeline was executed manually, but it has been configurated in the branch policies to start automatically if changes are made in the folder `infrastructure-as-code`:
 
 ![](./media/branch-policies-builder.PNG)
 
@@ -425,14 +436,14 @@ This pipeline was executed manually, but it has in the branch policies configura
 
 ![](./media/Run-CDPipeline-Iac.PNG)
 
-When you execute the CD Pipeline of IaC you can see in the Azure Devops that you environment status will change, when this pipeline finished the execution, you can validate if you see the resources created in the resource group of development environment.
+The CD pipeline will be triggered automatically after the CI Pipeline. After executing the IaC CD, check your Azure Devops environments to see how it changes. When this pipeline finishes its execution, also validate if you see the Azure resources created in the resource groups of the development environment.
 
 ![](./media/RGComputeDev.PNG)
 ![](./media/RGDataDev.PNG)
 
->**Note**: Name of the Resource Groups and Resources depends of the alias and the suscription id.
+>**Note**: Name of the Resource Groups and Resources depends on the custom alias defined by yourself and also the suscription id.
 
-With this resources created, you can configure the scope in databricks.
+With these resources created, you can configure a secrets scope in databricks, for secure management of secrets.
 
 ##### **Databricks Secrets Scope**
 
