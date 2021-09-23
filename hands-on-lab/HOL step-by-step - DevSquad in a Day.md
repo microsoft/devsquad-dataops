@@ -771,16 +771,16 @@ _Please note that we will use existing custom libraries in the repository, won�
 
 1. Open the HOL directory in your prompt and execute **“code .”**  to open the Visual Studio Code:
 
-![](./media/task2_01-Exploring-Python-Custom-Libraries.png'Code')  
+![](./media/task2_01-Exploring-Python-Custom-Libraries.png)  
 
 2. From the left explorer view, open the **“data-platform/src/dataopslib/dataopslib””** directory structure. 
 
-![](./media/task2_02-Exploring-Python-Custom-Libraries.png'Spark')  
+![](./media/task2_02-Exploring-Python-Custom-Libraries.png)  
 
 3. Inside the structure you will see the codes used for the development of libraries that are current used in the databricks notebook. 
 For that, open the **“spark”** directory and click on the file **“data_transformation.py”**
 
-![](./media/task2_03-Exploring-Python-Custom-Libraries.png'Data Transformations1')
+![](./media/task2_03-Exploring-Python-Custom-Libraries.png)
 
 4. If you look in the code library, will notice that there is a lot of functions that is used in the databricks notebooks to address data cleanings and transformations. Let’s look at one of them. Press *CTRL+F* type **“make_datetime_column”** and click OK. You will see that in this part of the code, we are using is a pretty common practice for some datasets:
 
@@ -876,7 +876,7 @@ def make_datetime_column(df: DataFrame, columnName: str, year: str, month: str, 
 
 8. Now we already have the environment prepared and to start the execution of some existing libraries. Choose more one sample to test, open the samples folder, click on the file **“sample_read_csv.py”** and press F5.
 
-![](./media/task2_04-Exploring-Python-Custom-Libraries.png'SampleRead')  
+![](./media/task2_04-Exploring-Python-Custom-Libraries.png)  
 
 
 10. Until we were able to abstract certain functions inside a library and reuse them in the notebooks. But now, let’s imagine that we need to create a new feature for this library, or maybe fix a bug, how to versioning this code? Let's to learn that in the next exercise.
@@ -885,7 +885,7 @@ def make_datetime_column(df: DataFrame, columnName: str, year: str, month: str, 
 
 In the [Exercise 2](#exercise-2-git-workflow) we saw about the Data Engineering git workflow, which basically has two independent workflows:  **Databricks Notebooks** and **Library**. The two are very closely related, but as our purpose here is to learn more about how this semantic versioning approach for custom libraries works, let’s into a little bit deeper  to understand first how the library workflows. 
 
-![](./media/task03_01-library-workflow.png'Library-workflow')  
+![](./media/task03_01-library-workflow.png)  
 
 The first thing that we need to understand looking to the picture above is that we are considering the best practices of Software Engineering for our practices of Data Engineering. We need to have in our mind that libraries for data engineering have also a specify lifecycle, because the data engineers also are working for introducing new capabilities for theses libraries and because of that it’s important to have a good versioning strategy. For those who has more familiarity with software versioning concept and knows the terms MAJOR MINOR and PATH it is a similar approach, but for those who doesn’t know, take look to a simple summary about it.
 
@@ -910,16 +910,20 @@ These definition can be done using a lot of different ways, but here we are cons
 
 >. In the **Azure DevOps Portal**, open the **Artifacts** and click in **dataopslib**. 
 
-![](./media/task03_02-artifacts.png'Library-workflow')  
+![](./media/task03_02-artifacts.png)  
 
 >2. In **Overview**, you can analyze the main information’s of the library that you explored in the previous task. 
 
-![](./media/task03_02-artifactsliboverview.png'Library-workflow') 
+![](./media/task03_02-artifactsliboverview.png) 
 
 
 >3. Clicking in **versions** you can check the list of the previous version. We can noticed that the currently version in the pipeline, already was a ***Alpha Version(a)*** **(0.1.0a5, 0.1.0a14, 0.1.a23)**, also after this become a ***Beta Version(b)*** **(0.1.0b6)** and subsequently a ***Release Candidate(r)*** **(0.1.0rc15)** until be deployment in production **(0.1.0).**  
 
 ![](./media/task03_04-artifactsliboverview.png'Library-workflow') 
+
+The git flow for this solution begins with the pull request to of this change the ***develop branch***, it automatically will generate what we are calling ***Alpha Version***. This Alpha version will pass to the **Library CI Builds** to do automatized tests, once it is approved there is more one’s checklists to proceed and do the merge in develop branch, when it occurs the CD Trigger will generate the **Beta version id** into the development environment. Repeating the same process to the QA branch, it will generate a ***Release Candidate (RC)*** that can be used after to deploy this change in the production. 
+
+
 
 ### **Task 4: Code Review Checklist: Data Engineering**
 
