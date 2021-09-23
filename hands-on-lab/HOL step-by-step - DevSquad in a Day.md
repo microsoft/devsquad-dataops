@@ -34,8 +34,8 @@ Sep 2021
   - [Exercise 5: Semantic Versioning of Data Engineering Libraries](#exercise-5-semantic-versioning-of-data-engineering-libraries) (20 min)
     - [Task 1: Exploring the Databricks Notebook](#task-1-exploring-the-databricks-notebook)
 	- [Task 2: Exploring the Python custom libraries](#task-2-exploring-the-python-custom-libraries)
-    - [Task 3: The Git Workflow for Data Engineering](#task-3-the-git-worflow-for-data-engineering)
-    - [Task 4: Code Review Checklist: Data Engineering](task-4-code-review-checklist-data-engineering)
+    - [Task 3: The Git Workflow for Data Engineering](#task-3-the-git-workflow-for-data-engineering)
+    - [Task 4: Code Review Checklist: Data Engineering](task-4-code-review-checklist:-data-engineering)
   - [Exercise 6: Testing](#exercise-6-testing)  (20 min)
     - [Task 1: Understanding test types](#task-1-understanding-test-types)
 	- [Task 2: Understanding BDD tests](#task-2-understanding-bdd-tests)
@@ -879,7 +879,7 @@ def make_datetime_column(df: DataFrame, columnName: str, year: str, month: str, 
 ![](./media/task2_04-Exploring-Python-Custom-Libraries.png)  
 
 
-10. Until we were able to abstract certain functions inside a library and reuse them in the notebooks. But now, let’s imagine that we need to create a new feature for this library, or maybe fix a bug, how to versioning this code? Let's to learn that in the next exercise.
+10. Until we were able to abstract certain functions inside a library and reuse them in the notebooks. But now, let’s imagine that we need to create a new feature for this library, or maybe fix a bug, how to versioning this code? Let's to learn that in the next task.
 
 ### **Task 3: The Git Workflow for Data Engineering**
 
@@ -919,7 +919,7 @@ These definition can be done using a lot of different ways, but here we are cons
 
 >3. Clicking in **versions** you can check the list of the previous version. We can noticed that the currently version in the pipeline, already was a ***Alpha Version(a)*** **(0.1.0a5, 0.1.0a14, 0.1.a23)**, also after this become a ***Beta Version(b)*** **(0.1.0b6)** and subsequently a ***Release Candidate(r)*** **(0.1.0rc15)** until be deployment in production **(0.1.0).**  
 
-![](./media/task03_04-artifactsliboverview.png'Library-workflow') 
+![](./media/task03_04-artifactsliboverview.png) 
 
 The git flow for this solution begins with the pull request to of this change the ***develop branch***, it automatically will generate what we are calling ***Alpha Version***. This Alpha version will pass to the **Library CI Builds** to do automatized tests, once it is approved there is more one’s checklists to proceed and do the merge in develop branch, when it occurs the CD Trigger will generate the **Beta version id** into the development environment. Repeating the same process to the QA branch, it will generate a ***Release Candidate (RC)*** that can be used after to deploy this change in the production. 
 
