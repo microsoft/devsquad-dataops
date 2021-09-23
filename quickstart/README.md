@@ -128,7 +128,7 @@ Execute all these steps below to setup your evironment before running the Hands-
         # You don't need to change any of the following values below
         git config --global user.email "hol@microsoft.com"
         git config --global user.name "HOL Setup User"
-        $env:AZURE_DEVOPS_EXT_PAT_TEMPLATE="zmmxgs34zsj3i62fmq4xi457q4aynakerpl64ya2fedko42ojmsa"
+        $env:AZURE_DEVOPS_EXT_PAT_TEMPLATE="THIS VALUE WILL BE PROVIDED BY MICROSOFT ON THE LAB DAY"
         ```
 
         > This command configures git and defines an environment variable that will be used to setup your Azure DevOps project.
