@@ -34,7 +34,8 @@ Sep 2021
   - [Exercise 5: Semantic Versioning of Data Engineering Libraries](#exercise-5-semantic-versioning-of-data-engineering-libraries) (20 min)
     - [Task 1: Exploring the Databricks Notebook](#task-1-exploring-the-databricks-notebook)
 	- [Task 2: Exploring the Python custom libraries](#task-2-exploring-the-python-custom-libraries)
-    - [Task 3: Code Review Checklist: Data Engineering](task-3-code-review-checklist-data-engineering)
+    - [Task 3: The Git Workflow for Data Engineering](#task-3-the-git-worflow-for-data-engineering)
+    - [Task 4: Code Review Checklist: Data Engineering](task-4-code-review-checklist-data-engineering)
   - [Exercise 6: Testing](#exercise-6-testing)  (20 min)
     - [Task 1: Understanding test types](#task-1-understanding-test-types)
 	- [Task 2: Understanding BDD tests](#task-2-understanding-bdd-tests)
@@ -52,20 +53,22 @@ At the end of this hands-on lab, you will be better able to implement an end-to-
 
 ## Overview
 
-The architecture is a workflow that read datasources in an origen source and these are processed and transformed with Azure Data Factory and Databricks to put this information in the Datalake.
+The lab architecture is a workflow that starts reading data from an original source, moving it to an Azure Data Lake Gen2. After data movement, data is transformed using Azure Databricks and persisted on another layer of the datalake. Meanwhile, Azure Data Factory is also leveraged to orchestrate all those activities.
+
+Azure DevOps is used for the version control of all the infrastructure, CI/CD pipelines, Databricks code, Data Factory assets (datasets, pipelines & linked services). Azure DevOps is also used for the continuous integration and continuous deployment of this project on development, qa and production environments.
 
 ## Solution architecture
 
 Below is a diagram of the solution architecture you will deploy in this lab, leveraging several DataOps best practices.
 
-![](./media/high-level-overview-dataops.png 'Solution Architecture')
+![Solution Architecture](./media/high-level-overview-dataops.png)
 
 ## Requirements
 
 1. Microsoft Azure subscription must be pay-as-you-go or MSDN.
     - Trial subscriptions will not work.
 
-2. Follow all the steps provided in [Before the Hands-on Lab](.../quickstart/README.md)
+2. Follow all the steps provided in [Before the Hands-on Lab](../quickstart/README.md)
 
 	> Refer to the Before the hands-on lab setup guide manual before continuing to the lab exercises.
 
@@ -79,22 +82,22 @@ In this exercise, you will explore and understand the structure and contents of 
 
 #### Infrastructure As Code Practice
 
-Infrastructure as Code (IaC) is the management of infrastructure (networks, virtual machines, load balancers, and connection topology) in a descriptive model, using the same versioning as DevOps team uses for source code. Like the principle that the same source code generates the same binary, an IaC model generates the same environment every time it is applied. IaC is a key DevOps practice and is used in conjunction with continuous delivery. [More information](https://docs.microsoft.com/en-us/devops/deliver/what-is-infrastructure-as-code)
+Infrastructure as Code (IaC) is the management of infrastructure (networks, virtual machines, load balancers, connection topology, and other cloud services) in a descriptive model, using the same versioning as DevOps team uses for source code. Like the principle that the same source code generates the same binary, an IaC model generates the same environment every time it is applied. IaC is a key DevOps practice and is used in conjunction with continuous delivery. [More information](https://docs.microsoft.com/en-us/devops/deliver/what-is-infrastructure-as-code)
 
 #### Azure Resource Manager Templates
 
-To implement infrastructure as code for your Azure solutions, use Azure Resource Manager templates (ARM templates). The template is a JavaScript Object Notation (JSON) file that defines the infrastructure and configuration for your project. The template uses declarative syntax, which lets you state what you intend to deploy without having to write the sequence of programming commands to create it. In the template, you specify the resources to deploy and the properties for those resources. [More information](https://docs.microsoft.com/en-us/azure/azure-resource-manager/templates/overview)
+To implement infrastructure as code for your Azure solutions, one of the options is to use Azure Resource Manager templates (ARM templates). The template is a JavaScript Object Notation (JSON) file that defines infrastructure and configurations for your project. The template uses declarative syntax, which lets you state what you intend to deploy without having to write the sequence of programming commands to create it. In the template, you specify the resources to deploy and the properties for those resources. [More information](https://docs.microsoft.com/en-us/azure/azure-resource-manager/templates/overview)
 
 ### **Task 1: Understanding the IaC folder**
 
-In this task you will explore and understand the folder structure and scripts, templates contained in it for execution in IaC.
+In this task you will explore and understand the folder structure, navigating through its scripts and templates for IaC execution.
 
-To proceed with the execution of the other exercises below, you must understand the structure of the "infrastructure-as-code" folder, as well as its content of templates and scripts.
+To proceed with the execution of the other exercises below, you must understand the structure of the "infrastructure-as-code" folder.
 
-![](./media/infrastructure-as-code-folder.PNG 'infrastructure as code')
+![infrastructure as code](./media/infrastructure-as-code-folder.PNG)
 
 ```
-|infrastructure-as-code| ---> Principal folder
+|infrastructure-as-code| ---> Main folder
 	|databricks|
 		|dev|
 			interactive.json
@@ -123,7 +126,7 @@ To proceed with the execution of the other exercises below, you must understand 
 			parameters.qa.json
 			parameters.qa.template.json
 		azuredeploy.json
-	|scripts| ---> Scripts file with objective to execute and create our infrastrucure with help from ARM templates
+	|scripts| ---> Script files that create our infrastrucure with help from ARM templates
 		AcceptanceTest.ps1
 		DatabricksClusters.ps1
 		DatabricksSecrets.ps1
@@ -134,7 +137,7 @@ To proceed with the execution of the other exercises below, you must understand 
 		Sandbox.ps1
 		Setup.ps1
 		UploadSampleData.ps1
-	|tests| ---> After of execution, these scripts can to validate if have anything incorrect in the process of creation
+	|tests| ---> After of IaC execution, these scripts can validate the final IaC result, looking for issues on the resource creation process
 		|Compute|
 			Databricks.Tests.ps1
 			DataFactory.Tests.ps1
@@ -151,7 +154,7 @@ To proceed with the execution of the other exercises below, you must understand 
 
 ##### *File: azuredeploy.json*
 
-![](./media/iac-folder-infrastructure.PNG 'infrastructure-folder')
+![infrastructure-folder](./media/iac-folder-infrastructure.PNG)
 
 Main template, with declared parameters, variables and resources. Here we use linkedTemplates.
 >*NOTE*: We have the option of using separate parameter files as a good practice when using IaC templates, without the need to change directly in the main template.
@@ -159,7 +162,7 @@ Main template, with declared parameters, variables and resources. Here we use li
 
 #### **Folder: linkedTemplates**
 
-![](./media/iac-folder-linkedtemplates.PNG 'linkedTemplate-folder')
+![linkedTemplate-folder](./media/iac-folder-linkedtemplates.PNG)
 
 In linkedTemplates we have templates with "parts" of declared resources that are not declared in the main Template, in order to reuse and can link with other templates.
 >*NOTE*: linkedTemplates is a widely used practice, for better organization and handling of templates of different types of resources and being able to link them to any template.
@@ -167,43 +170,43 @@ In linkedTemplates we have templates with "parts" of declared resources that are
 
 #### **Sub-Folders and Files: linkedTemplates**
 
-![](./media/iac-folder-linkedtemplates-subfolders.PNG 'linkedTemplate-sub-folders')
+![linkedTemplate-sub-folders](./media/iac-folder-linkedtemplates-subfolders.PNG)
 
 ##### *File: template.json (subfolders 1, 2, 3)*
 
-For each subfolder (1, 2, 3) we have this file "similar" to the azuredeploy.json file, but with the declaration being carried out only with the resources corresponding to the subfolder type, for example: subfolder compute, we have a template file. json with only compute-related resources declared which will link to the main template next (azuredeploy.json).
+For each subfolder **(1, 2, 3)** we have this file "similar" to the `azuredeploy.json` file, but with the declaration being carried out only with the resources corresponding to the subfolder type, for example: subfolder compute, we have a template file `.json` with only compute-related resources declared which will link to the main template next (`azuredeploy.json`).
 
-Computing resources: Virtual machine, network interface, Public IP, Key Vault, DataBricks, DataFactory
-Data resources: DataLake Storage Account
-ML resources: Machine Learning Services
+- **Computing resources:** Virtual machine, network interface, Public IP, Key Vault, Databricks, Data Factory
+- **Data resources:** Data Lake Storage Account
+- **ML resources:** Machine Learning Service and associated resources (Key Vault, Application Insights, Storage and Container Registry)
 
-Example of a resource declaration in this template.
+Example of an Azure Data Factory declaration in a template.
 
-![](./media/iac-linkedtemplates-template-compute.PNG 'lkd-template-compute')
+![lkd-template-compute](./media/iac-linkedtemplates-template-compute.PNG)
 
 #### **File: compute.json, data.json (subfolder 4)**
 
-For subfolder 4 we have two templates named "compute" and "data" responsible and with declared instructions to apply and allow access to each resource to be created, correctly.
+For subfolder 4 we have two templates named `compute` and `data`, responsible and with declared instructions to apply and allow access to each resource to be created, correctly.
 
 To apply a correct role and permission to a resource, Azure uses features from Azure Active Directory, such as Service Principal.
 
->**Azure AD Service Principal** is an identity created for use with applications, hosted services, and automated tools to access Azure resources. This access is restricted by the roles assigned to the service principal, giving you control over which resources can be accessed and at which level. For security reasons, it's always recommended to use service principals with automated tools rather than allowing them to log in with a user identity. [More information](https://docs.microsoft.com/en-us/cli/azure/create-an-azure-service-principal-azure-cli)
+>**Azure AD Service Principal** is an identity created for usage with applications, hosted services, and automated tools that need access to Azure resources. This access is restricted by the roles assigned to the service principal, giving you control over which resources can be accessed and at which level. For security reasons, it's always recommended to use service principals with automated tools rather than allowing them to log in with a user identity. [More information](https://docs.microsoft.com/en-us/cli/azure/create-an-azure-service-principal-azure-cli)
 
 Example of a resource declaration in this template.
 
-![](./media/iac-service-principal.PNG 'iac-service-principal')
+![iac-service-principal](./media/iac-service-principal.PNG)
 
 
 #### **Folder: parameters**
 
-![](./media/iac-folder-parameters.PNG 'parameters-folder')
+![parameters-folder](./media/iac-folder-parameters.PNG)
 
 Parameters folder and directory with templates files with parameters and values to be used by linkedTemplates and main template, without the need to change directly in the main template.
 >*NOTE*: Using templates parameters is optional and can be used directly in the main template. However, following a model of good practice, the use separately is indicated.
 
 Example of a parameters declaration in this template.
 
-![](./media/parameters-dev-json.PNG 'iac-parameters')
+![iac-parameters](./media/parameters-dev-json.PNG)
 
 
 #### **Folder [databricks]**
@@ -221,7 +224,7 @@ Example of a configuration declaration in this template.
 In this folder you'll find all the scripts responsible for executing and creating resources, along with the ARM templates.
 Some scripts are referenced with ARM templates, "calling" them to perform some necessary steps for the correct creation of resources and infrastructure.
 
-However, we have a correct order for this execution as described in next task.
+There is a correct order for these scripts execution to succeed, as described in **Exercise 3**, in the IaC CI/CD discussion.
 
 ![](./media/iac-scripts.PNG 'iac-scripts')
 
@@ -232,11 +235,9 @@ After running using ARM templates, scripts and other configuration items and pro
 
 These tests must be run through the scripts described below.
 
-You can practice a little more on this topic in Exercise 5: Testing.
+You can practice more on the testing topic in [Exercise 6: Testing](#exercise-6-testing).
 
-However, we have a correct order for this execution as described in next task.
-
-![](./media/iac-folder-subfolder-tests.PNG 'iac-tests')
+![iac-tests](./media/iac-folder-subfolder-tests.PNG)
 
 
 ### **Task 2: Checklist of IaC best practices**
@@ -246,7 +247,8 @@ Using a checklist to review what has been or will be executed is extremely impor
 
 At each complete rerun of the steps, you should use this checklist described below to "check" each item/box you have already validated and is ok.
 In case of failure in one of the steps below, go back and validate the necessary to proceed.
-NEVER "skip" a step in order to gain agility in the process. Each step is essential and important for you to have the most assertive environment possible and not have future problems :)
+
+**NEVER "skip" a step in order to gain agility in the process. Each step is essential and important for you to have the most assertive environment possible and not have future problems :)**
 
 Whenever possible, review the reference documents listed at the end of these task for use of resources through best practice.
 
@@ -327,20 +329,31 @@ We are working with three environments `dev`, `qa` and `prod`, and this environm
 
 <br/>
 
->**Setting Azure Devops Project:** before to start to execute the pipelines and execute the git workflow, it is necessary to create the environments in Azure Devops for the IaC and Databricks environments.
+>**Setting Azure Devops Project:** before starting to execute the pipelines and the git workflow, it is necessary to create environments in Azure Devops for the IaC and Databricks environments. Environments can be created inside the Pipelines menu of Azure DevOps.
 
 ![](./media/environments-qa-prod.PNG)
 
 
->**Note**: Create Environments to `qa`, `prod`, `databricks-qa` and `databricks-prod` in Azure Devops before to make any Pull Request (PR).
+>**Note**: Create Environments for `dev`, `qa`, `prod`, `databricks-dev`, `databricks-qa` and `databricks-prod` in Azure Devops before making any Pull Request (PR).
     
 ![](./media/environments.PNG)
 
 ### **Task 3: Git workflow**
 
+Version control has a general workflow that most developers use when writing code and sharing it with the team.
+
+These steps are:
+
+1. Get a local copy of code if they don't have one yet.
+2. Make changes to code to fix bugs or add new features.
+3. Once the code is ready, make it available for review by your team.
+4. Once the code is reviewed, merge it into the team's shared codebase.
+
 <br/>
 
 #### **Infrastructure as code**
+
+On this lab, we've used the following git workflow for promoting IaC code to production.
 
 ![Git workflow](./media/91-git-workflow.png)
 
@@ -351,7 +364,7 @@ We are working with three environments `dev`, `qa` and `prod`, and this environm
 Data Engineering has two independent workflows:
 
 * Databricks Notebooks
-* Library
+* PySpark Library
 
 <br/>
 
@@ -395,7 +408,7 @@ The proposal is to use a **Production-first** strategy, where one of the *defini
 
 ### **Task 1: Executing CI/CD Pipeline IaC**
 
-Now we will start to work with the pipelines and understant the funcionality that these have.  After completing the [Preparing your Azure DevOps project](../quickstart/docs/3a-azdo-setup-basic.md) step, make sure the CI/CD pipelines exists in Azure Devops.
+Now we will start to work with the pipelines and understand the funcionality that these have.  After completing the [quickstart](../quickstart/README.md) step, make sure the CI/CD pipelines already exists in Azure DevOps.
 
 >**Note**: `dataops` word as part of the name is the alias that you assign to the project.
 
@@ -407,7 +420,7 @@ In the quickstart the process create the pipelines to IaC, the customized librar
 
 >**Note**: `dataops` word as part of the name is the alias that you assign to the project.
 
-**CI Pipeline:** This pipeline is the owner to create ARM template that will be used in the CD pipeline to create the resources in the differents resource groups by environment.
+**CI Pipeline:** This pipeline is responsible for creating ARM templates that will be used in the CD pipeline to deploy resources in differents resource groups per environment.
 
 ##### **Execute CI Pipeline:** 
 
@@ -415,7 +428,7 @@ In the quickstart the process create the pipelines to IaC, the customized librar
 
 ![](./media/CI-Iac.PNG)
 
-This pipeline was executed manually, but it has in the branch policies configurated to start automatically if any change occur in branch in the folder `infrastructure-as-code`:
+This pipeline was executed manually, but it has been configurated in the branch policies to start automatically if changes are made in the folder `infrastructure-as-code`:
 
 ![](./media/branch-policies-builder.PNG)
 
@@ -423,14 +436,14 @@ This pipeline was executed manually, but it has in the branch policies configura
 
 ![](./media/Run-CDPipeline-Iac.PNG)
 
-When you execute the CD Pipeline of IaC you can see in the Azure Devops that you environment status will change, when this pipeline finished the execution, you can validate if you see the resources created in the resource group of development environment.
+The CD pipeline will be triggered automatically after the CI Pipeline. After executing the IaC CD, check your Azure Devops environments to see how it changes. When this pipeline finishes its execution, also validate if you see the Azure resources created in the resource groups of the development environment.
 
 ![](./media/RGComputeDev.PNG)
 ![](./media/RGDataDev.PNG)
 
->**Note**: Name of the Resource Groups and Resources depends of the alias and the suscription id.
+>**Note**: Name of the Resource Groups and Resources depends on the custom alias defined by yourself and also the suscription id.
 
-With this resources created, you can configure the scope in databricks.
+With these resources created, you can configure a secrets scope in databricks, for secure management of secrets.
 
 ##### **Databricks Secrets Scope**
 
@@ -770,36 +783,103 @@ _Please note that we will use existing custom libraries in the repository, won�
 
 1. Open the HOL directory in your prompt and execute **“code .”**  to open the Visual Studio Code:
 
-_[Image]_
+![](./media/task2_01-Exploring-Python-Custom-Libraries.png)  
 
+2. From the left explorer view, open the **“data-platform/src/dataopslib/dataopslib””** directory structure. 
 
-2. From the left explorer view, open the **“data-platform/src”** directory structure. 
+![](./media/task2_02-Exploring-Python-Custom-Libraries.png)  
 
+3. Inside the structure you will see the codes used for the development of libraries that are current used in the databricks notebook. 
+For that, open the **“spark”** directory and click on the file **“data_transformation.py”**
 
-_[Image]_
-
-3. Inside the structure you will have all items necessary to develop and validate a custom library. To proceed with the validation, we will investigate the existing library used in the databricks notebook. For that, open the **“spark”** directory and click on the file **“data_transformation.py”**
-
-_[Image]_
+![](./media/task2_03-Exploring-Python-Custom-Libraries.png)
 
 4. If you look in the code library, will notice that there is a lot of functions that is used in the databricks notebooks to address data cleanings and transformations. Let’s look at one of them. Press *CTRL+F* type **“make_datetime_column”** and click OK. You will see that in this part of the code, we are using is a pretty common practice for some datasets:
 
-_[Image]_
+```
+def make_datetime_column(df: DataFrame, columnName: str, year: str, month: str, day: str,
+                         hour: Union[str, None] = None, minute: Union[str, None] = None,
+                         second: Union[str, None] = None, time: [str, None] = None,
+                         timeFormat: str = 'HH:mm:ss') -> DataFrame:
+    """Buils a new `Timestamp` column based on string columns containing each of the parts of the date. If time-related columns are indicated,
+    time is constructed based on local time zone. If not, a `DateTime` column is constructed. Missing values are rounded down to the minute/hour.
+
+    Parameters
+    ----------
+    df : DataFrame
+        The dataframe where the data is contained
+    columnName : str
+        the column to build
+    year : str
+        Column containing the year
+    month : str
+        Column containing the month
+    day : str
+        Column containing the day
+    hour : Union[str, None], optional
+        Column containing the hour, by default None
+    minute : Union[str, None], optional
+        Column containing the minute, by default None
+    second : Union[str, None], optional
+        Column containing the second, by default None
+    time: Union[str, None], optional
+        Column containing the time part to construct the date column. This argument can't be combined with `hour`/`minute`/`second`
+    timeFormat: str, optional
+        When `time` is indicated, `timeFormat` represents the format where time column is stored, by default 'HH:mm:ss'
+    Returns
+    -------
+    DataFrame
+        The dataframe with the new column appended.
+    """
+    if timeFormat and not time:
+        raise ValueError("You can't specify timeFormat if time is missing.")
+    if time and (hour or minute or second):
+        raise ValueError("You can't specify both time and hour/minute/second. Either use one or the others")
+    if not second:
+        logger.info("Seconds not specified. Minutes will be rounded down")
+        second = f.lit("00")
+    if not minute:
+        logger.info("Minutes not specified. Hours will be rounded down")
+        minute = f.lit("00")
+
+    if not (hour or time):
+        logger.info(f"Building a date column from columns '{year}', '{month}' and '{day}'")
+        return parse_to_date_column(concat_columns(df, columnName, year, month, day, union_char='-'), columnName, 'yyyy-M-d')
+    else:
+        logger.info('Building a datetime column from columns {}'.format([year, month, day, hour, minute, second, time]))
+        df = concat_columns(df, '__date_part', year, month, day, union_char='-')
+        if not time:
+            df = concat_columns(df, '__time_part', hour, minute, second, union_char=':')
+        else:
+            df = parse_to_time_column(df, time, timeFormat, '__time_part')
+
+        df = concat_columns(df, columnName, '__date_part', '__time_part', union_char=' ')
+        df = parse_to_datetime_column(df, columnName, 'yyyy-M-d HH:mm:ss', columnName)
+        df = drop_columns(df, '__date_part', '__time_part')
+
+        return df
+```
+
+
+
 
 
 5.	From the left menu explorer, you will see others library, but before to execute and test them locally you will need to setup the configuration of the environment. For that, follow the steps **6** and **7**.
 
 
-6. Create a virtual environment and install the required packages:
+6. Open **data_platform/src/dataopslib** create a virtual environment and install the required packages:
 
     ```sh
       python3 -m venv dataopslib_env
       source dataopslib_env/bin/activate
 
+	  code . 
+	  
+      pip3 install wheel
       pip3 install -r requirements.txt
     ```
 
-7. Open the `spark` folder on your terminal and run the Docker compose to start an Apache Spark instance locally:
+7. Open **data_platform/src/spark** folder on your terminal and run the Docker compose to start an Apache Spark instance locally:
 
     ```sh
        docker-compose up
@@ -808,24 +888,56 @@ _[Image]_
 
 8. Now we already have the environment prepared and to start the execution of some existing libraries. Choose more one sample to test, open the samples folder, click on the file **“sample_read_csv.py”** and press F5.
 
-
-_[Image]_
-
-9. Now let's imagine that we need to add a new function to address new functionalities in our pipeline. We could add this new feature in the library and promote that to our pipeline. Here the intention is just to show how is the process to promote to QA, so let’s to add a simple code:
-
-```
-def `make_datetime_column_new`(df: DataFrame, columnName: str, year: str, month: str, day: str,
-					hour: Union[str, None] = None, minute: Union[str, None] = None,
-					second: Union[str, None] = None, time: [str, None] = None,
-					timeFormat: str = 'HH:mm:ss') -> DataFrame:
-```
+![](./media/task2_04-Exploring-Python-Custom-Libraries.png)  
 
 
 10. Until we were able to abstract certain functions inside a library and reuse them in the notebooks. But now, let’s imagine that we need to create a new feature for this library, or maybe fix a bug, how to versioning this code? Let's to learn that in the next exercise.
 
-_[Image]_
+### **Task 3: The Git Workflow for Data Engineering**
 
-### **Task 3: Code Review Checklist: Data Engineering**
+In the [Exercise 2](#exercise-2-git-workflow) we saw about the Data Engineering git workflow, which basically has two independent workflows:  **Databricks Notebooks** and **Library**. The two are very closely related, but as our purpose here is to learn more about how this semantic versioning approach for custom libraries works, let’s into a little bit deeper  to understand first how the library workflows. 
+
+![](./media/task03_01-library-workflow.png)  
+
+The first thing that we need to understand looking to the picture above is that we are considering the best practices of Software Engineering for our practices of Data Engineering. We need to have in our mind that libraries for data engineering have also a specify lifecycle, because the data engineers also are working for introducing new capabilities for theses libraries and because of that it’s important to have a good versioning strategy. For those who has more familiarity with software versioning concept and knows the terms MAJOR MINOR and PATH it is a similar approach, but for those who doesn’t know, take look to a simple summary about it.
+
+
+    
+* **Patch Version:** are exchangeable, meaning notebooks and environments consumers can upgrade or downgrade freely.
+    * **Example:** Bug fix, Performance improvement, environment, or internal tweaks.
+	* **Policy:** Notebooks or Spark clusters should have this library updated to improve the utilization in a specific situation.
+	* **
+* **Minor Version:** are backward compatible, notebooks and environments consumers can upgrade freely.
+    * **Example:** New features.
+	* **Policy:** Update the notebooks, jobs, or environment to get some new functions. Nothing will break
+	* **
+* **Major Version:** means a complete refactoring on the package and the change breaking backward compatibility.
+    * **Example:** Change a transformation function or removed an old function and replace by new one.
+	* **Policy:** Test all environments or notebooks post update.
+	* **
+
+These definition can be done using a lot of different ways, but here we are considering a combination of these three **<semVer=MAJOR.MINOR.PATCH>** into three different prefixes such as ***Alpha Version(a)***, ***Beta Version(b)*** and ***Release Candidate Version(RC).***
+
+
+
+>. In the **Azure DevOps Portal**, open the **Artifacts** and click in **dataopslib**. 
+
+![](./media/task03_02-artifacts.png)  
+
+>2. In **Overview**, you can analyze the main information’s of the library that you explored in the previous task. 
+
+![](./media/task03_02-artifactsliboverview.png) 
+
+
+>3. Clicking in **versions** you can check the list of the previous version. We can noticed that the currently version in the pipeline, already was a ***Alpha Version(a)*** **(0.1.0a5, 0.1.0a14, 0.1.a23)**, also after this become a ***Beta Version(b)*** **(0.1.0b6)** and subsequently a ***Release Candidate(r)*** **(0.1.0rc15)** until be deployment in production **(0.1.0).**  
+
+![](./media/task03_04-artifactsliboverview.png'Library-workflow') 
+
+The git flow for this solution begins with the pull request to of this change the ***develop branch***, it automatically will generate what we are calling ***Alpha Version***. This Alpha version will pass to the **Library CI Builds** to do automatized tests, once it is approved there is more one’s checklists to proceed and do the merge in develop branch, when it occurs the CD Trigger will generate the **Beta version id** into the development environment. Repeating the same process to the QA branch, it will generate a ***Release Candidate (RC)*** that can be used after to deploy this change in the production. 
+
+
+
+### **Task 4: Code Review Checklist: Data Engineering**
 
 #### **Custom Library**
 
