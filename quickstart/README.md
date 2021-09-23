@@ -34,6 +34,14 @@ Execute all these steps below to setup your evironment before running the Hands-
 
 4. Make sure the Organization where the project is created in the Azure DevOps is [connected with the Azure Active Directory](https://docs.microsoft.com/en-us/azure/devops/organizations/accounts/connect-organization-to-azure-ad?view=azure-devops) of the Azure Subscription that will be used in the lab.
 
+    - Select your Azure DevOps organization and open the `Organization Settings` menu:
+
+        ![Open organizational settings](./docs/images/open-org-settings.png)
+
+    - On the `Organization Settings` menu, navigate to `Azure Active Directory` and check if your Azure DevOps organization is already connected to an Azure AD. *If it is not*, press the `Connect directory` button and configure it with your Azure subscription.
+
+        ![Connect Azure DevOps to Azure AD](./docs/images/ad-connect-directory.png)
+
 
 ## Step 2: Setup the Hands-On Lab configuration file
 
@@ -161,4 +169,8 @@ Execute all these steps below to setup your evironment before running the Hands-
     > Note that the RDP port of the VM is already configured to allow inbound access.
 
 
-You should follow all these steps provided *before* starting the Hands-on lab.
+## Hands-On Lab
+
+- *Before* starting the Hands-On Lab, you should follow all the steps provided on this quickstart tutorial.
+
+- For starting the Hands-On Lab, follow [these instructions](./hands-on-lab/HOL%20step-by-step%20-%20DevSquad%20in%20a%20Day.md#).

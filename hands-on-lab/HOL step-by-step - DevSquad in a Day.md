@@ -1,26 +1,10 @@
-![Microsoft Cloud Workshops](https://github.com/Microsoft/MCW-Template-Cloud-Workshop/raw/main/Media/ms-cloud-workshop.png "Microsoft Cloud Workshops")
+# Hands-on lab
 
-# DevSquad in a Day
+DevSquad in a Day 
 
-<div class="MCWHeader2">
-Hands-on lab step-by-step
-</div>
+Sep 2021
 
-<div class="MCWHeader3">
-May 2021
-</div>
-
-Information in this document, including URL and other Internet Web site references, is subject to change without notice. Unless otherwise noted, the example companies, organizations, products, domain names, e-mail addresses, logos, people, places, and events depicted herein are fictitious, and no association with any real company, organization, product, domain name, e-mail address, logo, person, place or event is intended or should be inferred. Complying with all applicable copyright laws is the responsibility of the user. Without limiting the rights under copyright, no part of this document may be reproduced, stored in or introduced into a retrieval system, or transmitted in any form or by any means (electronic, mechanical, photocopying, recording, or otherwise), or for any purpose, without the express written permission of Microsoft Corporation.
-
-Microsoft may have patents, patent applications, trademarks, copyrights, or other intellectual property rights covering subject matter in this document. Except as expressly provided in any written license agreement from Microsoft, the furnishing of this document does not give you any license to these patents, trademarks, copyrights, or other intellectual property.
-
-The names of manufacturers, products, or URLs are provided for informational purposes only and Microsoft makes no representations and warranties, either expressed, implied, or statutory, regarding these manufacturers or the use of the products with any Microsoft technologies. The inclusion of a manufacturer or product does not imply endorsement of Microsoft of the manufacturer or product. Links may be provided to third party sites. Such sites are not under the control of Microsoft and Microsoft is not responsible for the contents of any linked site or any link contained in a linked site, or any changes or updates to such sites. Microsoft is not responsible for webcasting or any other form of transmission received from any linked site. Microsoft is providing these links to you only as a convenience, and the inclusion of any link does not imply endorsement of Microsoft of the site or the products contained therein.
-
-© 2021 Microsoft Corporation. All rights reserved.
-
-Microsoft and the trademarks listed at <https://www.microsoft.com/en-us/legal/intellectualproperty/Trademarks/Usage/General.aspx> are trademarks of the Microsoft group of companies. All other trademarks are property of their respective owners.
-
-**Contents** 
+## **Contents**
 
 <!-- TOC -->
 - [DevSquad in a Day hands-on lab step-by-step](#devsquad-in-a-day-hands-on-lab-step-by-step)
@@ -31,8 +15,7 @@ Microsoft and the trademarks listed at <https://www.microsoft.com/en-us/legal/in
   - [Before the hands-on lab](#before-the-hands-on-lab) (30 min) 
   - [Exercise 1: Infrastructure As Code](#exercise-1-infrastructure-as-code) (20 min)
     - [Task 1: Understanding the IaC folder](#task-1-understanding-the-iac-folder)
-    - [Task 2: Creating a new sandbox environment with Powershell](#task-2-creating-a-new-sandbox-environment-with-powershell)
-    - [Task 3: Checklist of IaC best practices](#task-3-checklist-of-iac-best-practices)
+    - [Task 2: Checklist of IaC best practices](#task-2-checklist-of-iac-best-practices)
   - [Exercise 2: Git Workflow](#exercise-2-git-workflow) (20 min)
     - [Task 1: Understanding all folders](#task-1-understanding-all-folders)
     - [Task 2: Validate of the Environments](#task-2-validate-of-the-environments)
@@ -84,9 +67,7 @@ Below is a diagram of the solution architecture you will deploy in this lab, lev
 
 2. Follow all the steps provided in [Before the Hands-on Lab](.../quickstart/README.md)
 
-## Before the hands-on lab
-
-Refer to the Before the hands-on lab setup guide manual before continuing to the lab exercises.
+	> Refer to the Before the hands-on lab setup guide manual before continuing to the lab exercises.
 
 ## **Exercise 1: Infrastructure As Code**
 
@@ -258,11 +239,7 @@ However, we have a correct order for this execution as described in next task.
 ![](./media/iac-folder-subfolder-tests.PNG 'iac-tests')
 
 
-### **Task 2: Creating a new sandbox environment with Powershell**
-
-In this task you will learn how to create your first sandbox environment, with Azure Powershell scripts.
-
-### **Task 3: Checklist of IaC best practices**
+### **Task 2: Checklist of IaC best practices**
 
 In this task you will understand the best practices in creating, executing and managing scripts and templates in IaC.
 Using a checklist to review what has been or will be executed is extremely important, with the objective of validating and verifying what may be "missing" in your environment and that is essential for use.
