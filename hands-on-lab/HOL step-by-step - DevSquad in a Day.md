@@ -804,7 +804,6 @@ The first thing that we need to understand looking to the picture above is that 
 These definition can be done using a lot of different ways, but here we are considering a combination of these three **<semVer=MAJOR.MINOR.PATCH>** into three different prefixes such as ***Alpha Version(a)***, ***Beta Version(b)*** and ***Release Candidate Version(RC).***
 
 
-
 >. In the **Azure DevOps Portal**, open the **Artifacts** and click in **dataopslib**. 
 
 ![](./media/task03_02-artifacts.png)  
