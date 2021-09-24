@@ -4,7 +4,7 @@
 1. Execute the following script to delete all your Azure resources created on this Hands-On Lab.
 
     ```poweershell
-    ./quickstart/scripts/dataops/Delete-AzureResources.ps
+    ./quickstart/scripts/cloud-setup/Delete-AzureResources.ps1
     ```
 
     - You will be prompted to provide your `projectName` and `projectAlias`:
