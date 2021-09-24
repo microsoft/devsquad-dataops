@@ -614,54 +614,54 @@ In this task, you will explore the Azure Databricks instance dbw-dataops-eastus2
 
 1. Navigate to the Azure Databricks instance `dbw-dataops-eastus2-dev` and Launch the Workspace. 
 
-![](./media/dbw-dataops-eastus2-dev-overview.png 'Databricks overview')
+![](./media/dbw-dataops-eastus2-dev-overview.PNG 'Databricks overview')
 
 2. Navigate to the Workspace hub (2). Open the folders shared with you (if someone share with you the databricks instance) or seek your user in Users (3). Open the DataOps Folder (4) and select the notebook named 01 ADLS Mount (5).  
 
-![](./media/dbw-dataops-eastus2-dev-ws.png 'Databricks workspace')
+![](./media/dbw-dataops-eastus2-dev-ws.PNG 'Databricks workspace')
 
 3. To run the notebook you need attach a cluster from the list (1) or create a new one if you don't have clusters deployed. 
 
-![](./media/notebook-01-adls-mount.png 'Attach a cluster')
+![](./media/notebook-01-adls-mount.PNG 'Attach a cluster')
 
 3.1 Provide a name for the new cluster, establish the cluster setting and select Create Cluster.
 
-![](./media/dbw-dataops-new-cluster.png 'Creating a cluster')
+![](./media/dbw-dataops-new-cluster.PNG 'Creating a cluster')
 
 3.2 Navigate back to the notebook named 01 ADLS Mount and attach the cluster
 
-![](./media/dbw-dataops-attaching-cluster.png 'Creating a cluster')
+![](./media/dbw-dataops-attaching-cluster.PNG 'Creating a cluster')
 
 4. Select Run Cell or Crt + Enter to run the cell and amount the Azure Data Lake. 
 This code is to mount the Azure Data Lake Storage Gen2 account to Databricks File System. For the authentication, it uses Key Vault and OAuth 2.0.
 
-![](./media/notebook-01-adls-runcell.png 'Run')  
+![](./media/notebook-01-adls-runcell.PNG 'Run')  
 
 5. Navigate back to the notebook named `02 One Notebook to Rule Them All`.
 
 5.1 Run the cells to import the libraries that you will use to process and transform the data.
 
-![](./media/02-One-Notebook-to-Rule-Them-All-1.png 'Run')  
+![](./media/02-One-Notebook-to-Rule-Them-All-1.PNG 'Run')  
 
 5.2 Read the file `FlightDelaysWithAirportCodes.csv` from the landing layer (1), transform the data (2), and create the a local table called flight_delays_with_airport_codes from the flight_delays_df Dataframe (3).  
 
-![](./media/02-One-Notebook-to-Rule-Them-All-2.png 'Run') 
+![](./media/02-One-Notebook-to-Rule-Them-All-2.PNG 'Run') 
 
 5.3 Select clean columns to generate clean data (1) and save the clean data as a global table called flight_delays_clean (2). 
 
-![](./media/02-One-Notebook-to-Rule-Them-All-3.png 'Run') 
+![](./media/02-One-Notebook-to-Rule-Them-All-3.PNG 'Run') 
 
 5.4 To see the created table: Click Data in the sidebar (1). In the databases folder, click on the default database (2). Open Tables Folder and Click the table name.  
 
-![](./media/globaltable-flight_delays_view.png 'Run') 
+![](./media/globaltable-flight_delays_view.PNG 'Run') 
 
 5.5 Navigate back to the notebook. Run cells 9, 10 and 11 to prepare the weather data. Cell 9 reads raw data from landing layer and create a local table called flight_weather_with_airport_code. Cell 10 transforms data and Cell 11 creates a global table called flight_weather_clean.
 
-![](./media/02-One-Notebook-to-Rule-Them-All-4.png 'Run') 
+![](./media/02-One-Notebook-to-Rule-Them-All-4.PNG 'Run') 
 
 5.5 Run the rest of cells. Cell 14 copies clean data of flight dealys and weather into the trusted layer of the data lake (1). Cell 16 saves data of airports with the delayes into the logs folder as CSV file (trusted layer) (2). Finally,the path of the CSV file will be the notebook output (3).
 
-![](./media/02-One-Notebook-to-Rule-Them-All-5.png 'Run') 
+![](./media/02-One-Notebook-to-Rule-Them-All-5.PNG 'Run') 
 
 ### **Task 5: Explore Azure Data Lake Storage**
 
@@ -671,15 +671,15 @@ In this task, you will explore the layers defined to organize the data into the 
 
 2. On the Overview blade, select Containers
 
-![](./media/lakedataopseastus2dev-overview.png 'Data Lake overview')
+![](./media/lakedataopseastus2dev-overview.PNG 'Data Lake overview')
 
 3. Select and open the landing layer container.
 
-![](./media/lakedataopseastus2dev-layers.png 'Containers')
+![](./media/lakedataopseastus2dev-layers.PNG 'Containers')
 
 4. Select and open the directories airport-metada, flight-delays, flight-weather. They will contain CSV files with the infomation about airports, flights and weather. 
 
-![](./media/lakedataopseastus2dev-layer-landing.png 'Landing layer')
+![](./media/lakedataopseastus2dev-layer-landing.PNG 'Landing layer')
 
 ### **Task 6: Azure Data Factory**
 
@@ -687,11 +687,11 @@ In this task, you will explore the `adf-dataops-eastus2-dev` Azure Data Factory 
 
 1. Navigate to the `adf-dataops-eastus2-dev` Azure Data Factory instance and launch the workspace (Author & Monitor). 
 
-![](./media/adf-dataops-eastus2-dev-overview.png 'Azure Data Factory Overview')
+![](./media/adf-dataops-eastus2-dev-overview.PNG 'Azure Data Factory Overview')
 
 2. Navigate to the Author hub.
 
-![](./media/adf-dataops-eastus2-dev-workspace1.png 'Azure Data Factory Hub')
+![](./media/adf-dataops-eastus2-dev-workspace1.PNG 'Azure Data Factory Hub')
 
 3. You will find the pipeline `ProcessFlightDelaysData` and 6 datasets. The pipeline contains the activities to copy data from the XXXXXXXSource datasets into the XXXXXXSink datasets.
 
@@ -740,7 +740,7 @@ In this task, you will explore the `adf-dataops-eastus2-dev` Azure Data Factory 
 
 9.1 Navigate to the Data Lake. Follow the file path that you indicated in the step 4.4. You will find the CSV file just copied. 
 
-![](./media/lakedataopseastus2dev-airport-metadata.png 'Exploring Data Lake')
+![](./media/lakedataopseastus2dev-airport-metadata.PNG 'Exploring Data Lake')
 
 >**Note:** If you arrive here you have the environment of dev deploy sucessful, now the idea is to see in detail more about the Lib and the tests.
 
