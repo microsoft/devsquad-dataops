@@ -31,6 +31,7 @@ Execute all these steps below to setup your evironment before running the Hands-
         ![Azure DevOps Build Service](./docs/images/quickstart-buildservice-3.png)
 
         > In case the Build Service user is not present on this list, click on `+ Add` and search for `<projectName> Build Service`, assigning the `Administrator` role.
+        > If you aren't finding the `<projectName> Build Service`, start typing your project name on the search bar, and you should receive a suggestion for `<projectName> Build Service`.
 
 4. Make sure the Organization where the project is created in the Azure DevOps is [connected with the Azure Active Directory](https://docs.microsoft.com/en-us/azure/devops/organizations/accounts/connect-organization-to-azure-ad?view=azure-devops) of the Azure Subscription that will be used in the lab.
 
@@ -49,6 +50,8 @@ Execute all these steps below to setup your evironment before running the Hands-
 
     > When using the Azure Cloud Shell, be sure you are logged in Azure with the subscription you want to use for the hands-on lab.
 
+    > If it's the first time you are using Azure Cloud Shell, you will be prompted to create an Azure Storage. Proceed with that storage creation with default values.
+
     ![Open Azure cloud shell](./docs/images/open-cloud-powershell.png)
 
 2. **On the Azure PowerShell terminal:** clone the source code of the lab and go to the `hol` directory.
@@ -65,12 +68,14 @@ Execute all these steps below to setup your evironment before running the Hands-
     # Be sure to execute this script under the hol directory
     ./quickstart/scripts/cloud-setup/Replace-TemplateArgs.ps1
     ```
+    
+    > **Don't use the default parameters from the table below!** You will need to use your own Azure DevOps organization name, Azure DevOps project name and Azure subscription ID. The alias can be any randomized alphanumerical string with **less than 8 characters**.
 
     |Argument|Description|Example|
     |-----|-----------|-------|
     |<_orgName_>|Azure DevOps organization name where you will execute the Hands-On Lab|_org-dataops_|
     |<_projectName_>|Name of the existing project inside Azure DevOps where you will execute the Hands-On Lab|_project-dataops_|
-    |<_projectAlias_>|An unique string with less than 8 characteres that will be used as part of your resource group names|_dataops_|
+    |<_projectAlias_>|An unique string with **less than 8 characteres** that will be used as part of your resource group names|_dataops_|
     |<_subscriptionId_>|Azure Subscription ID where the resources will be deployed|_f7e5bb9e-0f98-4c5d-a5c1-a9154bf3cd61_|
 
 - (_OPTIONAL_) If you are using this project as a Hands-On Lab, feel free to proceed to the next step of the lab setup. If you are using this project as a template for dataops, check [this additional documentation](./1b-create-prereqs-azure-advanced.md) that explains advanced configuration options.
@@ -128,7 +133,7 @@ Execute all these steps below to setup your evironment before running the Hands-
         # You don't need to change any of the following values below
         git config --global user.email "hol@microsoft.com"
         git config --global user.name "HOL Setup User"
-        $env:AZURE_DEVOPS_EXT_PAT_TEMPLATE="zmmxgs34zsj3i62fmq4xi457q4aynakerpl64ya2fedko42ojmsa"
+        $env:AZURE_DEVOPS_EXT_PAT_TEMPLATE="THIS VALUE WILL BE PROVIDED BY MICROSOFT ON THE LAB DAY"
         ```
 
         > This command configures git and defines an environment variable that will be used to setup your Azure DevOps project.
