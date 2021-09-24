@@ -7,7 +7,7 @@
 			"domain": "",
 			"authentication": "MSI",
 			"workspaceResourceId": "",
-			"existingClusterId": ""
+			"existingClusterId": "mycluster"
 		}
 	}
 }
