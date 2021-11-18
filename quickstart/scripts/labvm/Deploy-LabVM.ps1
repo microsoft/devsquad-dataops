@@ -79,6 +79,8 @@ $vm = Add-AzVMNetworkInterface -VM $vmConfig -Id $nic.Id
 $vm = Set-AzVMOSDisk -VM $vm -ManagedDiskId $disk.Id `
     -CreateOption Attach -Windows
 
+$vm = Set-AzVMBootDiagnostic -VM $vm -Disable
+
 Write-Host "[DevSquad In a Day] Creating the lab VM"
 
 New-AzVM -ResourceGroupName $resourceGroupName -Location $location -VM $vm
