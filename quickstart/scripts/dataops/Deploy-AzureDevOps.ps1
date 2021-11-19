@@ -6,7 +6,7 @@ Using module ../modules/Validation.psm1
 param(
     [Parameter(Mandatory)] $ConfigurationFile,
     [boolean] $UseSSH = $false,
-    [boolean] $UsePAT = $true
+    [boolean] $UsePAT = $false
 )
 
 $schemaFilePath = "./quickstart/schemas/dataops/config.schema.1.0.0.json"

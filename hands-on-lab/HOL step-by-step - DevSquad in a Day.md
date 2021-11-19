@@ -34,8 +34,8 @@ Sep 2021
   - [Exercise 5: Semantic Versioning of Data Engineering Libraries](#exercise-5-semantic-versioning-of-data-engineering-libraries) (20 min)
     - [Task 1: Exploring the Databricks Notebook](#task-1-exploring-the-databricks-notebook)
 	- [Task 2: Exploring the Python custom libraries](#task-2-exploring-the-python-custom-libraries)
-    - [Task 3: The Git Workflow for Data Engineering](#task-3-the-git-workflow-for-data-engineering)
-    - [Task 4: Code Review Checklist: Data Engineering](task-4-code-review-checklist:-data-engineering)
+    - [Task 3: The Git Workflow for Data Engineering](#task-3-the-git-worflow-for-data-engineering)
+    - [Task 4: Code Review Checklist: Data Engineering](task-4-code-review-checklist-data-engineering)
   - [Exercise 6: Testing](#exercise-6-testing)  (20 min)
     - [Task 1: Understanding test types](#task-1-understanding-test-types)
 	- [Task 2: Understanding BDD tests](#task-2-understanding-bdd-tests)
@@ -162,7 +162,7 @@ Main template, with declared parameters, variables and resources. Here we use li
 
 #### **Folder: linkedTemplates**
 
-![linkedTemplate-folder](./media/iac-folder-linkedtemplates.PNG)
+![linkedTemplate-folder](./media/iac-folder-linkedtemplates.png)
 
 In linkedTemplates we have templates with "parts" of declared resources that are not declared in the main Template, in order to reuse and can link with other templates.
 >*NOTE*: linkedTemplates is a widely used practice, for better organization and handling of templates of different types of resources and being able to link them to any template.
@@ -199,7 +199,7 @@ Example of a resource declaration in this template.
 
 #### **Folder: parameters**
 
-![parameters-folder](./media/iac-folder-parameters.PNG)
+![parameters-folder](./media/iac-folder-parameters.png)
 
 Parameters folder and directory with templates files with parameters and values to be used by linkedTemplates and main template, without the need to change directly in the main template.
 >*NOTE*: Using templates parameters is optional and can be used directly in the main template. However, following a model of good practice, the use separately is indicated.
@@ -237,7 +237,7 @@ These tests must be run through the scripts described below.
 
 You can practice more on the testing topic in [Exercise 6: Testing](#exercise-6-testing).
 
-![iac-tests](./media/iac-folder-subfolder-tests.PNG)
+![iac-tests](./media/iac-folder-subfolder-tests.png)
 
 
 ### **Task 2: Checklist of IaC best practices**
@@ -614,54 +614,54 @@ In this task, you will explore the Azure Databricks instance dbw-dataops-eastus2
 
 1. Navigate to the Azure Databricks instance `dbw-dataops-eastus2-dev` and Launch the Workspace. 
 
-![](./media/dbw-dataops-eastus2-dev-overview.PNG 'Databricks overview')
+![](./media/dbw-dataops-eastus2-dev-overview.png 'Databricks overview')
 
 2. Navigate to the Workspace hub (2). Open the folders shared with you (if someone share with you the databricks instance) or seek your user in Users (3). Open the DataOps Folder (4) and select the notebook named 01 ADLS Mount (5).  
 
-![](./media/dbw-dataops-eastus2-dev-ws.PNG 'Databricks workspace')
+![](./media/dbw-dataops-eastus2-dev-ws.png 'Databricks workspace')
 
 3. To run the notebook you need attach a cluster from the list (1) or create a new one if you don't have clusters deployed. 
 
-![](./media/notebook-01-adls-mount.PNG 'Attach a cluster')
+![](./media/notebook-01-adls-mount.png 'Attach a cluster')
 
 3.1 Provide a name for the new cluster, establish the cluster setting and select Create Cluster.
 
-![](./media/dbw-dataops-new-cluster.PNG 'Creating a cluster')
+![](./media/dbw-dataops-new-cluster.png 'Creating a cluster')
 
 3.2 Navigate back to the notebook named 01 ADLS Mount and attach the cluster
 
-![](./media/dbw-dataops-attaching-cluster.PNG 'Creating a cluster')
+![](./media/dbw-dataops-attaching-cluster.png 'Creating a cluster')
 
 4. Select Run Cell or Crt + Enter to run the cell and amount the Azure Data Lake. 
 This code is to mount the Azure Data Lake Storage Gen2 account to Databricks File System. For the authentication, it uses Key Vault and OAuth 2.0.
 
-![](./media/notebook-01-adls-runcell.PNG 'Run')  
+![](./media/notebook-01-adls-runcell.png 'Run')  
 
 5. Navigate back to the notebook named `02 One Notebook to Rule Them All`.
 
 5.1 Run the cells to import the libraries that you will use to process and transform the data.
 
-![](./media/02-One-Notebook-to-Rule-Them-All-1.PNG 'Run')  
+![](./media/02-One-Notebook-to-Rule-Them-All-1.png 'Run')  
 
 5.2 Read the file `FlightDelaysWithAirportCodes.csv` from the landing layer (1), transform the data (2), and create the a local table called flight_delays_with_airport_codes from the flight_delays_df Dataframe (3).  
 
-![](./media/02-One-Notebook-to-Rule-Them-All-2.PNG 'Run') 
+![](./media/02-One-Notebook-to-Rule-Them-All-2.png 'Run') 
 
 5.3 Select clean columns to generate clean data (1) and save the clean data as a global table called flight_delays_clean (2). 
 
-![](./media/02-One-Notebook-to-Rule-Them-All-3.PNG 'Run') 
+![](./media/02-One-Notebook-to-Rule-Them-All-3.png 'Run') 
 
 5.4 To see the created table: Click Data in the sidebar (1). In the databases folder, click on the default database (2). Open Tables Folder and Click the table name.  
 
-![](./media/globaltable-flight_delays_view.PNG 'Run') 
+![](./media/globaltable-flight_delays_view.png 'Run') 
 
 5.5 Navigate back to the notebook. Run cells 9, 10 and 11 to prepare the weather data. Cell 9 reads raw data from landing layer and create a local table called flight_weather_with_airport_code. Cell 10 transforms data and Cell 11 creates a global table called flight_weather_clean.
 
-![](./media/02-One-Notebook-to-Rule-Them-All-4.PNG 'Run') 
+![](./media/02-One-Notebook-to-Rule-Them-All-4.png 'Run') 
 
 5.5 Run the rest of cells. Cell 14 copies clean data of flight dealys and weather into the trusted layer of the data lake (1). Cell 16 saves data of airports with the delayes into the logs folder as CSV file (trusted layer) (2). Finally,the path of the CSV file will be the notebook output (3).
 
-![](./media/02-One-Notebook-to-Rule-Them-All-5.PNG 'Run') 
+![](./media/02-One-Notebook-to-Rule-Them-All-5.png 'Run') 
 
 ### **Task 5: Explore Azure Data Lake Storage**
 
@@ -671,15 +671,15 @@ In this task, you will explore the layers defined to organize the data into the 
 
 2. On the Overview blade, select Containers
 
-![](./media/lakedataopseastus2dev-overview.PNG 'Data Lake overview')
+![](./media/lakedataopseastus2dev-overview.png 'Data Lake overview')
 
 3. Select and open the landing layer container.
 
-![](./media/lakedataopseastus2dev-layers.PNG 'Containers')
+![](./media/lakedataopseastus2dev-layers.png 'Containers')
 
 4. Select and open the directories airport-metada, flight-delays, flight-weather. They will contain CSV files with the infomation about airports, flights and weather. 
 
-![](./media/lakedataopseastus2dev-layer-landing.PNG 'Landing layer')
+![](./media/lakedataopseastus2dev-layer-landing.png 'Landing layer')
 
 ### **Task 6: Azure Data Factory**
 
@@ -687,11 +687,11 @@ In this task, you will explore the `adf-dataops-eastus2-dev` Azure Data Factory 
 
 1. Navigate to the `adf-dataops-eastus2-dev` Azure Data Factory instance and launch the workspace (Author & Monitor). 
 
-![](./media/adf-dataops-eastus2-dev-overview.PNG 'Azure Data Factory Overview')
+![](./media/adf-dataops-eastus2-dev-overview.png 'Azure Data Factory Overview')
 
 2. Navigate to the Author hub.
 
-![](./media/adf-dataops-eastus2-dev-workspace1.PNG 'Azure Data Factory Hub')
+![](./media/adf-dataops-eastus2-dev-workspace1.png 'Azure Data Factory Hub')
 
 3. You will find the pipeline `ProcessFlightDelaysData` and 6 datasets. The pipeline contains the activities to copy data from the XXXXXXXSource datasets into the XXXXXXSink datasets.
 
@@ -740,7 +740,7 @@ In this task, you will explore the `adf-dataops-eastus2-dev` Azure Data Factory 
 
 9.1 Navigate to the Data Lake. Follow the file path that you indicated in the step 4.4. You will find the CSV file just copied. 
 
-![](./media/lakedataopseastus2dev-airport-metadata.PNG 'Exploring Data Lake')
+![](./media/lakedataopseastus2dev-airport-metadata.png 'Exploring Data Lake')
 
 >**Note:** If you arrive here you have the environment of dev deploy sucessful, now the idea is to see in detail more about the Lib and the tests.
 
@@ -767,16 +767,131 @@ Open the **02 One Notebook to Rule them all** notebook (located in the Workspace
 >**IMPORTANT NOTE**
 _Please note that each of these tasks will be addressed through several cells in the notebook. You don’t need to change them only execute and analyze the transformation operations._
 
-### **Task 2 (Optional): Exploring the Python custom libraries**
+### **Task 2: Exploring the Python custom libraries**
 
-In previous task we explored the databricks notebook, and we used a custom library responsible for the main transformations in the data sets of flights delays and whether. In this exercise, you have the opportunity to explore and understand some approaches to creating custom libraries in data analytics projects.
+In previous task we explored the databricks notebook, and we used a custom library responsible for the main transformations in the data sets of flights delays and whether. Now, let’s to explore and understand some approaches to creating custom libraries in data analytics projects.
+
+>**IMPORTANT NOTE**
+_Please note that we will use existing custom libraries in the repository, won’t be necessary to develop a new library to this exercise._
+
+**For the remainder of this guide, the following pre-requirements will be necessary to execute and validate the library locally:**
+
+*	Python 3.x
+*	Docker + Docker Compose
+*	Java SDK
+*	Visual Studio Code
+
+1. Open the HOL directory in your prompt and execute **“code .”**  to open the Visual Studio Code:
+
+![](./media/task2_01-Exploring-Python-Custom-Libraries.png)  
+
+2. From the left explorer view, open the **“data-platform/src/dataopslib/dataopslib””** directory structure. 
+
+![](./media/task2_02-Exploring-Python-Custom-Libraries.png)  
+
+3. Inside the structure you will see the codes used for the development of libraries that are current used in the databricks notebook. 
+For that, open the **“spark”** directory and click on the file **“data_transformation.py”**
+
+![](./media/task2_03-Exploring-Python-Custom-Libraries.png)
+
+4. If you look in the code library, will notice that there is a lot of functions that is used in the databricks notebooks to address data cleanings and transformations. Let’s look at one of them. Press *CTRL+F* type **“make_datetime_column”** and click OK. You will see that in this part of the code, we are using is a pretty common practice for some datasets:
+
+```
+def make_datetime_column(df: DataFrame, columnName: str, year: str, month: str, day: str,
+                         hour: Union[str, None] = None, minute: Union[str, None] = None,
+                         second: Union[str, None] = None, time: [str, None] = None,
+                         timeFormat: str = 'HH:mm:ss') -> DataFrame:
+    """Buils a new `Timestamp` column based on string columns containing each of the parts of the date. If time-related columns are indicated,
+    time is constructed based on local time zone. If not, a `DateTime` column is constructed. Missing values are rounded down to the minute/hour.
+
+    Parameters
+    ----------
+    df : DataFrame
+        The dataframe where the data is contained
+    columnName : str
+        the column to build
+    year : str
+        Column containing the year
+    month : str
+        Column containing the month
+    day : str
+        Column containing the day
+    hour : Union[str, None], optional
+        Column containing the hour, by default None
+    minute : Union[str, None], optional
+        Column containing the minute, by default None
+    second : Union[str, None], optional
+        Column containing the second, by default None
+    time: Union[str, None], optional
+        Column containing the time part to construct the date column. This argument can't be combined with `hour`/`minute`/`second`
+    timeFormat: str, optional
+        When `time` is indicated, `timeFormat` represents the format where time column is stored, by default 'HH:mm:ss'
+    Returns
+    -------
+    DataFrame
+        The dataframe with the new column appended.
+    """
+    if timeFormat and not time:
+        raise ValueError("You can't specify timeFormat if time is missing.")
+    if time and (hour or minute or second):
+        raise ValueError("You can't specify both time and hour/minute/second. Either use one or the others")
+    if not second:
+        logger.info("Seconds not specified. Minutes will be rounded down")
+        second = f.lit("00")
+    if not minute:
+        logger.info("Minutes not specified. Hours will be rounded down")
+        minute = f.lit("00")
+
+    if not (hour or time):
+        logger.info(f"Building a date column from columns '{year}', '{month}' and '{day}'")
+        return parse_to_date_column(concat_columns(df, columnName, year, month, day, union_char='-'), columnName, 'yyyy-M-d')
+    else:
+        logger.info('Building a datetime column from columns {}'.format([year, month, day, hour, minute, second, time]))
+        df = concat_columns(df, '__date_part', year, month, day, union_char='-')
+        if not time:
+            df = concat_columns(df, '__time_part', hour, minute, second, union_char=':')
+        else:
+            df = parse_to_time_column(df, time, timeFormat, '__time_part')
+
+        df = concat_columns(df, columnName, '__date_part', '__time_part', union_char=' ')
+        df = parse_to_datetime_column(df, columnName, 'yyyy-M-d HH:mm:ss', columnName)
+        df = drop_columns(df, '__date_part', '__time_part')
+
+        return df
+```
 
 
->**Extra Bonus Lab:**
-
->Follow the instructions indicated [here](..\data-platform\src\dataopslib\ReadmeLibExtraExercise.md). After completion return to this page to continue with the lab.
 
 
+
+5.	From the left menu explorer, you will see others library, but before to execute and test them locally you will need to setup the configuration of the environment. For that, follow the steps **6** and **7**.
+
+
+6. Open **data_platform/src/dataopslib** create a virtual environment and install the required packages:
+
+    ```sh
+      python3 -m venv dataopslib_env
+      source dataopslib_env/bin/activate
+
+	  code . 
+	  
+      pip3 install wheel
+      pip3 install -r requirements.txt
+    ```
+
+7. Open **data_platform/src/spark** folder on your terminal and run the Docker compose to start an Apache Spark instance locally:
+
+    ```sh
+       docker-compose up
+    ```
+
+
+8. Now we already have the environment prepared and to start the execution of some existing libraries. Choose more one sample to test, open the samples folder, click on the file **“sample_read_csv.py”** and press F5.
+
+![](./media/task2_04-Exploring-Python-Custom-Libraries.png)  
+
+
+10. Until we were able to abstract certain functions inside a library and reuse them in the notebooks. But now, let’s imagine that we need to create a new feature for this library, or maybe fix a bug, how to versioning this code? Let's to learn that in the next exercise.
 
 ### **Task 3: The Git Workflow for Data Engineering**
 
@@ -804,6 +919,7 @@ The first thing that we need to understand looking to the picture above is that 
 These definition can be done using a lot of different ways, but here we are considering a combination of these three **<semVer=MAJOR.MINOR.PATCH>** into three different prefixes such as ***Alpha Version(a)***, ***Beta Version(b)*** and ***Release Candidate Version(RC).***
 
 
+
 >. In the **Azure DevOps Portal**, open the **Artifacts** and click in **dataopslib**. 
 
 ![](./media/task03_02-artifacts.png)  
@@ -815,7 +931,7 @@ These definition can be done using a lot of different ways, but here we are cons
 
 >3. Clicking in **versions** you can check the list of the previous version. We can noticed that the currently version in the pipeline, already was a ***Alpha Version(a)*** **(0.1.0a5, 0.1.0a14, 0.1.a23)**, also after this become a ***Beta Version(b)*** **(0.1.0b6)** and subsequently a ***Release Candidate(r)*** **(0.1.0rc15)** until be deployment in production **(0.1.0).**  
 
-![](./media/task03_04-artifactsliboverview.png) 
+![](./media/task03_04-artifactsliboverview.png'Library-workflow') 
 
 The git flow for this solution begins with the pull request to of this change the ***develop branch***, it automatically will generate what we are calling ***Alpha Version***. This Alpha version will pass to the **Library CI Builds** to do automatized tests, once it is approved there is more one’s checklists to proceed and do the merge in develop branch, when it occurs the CD Trigger will generate the **Beta version id** into the development environment. Repeating the same process to the QA branch, it will generate a ***Release Candidate (RC)*** that can be used after to deploy this change in the production. 
 
@@ -924,7 +1040,7 @@ Now lets review the DevOps pipeline execution results:
 
 **Pre-requisits:** Have an environment to run Python 3.4+, either on your local host or on a Virtual Machine like the "Data Sience Windows VM" on Azure.
 
-Follow the instructions indicated [here](..\data-platform\src\bdd-adf-pipelines\README.md#motivation). After completion return to this page to continue with the lab.
+Follow the instructions indicated [here](../data-platform/src/bdd-adf-pipelines/README.md#motivation). After completion return to this page to continue with the lab.
 
 ## **Exercise 7: Deploying QA and Prod Environments**
 

@@ -8,7 +8,7 @@
         "AzureDevOpsOrganization": "<azureDevOps.organization>",
         "AzureDevOpsOrganizationURI": "https://dev.azure.com/<azureDevOps.organization>",
         "AzureDevOpsProject": "<project.name>",
-        "TemplateGitUrl": "https://csu-devsquad@dev.azure.com/csu-devsquad/advworks-dataops/_git/hol",
+        "TemplateGitUrl": "https://github.com/microsoft/devsquad-in-a-day.git",
         "MinimumApprovers": "1",
         "Pipelines": [
             {
