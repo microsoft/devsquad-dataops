@@ -43,7 +43,7 @@ function CreateOrGetServicePrincipal
 
 	if (! $servicePrincipal)
 	{ 
-		$servicePrincipal = New-AzADServicePrincipal -DisplayName $Name -SkipAssignment
+		$servicePrincipal = New-AzADServicePrincipal -DisplayName $Name
 		LogInfo -Message "Service principal '$Name' created."
 	}
 	else
