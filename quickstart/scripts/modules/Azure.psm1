@@ -39,10 +39,13 @@ function CreateOrGetServicePrincipal
         [Parameter(Mandatory)] [string] $Name
     )
 
+    LogInfo -Message "Trying to get Service principal '$Name'."
+
 	$servicePrincipal = Get-AzADServicePrincipal -DisplayName $Name
 
 	if (! $servicePrincipal)
 	{ 
+        LogInfo -Message "Trying to create Service principal with DisplayName param with '$Name'"
 		$servicePrincipal = New-AzADServicePrincipal -DisplayName $Name
 		LogInfo -Message "Service principal '$Name' created."
 	}
