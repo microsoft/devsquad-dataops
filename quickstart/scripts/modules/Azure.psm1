@@ -22,7 +22,7 @@ function SetupServicePrincipals
                 "objectId" = $servicePrincipal.Id
                 "clientId" = $servicePrincipal.ApplicationId
 				"displayName" = $servicePrincipal.DisplayName
-                "clientSecret" = $servicePrincipal.Secret
+                "clientSecret" = $servicePrincipal.clientSecret
             }
         }
     }
