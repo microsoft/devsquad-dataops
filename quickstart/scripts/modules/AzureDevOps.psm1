@@ -256,6 +256,9 @@ function SetupServiceConnection {
     if (!$serviceEndpointId) {
         LogInfo -Message "No '$serviceConnectionName' service connection found. Creating..."
 
+        LogInfo -Message "loggin clientSecret: '$ServicePrincipal.clientSecret'"
+        LogInfo -Message "loggin Secret: '$ServicePrincipal.Secret'"
+
         if (! $ServicePrincipal.clientSecret) {
             throw "Client Secret was not present in the request."
         }
