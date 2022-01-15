@@ -17,7 +17,7 @@ function SetupServicePrincipals
 	{
 		$servicePrincipal = CreateOrGetServicePrincipal -Name $principalName
 
-        $servicePrincipals += @{        
+        $servicePrincipals += [PSCustomObject]@{        
             objectId = $servicePrincipal.Id;
             clientId = $servicePrincipal.ApplicationId;
             displayName = $servicePrincipal.DisplayName;
