@@ -17,9 +17,6 @@ function SetupServicePrincipals
 	{
 		$servicePrincipal = CreateOrGetServicePrincipal -Name $principalName
 
-        $BSTR = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($servicePrincipal.Secret)
-        $UnsecureSecret = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto($BSTR)
-
         LogInfo -Message "Service Principal secret '$UnsecureSecret'"
         
         $servicePrincipals += @{        
@@ -27,7 +24,7 @@ function SetupServicePrincipals
                 "objectId" = $servicePrincipal.Id
                 "clientId" = $servicePrincipal.ApplicationId
 				"displayName" = $servicePrincipal.DisplayName
-                "clientSecret" = $servicePrincipal.Secret
+                "clientSecret" = $servicePrincipal.PasswordCredentials.PlanText
             }
         }
     }
