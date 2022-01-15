@@ -18,14 +18,14 @@ function SetupServicePrincipals
 		$servicePrincipal = CreateOrGetServicePrincipal -Name $principalName
 
         $servicePrincipals += @{        
-            objectId = $servicePrincipal.Id;
-            clientId = $servicePrincipal.ApplicationId;
-            displayName = $servicePrincipal.DisplayName;
-            clientSecret = $servicePrincipal.PasswordCredentials.SecretText;
+            $servicePrincipal.DisplayName = @{
+                "objectId" = $servicePrincipal.Id
+                "clientId" = $servicePrincipal.ApplicationId
+                "displayName" = $servicePrincipal.DisplayName
+                "clientSecret" = $servicePrincipal.PasswordCredentials.SecretText
+            }
         }
 
-        $sv0 = $servicePrincipals[0]
-        LogInfo -Message "Service principals[0]: '$sv0'"
     }
 
 	EndScope
@@ -71,12 +71,10 @@ function SetupEnvironments {
 		
 		$enviroment = $Configuration.environments[$envKey]
 		
-        $servicePrincipal = $ServicePrincipals[0]
+        #Devido ao fato de termos somente 1 item no array
+        $servicePrincipal = $ServicePrincipals[$Configuration.servicePrincipals[0]]
 
-        Write-Output $ServicePrincipals[0]
-        Write-Output $servicePrincipal
-		
-		Set-AzContext -Subscription $enviroment.subscriptionId
+        Set-AzContext -Subscription $enviroment.subscriptionId
 
         AssignRoleIfNotExists -RoleName "Owner" -ObjectId $servicePrincipal.objectId -SubscriptionId $enviroment.subscriptionId
 
