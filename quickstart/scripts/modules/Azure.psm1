@@ -72,6 +72,9 @@ function SetupEnvironments {
 		
 		$enviroment = $Configuration.environments[$envKey]
 		$servicePrincipal = $ServicePrincipals[$enviroment.servicePrincipalName]
+
+        Write-Output "servicePrincipal Loaded"
+        Write-Output $servicePrincipal | Get-Member
 		
 		Set-AzContext -Subscription $enviroment.subscriptionId
 
