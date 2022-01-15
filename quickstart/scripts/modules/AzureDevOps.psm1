@@ -256,13 +256,14 @@ function SetupServiceConnection {
     if (!$serviceEndpointId) {
         LogInfo -Message "No '$serviceConnectionName' service connection found. Creating..."
 
-        LogInfo -Message "Loggin Secret: '$ServicePrincipal.PasswordCredentials.SecretText'"
+        $Pass = $ServicePrincipal.PasswordCredentials.SecretText
+        LogInfo -Message "Loggin Secret: '$Pass'"
 
         if (! $ServicePrincipal.PasswordCredentials.SecretText) {
             throw "Client Secret was not present in the request."
         }
 
-        $env:AZURE_DEVOPS_EXT_AZURE_RM_SERVICE_PRINCIPAL_KEY = ConvertFrom-SecureString -SecureString $ServicePrincipal.PasswordCredentials.SecretText -AsPlainText
+        $env:AZURE_DEVOPS_EXT_AZURE_RM_SERVICE_PRINCIPAL_KEY = ConvertFrom-SecureString -SecureString $Pass -AsPlainText
 
         $subscription = Get-AzSubscription | Where-Object { $_.Id -eq $Environment.subscriptionId }
 
