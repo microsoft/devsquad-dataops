@@ -11,13 +11,13 @@ function SetupServicePrincipals
 
 	BeginScope -Scope "Service Principals"
 
-    $servicePrincipals = @()
+    $servicePrincipals = @{}
 
     foreach ($principalName in $Configuration.servicePrincipals)
 	{
 		$servicePrincipal = CreateOrGetServicePrincipal -Name $principalName
 
-        LogInfo -Message "Service principal password '$servicePrincipal.PasswordCredentials.SecretText'"
+        LogInfo -Message "Service principal password '$servicePrincipal'"
 
         $servicePrincipals += [PSCustomObject]@{        
             objectId = $servicePrincipal.Id;
