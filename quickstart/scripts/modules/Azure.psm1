@@ -17,15 +17,11 @@ function SetupServicePrincipals
 	{
 		$servicePrincipal = CreateOrGetServicePrincipal -Name $principalName
 
-        LogInfo -Message "Service Principal secret '$UnsecureSecret'"
-        
         $servicePrincipals += @{        
-            $servicePrincipal.DisplayName = @{
-                "objectId" = $servicePrincipal.Id
-                "clientId" = $servicePrincipal.ApplicationId
-				"displayName" = $servicePrincipal.DisplayName
-                "clientSecret" = $servicePrincipal.PasswordCredentials.PlanText
-            }
+            objectId = $servicePrincipal.Id;
+            clientId = $servicePrincipal.ApplicationId;
+            displayName = $servicePrincipal.DisplayName;
+            clientSecret = $servicePrincipal.PasswordCredentials.SecretText;
         }
     }
 
