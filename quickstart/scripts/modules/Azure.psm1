@@ -19,7 +19,7 @@ function SetupServicePrincipals
 
         LogInfo -Message "Service principal password '$servicePrincipal'"
 
-        $servicePrincipals += [PSCustomObject]@{        
+        $servicePrincipals += @{        
             objectId = $servicePrincipal.Id;
             clientId = $servicePrincipal.ApplicationId;
             displayName = $servicePrincipal.DisplayName;
