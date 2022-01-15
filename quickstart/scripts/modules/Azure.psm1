@@ -17,14 +17,15 @@ function SetupServicePrincipals
 	{
 		$servicePrincipal = CreateOrGetServicePrincipal -Name $principalName
 
-        LogInfo -Message "Service principal password '$servicePrincipal'"
-
         $servicePrincipals += @{        
             objectId = $servicePrincipal.Id;
             clientId = $servicePrincipal.ApplicationId;
             displayName = $servicePrincipal.DisplayName;
             clientSecret = $servicePrincipal.PasswordCredentials.SecretText;
         }
+
+        $sv0 = $servicePrincipals[0]
+        LogInfo -Message "Service principals[0]: '$sv0'"
     }
 
 	EndScope
