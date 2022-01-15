@@ -68,11 +68,9 @@ function SetupEnvironments {
 		
 		$enviroment = $Configuration.environments[$envKey]
 		
-        Write-Output $ServicePrincipals.Length
-        
         $servicePrincipal = $ServicePrincipals[0]
 
-        Write-Output "servicePrincipal Loaded"
+        Write-Output $ServicePrincipals[0]
         Write-Output $servicePrincipal
 		
 		Set-AzContext -Subscription $enviroment.subscriptionId
