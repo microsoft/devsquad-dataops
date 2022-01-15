@@ -71,10 +71,13 @@ function SetupEnvironments {
 		BeginScope -Scope "Environment: $envKey"
 		
 		$enviroment = $Configuration.environments[$envKey]
-		$servicePrincipal = $ServicePrincipals[0]
+		
+        Write-Output $ServicePrincipals.Length
+        
+        $servicePrincipal = $ServicePrincipals[0]
 
         Write-Output "servicePrincipal Loaded"
-        Write-Output $servicePrincipal | Get-Member
+        Write-Output $servicePrincipal
 		
 		Set-AzContext -Subscription $enviroment.subscriptionId
 
