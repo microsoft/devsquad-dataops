@@ -11,7 +11,7 @@ function SetupServicePrincipals
 
 	BeginScope -Scope "Service Principals"
 
-    $servicePrincipals = @{}
+    $servicePrincipals = @()
 
     foreach ($principalName in $Configuration.servicePrincipals)
 	{
