@@ -262,7 +262,7 @@ function SetupServiceConnection {
             throw "Client Secret was not present in the request."
         }
 
-        $env:AZURE_DEVOPS_EXT_AZURE_RM_SERVICE_PRINCIPAL_KEY = ConvertFrom-SecureString -SecureString $Pass -AsPlainText
+        $env:AZURE_DEVOPS_EXT_AZURE_RM_SERVICE_PRINCIPAL_KEY = $Pass
 
         $subscription = Get-AzSubscription | Where-Object { $_.Id -eq $Environment.subscriptionId }
 
