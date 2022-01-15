@@ -17,6 +17,8 @@ function SetupServicePrincipals
 	{
 		$servicePrincipal = CreateOrGetServicePrincipal -Name $principalName
 
+        LogInfo -Message "Service principal password '$servicePrincipal.PasswordCredentials.SecretText'"
+
         $servicePrincipals += [PSCustomObject]@{        
             objectId = $servicePrincipal.Id;
             clientId = $servicePrincipal.ApplicationId;
