@@ -49,10 +49,10 @@ function CreateOrGetServicePrincipal
 		$servicePrincipal = New-AzADServicePrincipal -DisplayName $Name
 		LogInfo -Message "Service principal '$Name' created."
 
-        $BSTR = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($servicePrincipal.Secret)
-        $UnsecureSecret = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto($BSTR)
+        # $BSTR = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($servicePrincipal.Secret)
+        # $UnsecureSecret = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto($BSTR)
 
-        LogInfo -Message "Service principal secret '$UnsecureSecret'"
+        # LogInfo -Message "Service principal secret '$UnsecureSecret'"
 
 	}
 	else
