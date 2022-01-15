@@ -17,7 +17,7 @@ function SetupServicePrincipals
 	{
 		$servicePrincipal = CreateOrGetServicePrincipal -Name $principalName
 
-        $secPass = ConvertTo-SecureString [-String] $servicePrincipal.PasswordCredentials.SecretText
+        $secPass = ConvertTo-SecureString $servicePrincipal.PasswordCredentials.SecretText  -AsPlainText -Force
 
         $servicePrincipals += @{        
             $servicePrincipal.DisplayName = @{
