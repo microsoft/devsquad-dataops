@@ -22,7 +22,7 @@ function SetupServicePrincipals
                 "objectId" = $servicePrincipal.Id
                 "clientId" = $servicePrincipal.ApplicationId
                 "displayName" = $servicePrincipal.DisplayName
-                "clientSecret" = $servicePrincipal.PasswordCredentials.SecretText
+                "clientSecret" = ConvertTo-SecureString [-String] $servicePrincipal.PasswordCredentials.SecretText
             }
         }
 
