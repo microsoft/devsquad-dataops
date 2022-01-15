@@ -71,7 +71,7 @@ function SetupEnvironments {
 		BeginScope -Scope "Environment: $envKey"
 		
 		$enviroment = $Configuration.environments[$envKey]
-		$servicePrincipal = $ServicePrincipals[$enviroment.servicePrincipalName]
+		$servicePrincipal = $ServicePrincipals[0]
 
         Write-Output "servicePrincipal Loaded"
         Write-Output $servicePrincipal | Get-Member
