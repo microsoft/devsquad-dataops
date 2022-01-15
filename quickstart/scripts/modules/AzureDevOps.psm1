@@ -259,7 +259,7 @@ function SetupServiceConnection {
         $Pass = $ServicePrincipal.PasswordCredentials.SecretText
         LogInfo -Message "Loggin Secret: '$Pass'"
 
-        if (! $ServicePrincipal.PasswordCredentials.SecretText) {
+        if (! $Pass) {
             throw "Client Secret was not present in the request."
         }
 
