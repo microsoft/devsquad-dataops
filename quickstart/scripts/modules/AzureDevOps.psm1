@@ -266,7 +266,7 @@ function SetupServiceConnection {
 
         $subscription = Get-AzSubscription | Where-Object { $_.Id -eq $Environment.subscriptionId }
 
-        az devops service-endpoint azurerm create `
+        $serviceEndpointId = az devops service-endpoint azurerm create `
             --azure-rm-service-principal-id $ServicePrincipal.clientId `
             --azure-rm-subscription-id $subscription.Id `
             --azure-rm-subscription-name $subscription.Name `
@@ -274,13 +274,10 @@ function SetupServiceConnection {
             --name $serviceConnectionName `
             --organization $organizationURI `
             --project $project `
-            --query 'id' -o tsv
+            --query "'$serviceConnectionName'.id" -o tsv
 
 		LogInfo -Message "Service connection '$serviceConnectionName' created."
-
-        #Retrieving ID of service-endepoint created
-        $serviceEndpointId = az devops service-endpoint list --org $organizationURI -p $project --query "[?name=='$serviceConnectionName'].id" -o tsv
-
+        
         LogInfo -Message "Service connection ID bellow:"
         Write-Output $serviceEndpointId
     }
