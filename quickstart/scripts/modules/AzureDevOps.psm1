@@ -256,11 +256,13 @@ function SetupServiceConnection {
     if (!$serviceEndpointId) {
         LogInfo -Message "No '$serviceConnectionName' service connection found. Creating..."
 
-        if (! $ServicePrincipal.clientSecret) {
+        $Pass = $ServicePrincipal.clientSecret
+
+        if (! $Pass) {
             throw "Client Secret was not present in the request."
         }
 
-        $env:AZURE_DEVOPS_EXT_AZURE_RM_SERVICE_PRINCIPAL_KEY = ConvertFrom-SecureString -SecureString $ServicePrincipal.clientSecret -AsPlainText
+        $env:AZURE_DEVOPS_EXT_AZURE_RM_SERVICE_PRINCIPAL_KEY = $Pass
 
         $subscription = Get-AzSubscription | Where-Object { $_.Id -eq $Environment.subscriptionId }
 
@@ -272,9 +274,10 @@ function SetupServiceConnection {
             --name $serviceConnectionName `
             --organization $organizationURI `
             --project $project `
-            --query 'id' -o tsv
+            --query "id" -o tsv
 
 		LogInfo -Message "Service connection '$serviceConnectionName' created."
+        
     }
 
 	LogInfo -Message "Granting acess permission to all pipelines on the '$serviceConnectionName' service connection..."

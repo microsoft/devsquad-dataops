@@ -17,14 +17,17 @@ function SetupServicePrincipals
 	{
 		$servicePrincipal = CreateOrGetServicePrincipal -Name $principalName
 
+        $secPass = ConvertTo-SecureString $servicePrincipal.PasswordCredentials.SecretText  -AsPlainText -Force
+
         $servicePrincipals += @{        
             $servicePrincipal.DisplayName = @{
                 "objectId" = $servicePrincipal.Id
-                "clientId" = $servicePrincipal.ApplicationId
-				"displayName" = $servicePrincipal.DisplayName
-                "clientSecret" = $servicePrincipal.Secret
+                "clientId" = $servicePrincipal.AppId
+                "displayName" = $servicePrincipal.DisplayName
+                "clientSecret" = $secPass
             }
         }
+
     }
 
 	EndScope
@@ -39,11 +42,13 @@ function CreateOrGetServicePrincipal
         [Parameter(Mandatory)] [string] $Name
     )
 
+    LogInfo -Message "Trying to get Service principal '$Name'."
+
 	$servicePrincipal = Get-AzADServicePrincipal -DisplayName $Name
 
 	if (! $servicePrincipal)
 	{ 
-		$servicePrincipal = New-AzADServicePrincipal -DisplayName $Name -SkipAssignment
+		$servicePrincipal = New-AzADServicePrincipal -DisplayName $Name
 		LogInfo -Message "Service principal '$Name' created."
 	}
 	else
@@ -66,9 +71,11 @@ function SetupEnvironments {
 		BeginScope -Scope "Environment: $envKey"
 		
 		$enviroment = $Configuration.environments[$envKey]
-		$servicePrincipal = $ServicePrincipals[$enviroment.servicePrincipalName]
 		
-		Set-AzContext -Subscription $enviroment.subscriptionId
+        #Only one item in array
+        $servicePrincipal = $ServicePrincipals[$Configuration.servicePrincipals[0]]
+
+        Set-AzContext -Subscription $enviroment.subscriptionId
 
         AssignRoleIfNotExists -RoleName "Owner" -ObjectId $servicePrincipal.objectId -SubscriptionId $enviroment.subscriptionId
 

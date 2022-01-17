@@ -93,15 +93,7 @@ Execute all these steps below to setup your evironment before running the Hands-
         $env:AZURE_DEVOPS_EXT_PAT="<my PAT goes here>"
         ```
 
-2. Connect and authenticate to your Azure account.
-
-    - **On the Azure PowerShell terminal**: connect to Azure with your authenticated account.
-
-        ```powershell
-        Connect-AzAccount -UseDeviceAuthentication
-        ```
-
-3. Run the deployment script
+2. Run the deployment script
 
     -  **On the Azure PowerShell terminal**: run the `Deploy-AzurePreReqs.ps1` script to deploy the pre-required Azure resources:
 
