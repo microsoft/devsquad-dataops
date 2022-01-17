@@ -277,7 +277,7 @@ function SetupServiceConnection {
             --query 'id' -o tsv
 
 		LogInfo -Message "Service connection '$serviceConnectionName' created."
-
+        LogInfo -Message "Service connection ID bellow:"
         Write-Output $serviceEndpointId
     }
 
