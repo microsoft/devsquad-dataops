@@ -48,7 +48,6 @@ function CreateOrGetServicePrincipal
 
 	if (! $servicePrincipal)
 	{ 
-        LogInfo -Message "Trying to create Service principal with DisplayName param with '$Name'"
 		$servicePrincipal = New-AzADServicePrincipal -DisplayName $Name
 		LogInfo -Message "Service principal '$Name' created."
 	}
@@ -73,7 +72,7 @@ function SetupEnvironments {
 		
 		$enviroment = $Configuration.environments[$envKey]
 		
-        #Devido ao fato de termos somente 1 item no array
+        #Only one item in array
         $servicePrincipal = $ServicePrincipals[$Configuration.servicePrincipals[0]]
 
         Set-AzContext -Subscription $enviroment.subscriptionId
