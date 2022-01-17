@@ -278,7 +278,7 @@ function SetupServiceConnection {
 
 		LogInfo -Message "Service connection '$serviceConnectionName' created."
         LogInfo -Message "Service connection ID bellow:"
-        Write-Output $serviceEndpointId
+        Write-Output $serviceEndpointId | Get-Member
     }
 
 	LogInfo -Message "Granting acess permission to all pipelines on the '$serviceConnectionName' service connection..."
