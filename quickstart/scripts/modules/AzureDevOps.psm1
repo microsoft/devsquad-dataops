@@ -137,6 +137,7 @@ function CloneRepo {
             $domainGitUrl = $domainGitUrl -replace "(?<=https://\s*).*?(?=\s*@)", $env:AZURE_DEVOPS_EXT_PAT
         }
     }
+    Write-Output "Clone repo: '$domainGitUrl'"
 
     git clone $domainGitUrl $directory
     
