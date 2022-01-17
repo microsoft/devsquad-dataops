@@ -266,7 +266,7 @@ function SetupServiceConnection {
 
         $subscription = Get-AzSubscription | Where-Object { $_.Id -eq $Environment.subscriptionId }
 
-        $serviceEndpointId = az devops service-endpoint azurerm create `
+        az devops service-endpoint azurerm create `
             --azure-rm-service-principal-id $ServicePrincipal.clientId `
             --azure-rm-subscription-id $subscription.Id `
             --azure-rm-subscription-name $subscription.Name `
@@ -277,8 +277,12 @@ function SetupServiceConnection {
             --query 'id' -o tsv
 
 		LogInfo -Message "Service connection '$serviceConnectionName' created."
+
+        #Retrieving ID of service-endepoint created
+        $serviceEndpointId = az devops service-endpoint list --org $organizationURI -p $project --query "[?name=='$serviceConnectionName'].id" -o tsv
+
         LogInfo -Message "Service connection ID bellow:"
-        Write-Output $serviceEndpointId | Get-Member
+        Write-Output $serviceEndpointId
     }
 
 	LogInfo -Message "Granting acess permission to all pipelines on the '$serviceConnectionName' service connection..."
