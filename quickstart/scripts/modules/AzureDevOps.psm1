@@ -274,7 +274,7 @@ function SetupServiceConnection {
             --name $serviceConnectionName `
             --organization $organizationURI `
             --project $project `
-            --query "'$serviceConnectionName'.id" -o tsv
+            --query "id" -o tsv
 
 		LogInfo -Message "Service connection '$serviceConnectionName' created."
         
