@@ -141,6 +141,7 @@ function CloneRepo {
     Write-Output $domainGitUrl
     Write-Output "Uses PAT:"
     Write-Output $UsePAT
+    Start-Sleep -s 5
 
     git clone $domainGitUrl $directory
     
