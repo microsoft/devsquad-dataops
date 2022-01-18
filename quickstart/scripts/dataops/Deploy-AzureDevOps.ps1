@@ -19,18 +19,26 @@ if (! $validConfigFile)
 }
 
 $branches = 'develop','qa','main'
-$config = LoadConfigurationFile -ConfigurationFile $ConfigurationFile -Verbose:$VerbosePreference
 
-CreateAzDevOpsVariableGroups -RepoConfiguration $config.RepoConfiguration -Verbose:$VerbosePreference
+try {
 
-$repoInfo = CreateAzureDevopsRepository -RepoConfiguration $config.RepoConfiguration -Verbose:$VerbosePreference
+    $config = LoadConfigurationFile -ConfigurationFile $ConfigurationFile -Verbose:$VerbosePreference
 
-$directory = CloneRepo -RepoInfo $repoInfo -UseSSH $UseSSH -UsePAT $UsePAT -Verbose:$VerbosePreference
-ImportTemplateRepoToDomainRepo -Branches $branches -RepoConfiguration $config.RepoConfiguration -UsePAT $UsePAT -Directory $directory[0] -Verbose:$VerbosePreference
+    CreateAzDevOpsVariableGroups -RepoConfiguration $config.RepoConfiguration -Verbose:$VerbosePreference
 
-CreateAzDevOpsYamlPipelines -DefaultBranch $branches[0] -RepoConfiguration $config.RepoConfiguration -Verbose:$VerbosePreference
+    $repoInfo = CreateAzureDevopsRepository -RepoConfiguration $config.RepoConfiguration -Verbose:$VerbosePreference
 
-UpdateIaCParameters -Branch $branches[0] -Configuration $config -Directory $directory[0] -Verbose:$VerbosePreference
+    $directory = CloneRepo -RepoInfo $repoInfo -UseSSH $UseSSH -UsePAT $UsePAT -Verbose:$VerbosePreference
+    ImportTemplateRepoToDomainRepo -Branches $branches -RepoConfiguration $config.RepoConfiguration -UsePAT $false -Directory $directory[0] -Verbose:$VerbosePreference
+
+    CreateAzDevOpsYamlPipelines -DefaultBranch $branches[0] -RepoConfiguration $config.RepoConfiguration -Verbose:$VerbosePreference
+
+    UpdateIaCParameters -Branch $branches[0] -Configuration $config -Directory $directory[0] -Verbose:$VerbosePreference
+
+}
+catch {
+    throw "Couldn't access or create or clone repository"
+}
 
 foreach ($branch in $branches)
 {
@@ -38,3 +46,4 @@ foreach ($branch in $branches)
     CreateAzDevOpsRepoCommentPolicy -Branch $branch -RepoInfo $repoInfo -RepoConfiguration $config.RepoConfiguration -Verbose:$VerbosePreference
     CreateAzDevOpsRepoBuildPolicy -Branch $branch -RepoInfo $repoInfo -RepoConfiguration $config.RepoConfiguration -Verbose:$VerbosePreference
 }
+
