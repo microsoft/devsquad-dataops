@@ -5,8 +5,7 @@ function ImportTemplateRepoToDomainRepo {
     param (
         [Parameter(Mandatory)] [hashtable] $RepoConfiguration,
         [Parameter(Mandatory)] [string[]] $Branches,
-        [Parameter(Mandatory)] [string] $Directory,
-		[Parameter(Mandatory)] [boolean] $UsePAT
+        [Parameter(Mandatory)] [string] $Directory
     )
     [Argument]::AssertIsNotNull("RepoConfiguration", $RepoConfiguration)
 
@@ -15,10 +14,7 @@ function ImportTemplateRepoToDomainRepo {
     Set-Location $Directory
 
 	$templateGitUrl = $RepoConfiguration.TemplateGitUrl
-	if ($UsePAT) {
-		$templateGitUrl = $templateGitUrl -replace "(?<=https://\s*).*?(?=\s*@)", $env:AZURE_DEVOPS_EXT_PAT_TEMPLATE
-	}
-
+	
     git remote add template $templateGitUrl
     git fetch template
     git merge remotes/template/main

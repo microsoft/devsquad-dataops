@@ -29,7 +29,7 @@ try {
     $repoInfo = CreateAzureDevopsRepository -RepoConfiguration $config.RepoConfiguration -Verbose:$VerbosePreference
 
     $directory = CloneRepo -RepoInfo $repoInfo -UseSSH $UseSSH -UsePAT $UsePAT -Verbose:$VerbosePreference
-    ImportTemplateRepoToDomainRepo -Branches $branches -RepoConfiguration $config.RepoConfiguration -UsePAT $false -Directory $directory[0] -Verbose:$VerbosePreference
+    ImportTemplateRepoToDomainRepo -Branches $branches -RepoConfiguration $config.RepoConfiguration -Directory $directory[0] -Verbose:$VerbosePreference
 
     CreateAzDevOpsYamlPipelines -DefaultBranch $branches[0] -RepoConfiguration $config.RepoConfiguration -Verbose:$VerbosePreference
 
@@ -37,7 +37,7 @@ try {
 
 }
 catch {
-    throw "Couldn't access or create or clone repository"
+    throw "Couldn't access, create or clone the repository"
 }
 
 foreach ($branch in $branches)
