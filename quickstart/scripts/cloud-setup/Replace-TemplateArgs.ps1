@@ -18,9 +18,9 @@ param (
     [string]$configsOutput = 'quickstart/configs/cloud-setup/hol.json'
 )
 
-$ramdomLetter = (65..90) + (97..122) | Get-Random -Count 1 | % {[char]$_} 
+$randomLetter = (65..90) + (97..122) | Get-Random -Count 1 | % {[char]$_} 
 $gUUID = New-Guid
-$projectAlias = $ramdomLetter + $getUUID.Guid.Split("-")[0].Substring(0, 7)
+$projectAlias = $randomLetter + $gUUID.Guid.Split("-")[0].Substring(0, 7)
 Write-Output "Project Alias: '$projectAlias'"
 
 (Get-Content $configsTemplate) `
