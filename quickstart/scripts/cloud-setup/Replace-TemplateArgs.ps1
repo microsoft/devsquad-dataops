@@ -1,3 +1,11 @@
+function GenerateRandomProjectAlias {
+    [cmdletbinding()]
+    param ()
+    $randomLetter = (65..90) + (97..122) | Get-Random -Count 1 | % {[char]$_} 
+    $gUUID = New-Guid
+    return $randomLetter + $gUUID.Guid.Split("-")[0].Substring(0, 7)
+}
+
 param (
     # Azure DevOps organization where you want to create this HOL resources
     [parameter(mandatory=$true)]
@@ -27,11 +35,3 @@ Write-Output "Project Alias: '$projectAlias'"
     -replace '<orgName>', $orgName `
     -replace '<subscriptionId>', $subscriptionId |
   Out-File $configsOutput
-
-function GenerateRandomProjectAlias {
-    [cmdletbinding()]
-    param ()
-    $randomLetter = (65..90) + (97..122) | Get-Random -Count 1 | % {[char]$_} 
-    $gUUID = New-Guid
-    return $randomLetter + $gUUID.Guid.Split("-")[0].Substring(0, 7)
-}
