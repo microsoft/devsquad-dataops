@@ -7,10 +7,6 @@ param (
     [parameter(mandatory=$true)]
     [string]$projectName = '<projectName>',
     
-    # Simple alias for the project (less than 8 characters)
-    [parameter(mandatory=$true)]
-    [string]$projectAlias = '<projectAlias>',
-
     # ID of the Azure Subscription where you want to create this HOL resources
     [parameter(mandatory=$true)]
     [string]$subscriptionId = '<subscriptionId>',
@@ -21,6 +17,11 @@ param (
     # ID of the Azure Subscription where you want to create this HOL resources
     [string]$configsOutput = 'quickstart/configs/cloud-setup/hol.json'
 )
+
+$ramdomLetter = (65..90) + (97..122) | Get-Random -Count 1 | % {[char]$_} 
+$gUUID = New-Guid
+$projectAlias = $ramdomLetter + $getUUID.Guid.Split("-")[0].Substring(0, 7)
+Write-Output "Project Alias: '$projectAlias'"
 
 (Get-Content $configsTemplate) `
     -replace '<projectName>', $projectName `
