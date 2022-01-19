@@ -18,9 +18,7 @@ param (
     [string]$configsOutput = 'quickstart/configs/cloud-setup/hol.json'
 )
 
-$randomLetter = (65..90) + (97..122) | Get-Random -Count 1 | % {[char]$_} 
-$gUUID = New-Guid
-$projectAlias = $randomLetter + $gUUID.Guid.Split("-")[0].Substring(0, 7)
+$projectAlias = GenerateRandomProjectAlias
 Write-Output "Project Alias: '$projectAlias'"
 
 (Get-Content $configsTemplate) `
@@ -29,3 +27,9 @@ Write-Output "Project Alias: '$projectAlias'"
     -replace '<orgName>', $orgName `
     -replace '<subscriptionId>', $subscriptionId |
   Out-File $configsOutput
+
+function GenerateRandomProjectAlias {
+    $randomLetter = (65..90) + (97..122) | Get-Random -Count 1 | % {[char]$_} 
+    $gUUID = New-Guid
+    return $randomLetter + $gUUID.Guid.Split("-")[0].Substring(0, 7)
+}
