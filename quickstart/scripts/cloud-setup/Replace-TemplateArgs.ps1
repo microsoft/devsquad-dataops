@@ -29,6 +29,8 @@ Write-Output "Project Alias: '$projectAlias'"
   Out-File $configsOutput
 
 function GenerateRandomProjectAlias {
+    [cmdletbinding()]
+    param ()
     $randomLetter = (65..90) + (97..122) | Get-Random -Count 1 | % {[char]$_} 
     $gUUID = New-Guid
     return $randomLetter + $gUUID.Guid.Split("-")[0].Substring(0, 7)
