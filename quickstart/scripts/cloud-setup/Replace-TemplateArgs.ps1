@@ -21,7 +21,7 @@ param (
 $randomLetter = (65..90) + (97..122) | Get-Random -Count 1 | % {[char]$_} 
 $gUUID = New-Guid
 $projectAlias = $randomLetter + $gUUID.Guid.Split("-")[0].Substring(0, 7)
-Write-Output "Project alias generated: '$projectAlias'"
+Write-Output "Project alias generated: " + $projectAlias.ToLower()
 
 (Get-Content $configsTemplate) `
     -replace '<projectName>', $projectName `
