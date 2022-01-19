@@ -37,7 +37,7 @@ try {
 
 }
 catch {
-    throw "Couldn't access or create or clone repository"
+    throw "Couldn't access, create or clone the repository"
 }
 
 foreach ($branch in $branches)

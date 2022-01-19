@@ -125,7 +125,6 @@ Execute all these steps below to setup your evironment before running the Hands-
         # You don't need to change any of the following values below
         git config --global user.email "hol@microsoft.com"
         git config --global user.name "HOL Setup User"
-        $env:AZURE_DEVOPS_EXT_PAT_TEMPLATE="THIS VALUE WILL BE PROVIDED BY MICROSOFT ON THE LAB DAY"
         ```
 
         > This command configures git and defines an environment variable that will be used to setup your Azure DevOps project.
@@ -139,8 +138,7 @@ Execute all these steps below to setup your evironment before running the Hands-
         >  Note the file name is the one inside the output directory and the name is the same name of the _projectName_ that was replaced in the first config file.
 
 
-3. (Optional) If you are using this project as a Hands-On Lab, feel free to proceed to the next step of the lab setup. If you are using this project as a template for dataops, check [this documentation](./3b-azdo-setup-advanced.md) for understanding more details about the `AZURE_DEVOPS_EXT_PAT_TEMPLATE` environment variable.
-
+3. (Optional) If you are using this project as a Hands-On Lab, feel free to proceed to the next step of the lab setup.
 
 ## Step 5: Create the Hands-On Lab VM
 
