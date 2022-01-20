@@ -25,7 +25,6 @@ $environment = 'dev','qa','prod','databricks-dev','databricks-qa','databricks-pr
 
 foreach ($env in $environment)
 {
-
     CreateAzDevOpsRepoEnviorment -Environment $env -RepoConfiguration $config.RepoConfiguration -Verbose:$VerbosePreference
 }
 
@@ -49,9 +48,6 @@ catch {
 
 foreach ($branch in $branches)
 {
-
-    CreateAzDevOpsRepoEnviorment -Branch $branch -RepoConfiguration $config.RepoConfiguration -Verbose:$VerbosePreference
-
     CreateAzDevOpsRepoApprovalPolicy -Branch $branch -RepoInfo $repoInfo -RepoConfiguration $config.RepoConfiguration -Verbose:$VerbosePreference
     CreateAzDevOpsRepoCommentPolicy -Branch $branch -RepoInfo $repoInfo -RepoConfiguration $config.RepoConfiguration -Verbose:$VerbosePreference
     CreateAzDevOpsRepoBuildPolicy -Branch $branch -RepoInfo $repoInfo -RepoConfiguration $config.RepoConfiguration -Verbose:$VerbosePreference
