@@ -189,6 +189,7 @@ function CreateAzDevOpsRepoEnviorment {
 
     Write-Host "Creating enviorment on branch $Branch" -ForegroundColor Green
     Write-Host "Project " $RepoConfiguration.AzureDevOpsProject -ForegroundColor Green
+    Write-Host "Organization " $RepoConfiguration.AzureDevOpsOrganizationURI
 
     $envBody = @{
         name = $env
