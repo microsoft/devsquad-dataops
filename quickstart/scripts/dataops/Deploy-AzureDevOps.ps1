@@ -26,7 +26,7 @@ $environment = 'dev','qa','prod','databricks-dev','databricks-qa','databricks-pr
 foreach ($env in $environment)
 {
 
-    CreateAzDevOpsRepoEnviorment -Enviorment $env -RepoConfiguration $config.RepoConfiguration -Verbose:$VerbosePreference
+    CreateAzDevOpsRepoEnviorment -Environment $env -RepoConfiguration $config.RepoConfiguration -Verbose:$VerbosePreference
 }
 
 try {
