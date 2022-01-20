@@ -187,9 +187,11 @@ function CreateAzDevOpsRepoEnviorment {
 
     [Argument]::AssertIsNotNull("RepoConfiguration", $RepoConfiguration)
 
+    $orgURI = $RepoConfiguration.AzureDevOpsOrganizationURI + "/"
+
     Write-Host "Creating enviorment on branch $Branch" -ForegroundColor Green
     Write-Host "Project " $RepoConfiguration.AzureDevOpsProject -ForegroundColor Green
-    Write-Host "Organization " $RepoConfiguration.AzureDevOpsOrganization  -ForegroundColor Green
+    Write-Host "Organization " $orgURI -ForegroundColor Green
 
     $envBody = @{
         name = $env
@@ -199,7 +201,7 @@ function CreateAzDevOpsRepoEnviorment {
     Set-Content -Path $infile -Value ($envBody | ConvertTo-Json)
     az devops invoke `
         --area distributedtask --resource environments `
-        --route-parameters project=$RepoConfiguration.AzureDevOpsProject --org $RepoConfiguration.AzureDevOpsOrganization `
+        --route-parameters project=$RepoConfiguration.AzureDevOpsProject --org $orgURI `
         --http-method POST --in-file $infile `
         --api-version "6.0-preview"
     rm $infile -f
