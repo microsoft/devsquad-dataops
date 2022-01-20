@@ -188,6 +188,7 @@ function CreateAzDevOpsRepoEnviorment {
     [Argument]::AssertIsNotNull("RepoConfiguration", $RepoConfiguration)
 
     Write-Host "Creating enviorment on branch $Branch" -ForegroundColor Green
+    Write-Host "Project " $RepoConfiguration.AzureDevOpsProject -ForegroundColor Green
 
     $envBody = @{
         name = $env
