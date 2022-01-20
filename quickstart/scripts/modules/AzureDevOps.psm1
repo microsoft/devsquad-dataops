@@ -177,6 +177,34 @@ function CreateAzDevOpsRepoApprovalPolicy {
 
     $result | Write-Verbose
 }
+
+function CreateAzDevOpsRepoEnviorment {
+    [cmdletbinding()]
+    param (
+        [Parameter(Mandatory)] [string] $Branch,
+        [Parameter(Mandatory)] [hashtable] $RepoConfiguration
+    )
+
+    [Argument]::AssertIsNotNull("RepoConfiguration", $RepoConfiguration)
+
+    Write-Host "Creating enviorment on branch $Branch" -ForegroundColor Green
+
+    $envBody = @{
+        name = $env
+        description = "$env environment"
+    }
+    $infile = "envbody.json"
+    Set-Content -Path $infile -Value ($envBody | ConvertTo-Json)
+    az devops invoke `
+        --area distributedtask --resource environments `
+        --route-parameters project=$RepoConfiguration.AzureDevOpsProject --org $RepoConfiguration.AzureDevOpsOrganizationURI `
+        --http-method POST --in-file $infile `
+        --api-version "6.0-preview"
+    rm $infile -f
+    
+    $result | Write-Verbose
+}
+
 function CreateAzDevOpsRepoCommentPolicy {
     [cmdletbinding()]
     param (
