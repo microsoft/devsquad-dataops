@@ -18,6 +18,8 @@ if (! $validConfigFile)
 	throw "Invalid properties on the '$ConfigurationFile' configuration file."
 }
 
+$config = LoadConfigurationFile -ConfigurationFile $ConfigurationFile -Verbose:$VerbosePreference
+
 $branches = 'develop','qa','main'
 $environment = 'dev','qa','prod','databricks-dev','databricks-qa','databricks-prod'
 
@@ -28,8 +30,6 @@ foreach ($env in $environment)
 }
 
 try {
-
-    $config = LoadConfigurationFile -ConfigurationFile $ConfigurationFile -Verbose:$VerbosePreference
 
     CreateAzDevOpsVariableGroups -RepoConfiguration $config.RepoConfiguration -Verbose:$VerbosePreference
 
