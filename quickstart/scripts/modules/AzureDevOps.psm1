@@ -181,7 +181,7 @@ function CreateAzDevOpsRepoApprovalPolicy {
 function CreateAzDevOpsRepoEnviorment {
     [cmdletbinding()]
     param (
-        [Parameter(Mandatory)] [string] $Branch,
+        [Parameter(Mandatory)] [string] $Environment,
         [Parameter(Mandatory)] [hashtable] $RepoConfiguration
     )
 
@@ -189,13 +189,13 @@ function CreateAzDevOpsRepoEnviorment {
 
     $orgURI = $RepoConfiguration.AzureDevOpsOrganizationURI + "/"
 
-    Write-Host "Creating enviorment on branch $Branch" -ForegroundColor Green
+    Write-Host "Creating environment on branch $Environment" -ForegroundColor Green
     Write-Host "Project " $RepoConfiguration.AzureDevOpsProject -ForegroundColor Green
     Write-Host "Organization " $orgURI -ForegroundColor Green
 
     $envBody = @{
-        name = $env
-        description = "$env environment"
+        name = $Environment
+        description = "$Environment environment"
     }
     $infile = "envbody.json"
     Set-Content -Path $infile -Value ($envBody | ConvertTo-Json)
