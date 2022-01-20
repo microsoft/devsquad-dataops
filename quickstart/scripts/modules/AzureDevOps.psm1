@@ -187,39 +187,38 @@ function CreateAzDevOpsRepoEnviorment {
 
     [Argument]::AssertIsNotNull("RepoConfiguration", $RepoConfiguration)
 
-    $orgURI = $RepoConfiguration.AzureDevOpsOrganizationURI + "/"
+    $orgURI = $RepoConfiguration.AzureDevOpsOrganizationURI
+    $project = $RepoConfiguration.AzureDevOpsProject
 
     Write-Host "Creating environment on branch $Environment" -ForegroundColor Green
-    Write-Host "Project " $RepoConfiguration.AzureDevOpsProject -ForegroundColor Green
+    Write-Host "Project " $project -ForegroundColor Green
     Write-Host "Organization " $orgURI -ForegroundColor Green
 
-    # $envBody = @{
-    #     name = $Environment
-    #     description = "$Environment environment"
-    # }
-    # $infile = "envbody.json"
-    # Set-Content -Path $infile -Value ($envBody | ConvertTo-Json)
-    # az devops invoke `
-    #     --area distributedtask --resource environments `
-    #     --route-parameters project=$RepoConfiguration.AzureDevOpsProject --org $orgURI `
-    #     --http-method POST --in-file $infile `
-    #     --api-version "6.0-preview"
-    # rm $infile -Force
-    
     $envBody = @{
-        name = "qa"
-        description = "My qa environment"
+        name = $Environment
+        description = "$Environment environment"
     }
-        $infile = "envbody.json"
-        Set-Content -Path $infile -Value ($envBody | ConvertTo-Json)
-        az devops invoke `
-            --area distributedtask --resource environments `
-            --route-parameters project=microsoft-devsquad --org https://dev.azure.com/a-fabiopadua0196 `
-            --http-method POST --in-file $infile `
-            --api-version "6.0-preview"
-        rm $infile -f
-
-    $result | Write-Verbose
+    $infile = "envbody.json"
+    Set-Content -Path $infile -Value ($envBody | ConvertTo-Json)
+    az devops invoke `
+        --area distributedtask --resource environments `
+         --route-parameters project=$project --org $orgURI `
+         --http-method POST --in-file $infile `
+         --api-version "6.0-preview"
+    rm $infile -f
+    
+    # $envBody = @{
+    #     name = "qa"
+    #     description = "My qa environment"
+    # }
+    #     $infile = "envbody.json"
+    #     Set-Content -Path $infile -Value ($envBody | ConvertTo-Json)
+    #     az devops invoke `
+    #         --area distributedtask --resource environments `
+    #         --route-parameters project=microsoft-devsquad --org https://dev.azure.com/a-fabiopadua0196 `
+    #         --http-method POST --in-file $infile `
+    #         --api-version "6.0-preview"
+    #     rm $infile -f
 }
 
 function CreateAzDevOpsRepoCommentPolicy {
