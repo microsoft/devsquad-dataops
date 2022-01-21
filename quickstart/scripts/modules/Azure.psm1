@@ -17,8 +17,12 @@ function SetupServicePrincipals
 	{
 		$servicePrincipal = CreateOrGetServicePrincipal -Name $principalName
 
+        LogInfo -Message $servicePrincipal.PasswordCredentials.SecretText
+
         $secPass = ConvertTo-SecureString $servicePrincipal.PasswordCredentials.SecretText -AsPlainText -Force
         
+        LogInfo -Message $secPass
+
         $servicePrincipals += @{        
             $servicePrincipal.DisplayName = @{
                 "objectId" = $servicePrincipal.Id
@@ -55,8 +59,6 @@ function CreateOrGetServicePrincipal
 	{
 		LogWarning -Message "Service principal $Name' already exists."
 	}
-
-    LogInfo -Message $servicePrincipal.PasswordCredentials.SecretText
 
 	return $servicePrincipal
 }
