@@ -56,7 +56,7 @@ function CreateOrGetServicePrincipal
 		LogWarning -Message "Service principal $Name' already exists."
 	}
 
-    LogInfo -Message $servicePrincipal
+    LogInfo -Message $servicePrincipal.PasswordCredentials.SecretText
 
 	return $servicePrincipal
 }
