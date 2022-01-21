@@ -20,13 +20,18 @@ if (! $validConfigFile)
 
 $config = LoadConfigurationFile -ConfigurationFile $ConfigurationFile -Verbose:$VerbosePreference
 
-$branches = 'develop','qa','main'
-# $environment = 'dev','qa','prod','databricks-dev','databricks-qa','databricks-prod'
+BeginScope -Scope "Enviornments"
 
-# foreach ($env in $environment)
-# {
-#     CreateAzDevOpsRepoEnviorment -Environment $env -RepoConfiguration $config.RepoConfiguration -Verbose:$VerbosePreference
-# }
+$environment = 'dev','qa','prod','databricks-dev','databricks-qa','databricks-prod'
+
+foreach ($env in $environment)
+{
+    CreateAzDevOpsRepoEnviorment -Environment $env -RepoConfiguration $config.RepoConfiguration -Verbose:$VerbosePreference
+}
+
+EndScope
+
+$branches = 'develop','qa','main'
 
 try {
 
