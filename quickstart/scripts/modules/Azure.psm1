@@ -17,7 +17,6 @@ function SetupServicePrincipals
 	{
 		$servicePrincipal = CreateOrGetServicePrincipal -Name $principalName
 
-        Write-Output "Pass retrivied " $servicePrincipal | Get-Member
         $secPass = ConvertTo-SecureString $servicePrincipal.PasswordCredentials.SecretText -AsPlainText -Force
         
         $servicePrincipals += @{        
@@ -56,6 +55,8 @@ function CreateOrGetServicePrincipal
 	{
 		LogWarning -Message "Service principal $Name' already exists."
 	}
+
+    LogInfo -Message $servicePrincipal
 
 	return $servicePrincipal
 }
