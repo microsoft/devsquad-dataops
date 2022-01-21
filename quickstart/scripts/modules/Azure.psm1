@@ -19,16 +19,12 @@ function SetupServicePrincipals
 
         LogInfo -Message $servicePrincipal.PasswordCredentials.SecretText
 
-        $secPass = ConvertTo-SecureString $servicePrincipal.PasswordCredentials.SecretText -AsPlainText -Force
-        
-        LogInfo -Message $secPass
-
         $servicePrincipals += @{        
             $servicePrincipal.DisplayName = @{
                 "objectId" = $servicePrincipal.Id
                 "clientId" = $servicePrincipal.AppId
                 "displayName" = $servicePrincipal.DisplayName
-                "clientSecret" = $secPass
+                "clientSecret" = $servicePrincipal.PasswordCredentials.SecretText
             }
         }
 
