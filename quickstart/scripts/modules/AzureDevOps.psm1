@@ -327,9 +327,9 @@ function SetupServiceConnection {
 
         LogInfo -Message "Service Principal pwd '$Pass'"
 
-        $secPass = ConvertTo-SecureString $Pass -AsPlainText -Force
+        #$secPass = ConvertTo-SecureString $Pass -AsPlainText -Force
         
-        $env:AZURE_DEVOPS_EXT_AZURE_RM_SERVICE_PRINCIPAL_KEY = $secPass
+        $env:AZURE_DEVOPS_EXT_AZURE_RM_SERVICE_PRINCIPAL_KEY = $Pass
 
         $subscription = Get-AzSubscription | Where-Object { $_.Id -eq $Environment.subscriptionId }
 
