@@ -324,10 +324,6 @@ function SetupServiceConnection {
         if (! $Pass) {
             throw "Client Secret was not present in the request."
         }
-
-        LogInfo -Message "Service Principal pwd '$Pass'"
-
-        #$secPass = ConvertTo-SecureString $Pass -AsPlainText -Force
         
         $env:AZURE_DEVOPS_EXT_AZURE_RM_SERVICE_PRINCIPAL_KEY = $Pass
 

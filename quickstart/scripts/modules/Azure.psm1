@@ -17,8 +17,6 @@ function SetupServicePrincipals
 	{
 		$servicePrincipal = CreateOrGetServicePrincipal -Name $principalName
 
-        LogInfo -Message $servicePrincipal.PasswordCredentials.SecretText
-
         $servicePrincipals += @{        
             $servicePrincipal.DisplayName = @{
                 "objectId" = $servicePrincipal.Id
