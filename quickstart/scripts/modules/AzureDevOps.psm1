@@ -177,6 +177,50 @@ function CreateAzDevOpsRepoApprovalPolicy {
 
     $result | Write-Verbose
 }
+
+function CreateAzDevOpsRepoEnviorment {
+    [cmdletbinding()]
+    param (
+        [Parameter(Mandatory)] [string] $Environment,
+        [Parameter(Mandatory)] [hashtable] $RepoConfiguration
+    )
+
+    [Argument]::AssertIsNotNull("RepoConfiguration", $RepoConfiguration)
+
+    $orgURI = $RepoConfiguration.AzureDevOpsOrganizationURI
+    $project = $RepoConfiguration.AzureDevOpsProject
+
+    Write-Host "Creating environment on branch $Environment" -ForegroundColor Green
+    Write-Host "Project " $project -ForegroundColor Green
+    Write-Host "Organization " $orgURI -ForegroundColor Green
+
+    $envBody = @{
+        name = $Environment
+        description = "$Environment environment"
+    }
+    $infile = "envbody.json"
+    Set-Content -Path $infile -Value ($envBody | ConvertTo-Json)
+    az devops invoke `
+        --area distributedtask --resource environments `
+         --route-parameters project=$project --org $orgURI `
+         --http-method POST --in-file $infile `
+         --api-version "6.0-preview"
+    rm $infile -f
+    
+    # $envBody = @{
+    #     name = "qa"
+    #     description = "My qa environment"
+    # }
+    #     $infile = "envbody.json"
+    #     Set-Content -Path $infile -Value ($envBody | ConvertTo-Json)
+    #     az devops invoke `
+    #         --area distributedtask --resource environments `
+    #         --route-parameters project=microsoft-devsquad --org https://dev.azure.com/a-fabiopadua0196 `
+    #         --http-method POST --in-file $infile `
+    #         --api-version "6.0-preview"
+    #     rm $infile -f
+}
+
 function CreateAzDevOpsRepoCommentPolicy {
     [cmdletbinding()]
     param (
@@ -280,7 +324,7 @@ function SetupServiceConnection {
         if (! $Pass) {
             throw "Client Secret was not present in the request."
         }
-
+        
         $env:AZURE_DEVOPS_EXT_AZURE_RM_SERVICE_PRINCIPAL_KEY = $Pass
 
         $subscription = Get-AzSubscription | Where-Object { $_.Id -eq $Environment.subscriptionId }

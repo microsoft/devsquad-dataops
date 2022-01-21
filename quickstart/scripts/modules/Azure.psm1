@@ -17,14 +17,12 @@ function SetupServicePrincipals
 	{
 		$servicePrincipal = CreateOrGetServicePrincipal -Name $principalName
 
-        $secPass = ConvertTo-SecureString $servicePrincipal.PasswordCredentials.SecretText  -AsPlainText -Force
-
         $servicePrincipals += @{        
             $servicePrincipal.DisplayName = @{
                 "objectId" = $servicePrincipal.Id
                 "clientId" = $servicePrincipal.AppId
                 "displayName" = $servicePrincipal.DisplayName
-                "clientSecret" = $secPass
+                "clientSecret" = $servicePrincipal.PasswordCredentials.SecretText
             }
         }
 

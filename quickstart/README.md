@@ -75,7 +75,6 @@ Execute all these steps below to setup your evironment before running the Hands-
     |-----|-----------|-------|
     |<_orgName_>|Azure DevOps organization name where you will execute the Hands-On Lab|_org-dataops_|
     |<_projectName_>|Name of the existing project inside Azure DevOps where you will execute the Hands-On Lab|_project-dataops_|
-    |<_projectAlias_>|An unique string with **less than 8 characteres** that will be used as part of your resource group names|_dataops_|
     |<_subscriptionId_>|Azure Subscription ID where the resources will be deployed|_f7e5bb9e-0f98-4c5d-a5c1-a9154bf3cd61_|
 
 - (_OPTIONAL_) If you are using this project as a Hands-On Lab, feel free to proceed to the next step of the lab setup. If you are using this project as a template for dataops, check [this additional documentation](./1b-create-prereqs-azure-advanced.md) that explains advanced configuration options.
