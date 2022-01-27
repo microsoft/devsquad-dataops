@@ -11,6 +11,9 @@
         "location": {
             "value": "eastus"
         },
+        "servicePrincipal": {
+            "value": "SP-<Project.Alias>-DevTest"
+        },
         "resourceGroupData":{
             "value": "rg-<Project.Alias>-data-qa"
         },
