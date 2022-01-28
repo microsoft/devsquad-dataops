@@ -7,6 +7,12 @@ parameters:
   type: string
 - name: solutionName
   type: string
+- name: servicePrincipal
+  type: string
+- name: resourceGroupData
+  type: string
+- name: resourceGroupCompute
+  type: string
 
 stages:
 - stage: deploy
@@ -80,10 +86,40 @@ stages:
             env:
               AzureDevOpsPAT: $(System.AccessToken)
   
+  - deployment: deploy_databricks_secrets
+    displayName: 'Deploy Databricks Secrets to ${{ parameters.environment }}'
+    condition: succeeded()
+    dependsOn: deploy_arm
+    pool:
+      vmImage: 'Ubuntu-20.04'
+    environment: ${{ parameters.environment }}
+    variables:
+    - group: dataops-iac-cd-output-${{ parameters.environment }}
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - checkout: self
+          - template: step.install-databricks-cli.yml
+            parameters:
+              azureServiceConnection: ${{ parameters.azureServiceConnection }}
+          - task: AzurePowerShell@4
+            displayName: 'Databricks Secrets'
+            inputs:
+              azureSubscription: ${{ parameters.azureServiceConnection }}
+              scriptType: filePath
+              scriptPath: infrastructure-as-code/scripts/DatabricksSecrets.ps1
+              scriptArguments: >
+                -ServicePrincipalName ${{ parameters.servicePrincipal }}
+                -DataResourceGroup ${{ parameters.resourceGroupData }}
+                -ComputeResourceGroup ${{ parameters.resourceGroupCompute }}
+              azurePowerShellVersion: 'OtherVersion'
+              preferredAzurePowerShellVersion: $(azPowershellVersion)
+
   - deployment: deploy_dbw_clusters
     displayName: 'Deploy DBW Clusters to ${{ parameters.environment }}'
     condition: succeeded()
-    dependsOn: deploy_arm
+    dependsOn: deploy_databricks_secrets
     pool:
       vmImage: 'Ubuntu-20.04'
     environment: ${{ parameters.environment }}
