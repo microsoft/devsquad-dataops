@@ -7,12 +7,6 @@ parameters:
   type: string
 - name: solutionName
   type: string
-- name: servicePrincipal
-  type: string
-- name: resourceGroupData
-  type: string
-- name: resourceGroupCompute
-  type: string
 
 stages:
 - stage: deploy
@@ -110,9 +104,7 @@ stages:
               scriptType: filePath
               scriptPath: infrastructure-as-code/scripts/DatabricksSecrets.ps1
               scriptArguments: >
-                -ServicePrincipalName ${{ parameters.servicePrincipal }}
-                -DataResourceGroup ${{ parameters.resourceGroupData }}
-                -ComputeResourceGroup ${{ parameters.resourceGroupCompute }}
+                -DeploymentOutputFile "armOutput.json"
               azurePowerShellVersion: 'OtherVersion'
               preferredAzurePowerShellVersion: $(azPowershellVersion)
 

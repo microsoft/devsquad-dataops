@@ -1,15 +1,17 @@
 param(
-    [Parameter(Mandatory)] [string] $ServicePrincipalName,
-    [Parameter(Mandatory)] [string] $DataResourceGroup,
-    [Parameter(Mandatory)] [string] $ComputeResourceGroup
+    [Parameter(Mandatory)] [string] $DeploymentOutputFile
 )
 
 $ErrorActionPreference = "Stop"
 
-# Load enviornments variables from DevOps Library
-$KeyVaultName = $env:keyVaultName
-$DataLakeName = $env:dataLakeName
-$DatabricksName = $env:databricksName
+Write-Host "Getting variables from $DeploymentOutputFile file..." -ForegroundColor Green
+$DeploymentOutput = Get-Content -Path $DeploymentOutputFile | ConvertFrom-Json -AsHashtable
+$DataResourceGroup = $DeploymentOutput["resourceGroupData"]
+$DataResourceGroup = $DeploymentOutput["resourceGroupCompute"]
+$DataResourceGroup = $DeploymentOutput["servicePrincipal"]
+$KeyVaultName = $DeploymentOutput["keyVaultName"]
+$DataLakeName = $DeploymentOutput["dataLakeName"]
+$DatabricksName = $DeploymentOutput["databricksName"]
 
 $context = Get-AzContext
 Write-Host "Getting user and principal information..." -ForegroundColor Green
