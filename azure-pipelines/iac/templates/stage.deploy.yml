@@ -89,6 +89,7 @@ stages:
     environment: ${{ parameters.environment }}
     variables:
     - group: dataops-iac-cd-output-${{ parameters.environment }}
+      azPowershellVersion: 5.5.0
     strategy:
       runOnce:
         deploy:
