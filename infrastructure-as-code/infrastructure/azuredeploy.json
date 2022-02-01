@@ -20,6 +20,12 @@
         "description": "Region where the resource is provisioned"
       }
     }, 
+    "servicePrincipal": {
+      "type": "string",
+      "metadata": {
+        "description": "Service Principal for credentials usage"
+      }
+    },
     "resourceGroupData": {
       "type": "string",
       "metadata": {
