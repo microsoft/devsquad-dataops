@@ -89,7 +89,6 @@ stages:
     environment: ${{ parameters.environment }}
     variables:
     - group: dataops-iac-cd-output-${{ parameters.environment }}
-      azPowershellVersion: 5.5.0
     strategy:
       runOnce:
         deploy:
@@ -107,7 +106,7 @@ stages:
               scriptArguments: >
                 -DeploymentOutputFile "armOutput.json"
               azurePowerShellVersion: 'OtherVersion'
-              preferredAzurePowerShellVersion: $(azPowershellVersion)
+              preferredAzurePowerShellVersion: 5.5.0
 
   - deployment: deploy_dbw_clusters
     displayName: 'Deploy DBW Clusters to ${{ parameters.environment }}'
