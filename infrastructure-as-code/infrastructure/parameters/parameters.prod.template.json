@@ -12,7 +12,7 @@
             "value": "eastus"
         },
         "servicePrincipal": {
-            "value": "SP-<Project.Alias>-DevTest"
+            "value": "SP-<Project.Name>-DevTest"
         },
         "resourceGroupData":{
             "value": "rg-<Project.Alias>-data-prod"
