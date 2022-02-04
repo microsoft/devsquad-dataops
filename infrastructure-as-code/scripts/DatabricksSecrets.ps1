@@ -15,7 +15,7 @@ $keyVaultName = $DeploymentOutput["keyVaultName"]
 Write-Host "Getting variables from $SolutionParametersFile file..." -ForegroundColor Green
 $ParameterContent = Get-Content -Path $SolutionParametersFile | ConvertFrom-Json
 $DataResourceGroup = ($ParameterContent).PSObject.Properties["parameters"].Value.resourceGroupData.Value
-$DataResourceCompute =  ($ParameterContent).PSObject.Properties["parameters"].Value.resourceGroupCompute.Value
+$ComputeResourceGroup =  ($ParameterContent).PSObject.Properties["parameters"].Value.resourceGroupCompute.Value
 $ServicePrincipalName = ($ParameterContent).PSObject.Properties["parameters"].Value.servicePrincipal.Value
 
 Write-Host "Parameter file " $SolutionParametersFile
