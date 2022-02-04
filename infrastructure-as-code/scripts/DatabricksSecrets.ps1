@@ -1,17 +1,25 @@
 param(
-    [Parameter(Mandatory)] [string] $DeploymentOutputFile
+    [Parameter(Mandatory)] [string] [ValidateSet("dev", "qa", "prod", "sandbox")] $Environment,
+    [Parameter(Mandatory)] [string] $DeploymentOutputFile,
+    [string] $SolutionParametersFile = "./infrastructure-as-code/infrastructure/parameters/parameters.$Environment.json"
 )
 
 $ErrorActionPreference = "Stop"
 
 Write-Host "Getting variables from $DeploymentOutputFile file..." -ForegroundColor Green
 $DeploymentOutput = Get-Content -Path $DeploymentOutputFile | ConvertFrom-Json -AsHashtable
-$DataResourceGroup = $DeploymentOutput["resourceGroupData"]
-$DataResourceGroup = $DeploymentOutput["resourceGroupCompute"]
-$DataResourceGroup = $DeploymentOutput["servicePrincipal"]
-$KeyVaultName = $DeploymentOutput["keyVaultName"]
-$DataLakeName = $DeploymentOutput["dataLakeName"]
+$DataLakeName = $DeploymentOutput["dataFactoryName"]
 $DatabricksName = $DeploymentOutput["databricksName"]
+$keyVaultName = $DeploymentOutput["keyVaultName"]
+
+Write-Host "Getting variables from $SolutionParametersFile file..." -ForegroundColor Green
+$ParameterContent = Get-Content -Path $SolutionParametersFile | ConvertFrom-Json
+$DataResourceGroup = ($ParameterContent).PSObject.Properties["parameters"].Value.resourceGroupData.Value
+$DataResourceCompute =  ($ParameterContent).PSObject.Properties["parameters"].Value.resourceGroupCompute.Value
+$ServicePrincipalName = ($ParameterContent).PSObject.Properties["parameters"].Value.servicePrincipal.Value
+
+Write-Host "Parameter file " $SolutionParametersFile
+Write-Host "ServicePrincipalName " $ServicePrincipalName
 
 $context = Get-AzContext
 Write-Host "Getting user and principal information..." -ForegroundColor Green

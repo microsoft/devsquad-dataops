@@ -80,13 +80,14 @@ stages:
             env:
               AzureDevOpsPAT: $(System.AccessToken)
 
-          - task: AzurePowerShell@5
+          - task: AzurePowerShell@4
             displayName: 'Publish Databricks Secrets'
             inputs:
               azureSubscription: ${{ parameters.azureServiceConnection }}
               scriptType: filePath
               scriptPath: infrastructure-as-code/scripts/DatabricksSecrets.ps1
               scriptArguments: >
+                -Environment ${{ parameters.environment }}
                 -DeploymentOutputFile "armOutput.json"
               azurePowerShellVersion: 'OtherVersion'
               preferredAzurePowerShellVersion: $(azPowershellVersion)
@@ -94,7 +95,7 @@ stages:
   - deployment: deploy_dbw_clusters
     displayName: 'Deploy DBW Clusters to ${{ parameters.environment }}'
     condition: succeeded()
-    dependsOn: deploy_databricks_secrets
+    dependsOn: deploy_arm
     pool:
       vmImage: 'Ubuntu-20.04'
     environment: ${{ parameters.environment }}
