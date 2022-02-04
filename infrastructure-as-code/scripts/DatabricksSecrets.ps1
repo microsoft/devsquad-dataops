@@ -27,10 +27,11 @@ $user = Get-AzADUser -UserPrincipalName $context.Account.Id
 $servicePrincipal = Get-AzADServicePrincipal -DisplayName $ServicePrincipalName
 
 if ($servicePrincipal) {
-        
+    
     Write-Host "Generating new client secret..." -ForegroundColor Green
     $startDate = Get-Date
-    $endDate = $start.AddMonths(6)
+    $endDate = $startDate.AddMonths(6)
+
     $clientSecret = New-AzADSpCredential -ObjectId $servicePrincipal.Id -StartDate $startDate -EndDate $endDate
     Write-Host "Secret generated " $clientSecret -ForegroundColor Yellow
 
