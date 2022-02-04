@@ -8,7 +8,7 @@ $ErrorActionPreference = "Stop"
 
 Write-Host "Getting variables from $DeploymentOutputFile file..." -ForegroundColor Green
 $DeploymentOutput = Get-Content -Path $DeploymentOutputFile | ConvertFrom-Json -AsHashtable
-$DataLakeName = $DeploymentOutput["dataFactoryName"]
+$DataLakeName = $DeploymentOutput["dataLakeName"]
 $DatabricksName = $DeploymentOutput["databricksName"]
 $keyVaultName = $DeploymentOutput["keyVaultName"]
 
