@@ -1,23 +1,18 @@
 param(
     [Parameter(Mandatory)] [string] [ValidateSet("dev", "qa", "prod", "sandbox")] $Environment,
+    [Parameter(Mandatory)] [string] $DataLakeName,
+    [Parameter(Mandatory)] [string] $DatabricksName,
+    [Parameter(Mandatory)] [string] $KeyVaultName,
+    [Parameter(Mandatory)] [string] $DATABRICKS_TOKEN,
     [string] $SolutionParametersFile = "./infrastructure-as-code/infrastructure/parameters/parameters.$Environment.json"
 )
 
 $ErrorActionPreference = "Stop"
 
 Write-Host "Getting variables from Library file..." -ForegroundColor Green
-#$DeploymentOutput = Get-Content -Path $DeploymentOutputFile | ConvertFrom-Json -AsHashtable
-# $DataLakeName = $DeploymentOutput["dataLakeName"]
-# $DatabricksName = $DeploymentOutput["databricksName"]
-# $keyVaultName = $DeploymentOutput["keyVaultName"]
-
-$DataLakeName = $dataLakeName
-$DatabricksName = $databricksName
-$keyVaultName = $keyVaultName
-
 Write-Host "DataLake: " $DataLakeName 
 Write-Host "DataBricks: " $DatabricksName 
-Write-Host "Key Valt: " $keyVaultName
+Write-Host "Key Valt: " $KeyVaultName
 
 Write-Host "Getting variables from $SolutionParametersFile file..." -ForegroundColor Green
 $ParameterContent = Get-Content -Path $SolutionParametersFile | ConvertFrom-Json
@@ -67,10 +62,16 @@ if ($servicePrincipal) {
     }
 
     Write-Host "Creating the Key Vault secret scope on Databricks..." -ForegroundColor Green
+    #$accessToken = Get-AzAccessToken -ResourceUrl 2ff814a6-3304-4ab8-85cb-cd0e6f879c1d
+    #$env:DATABRICKS_TOKEN = $accessToken.Token
     $env:DATABRICKS_HOST = "https://$($dbw.Url)"
+    $env:DATABRICKS_TOKEN = $DATABRICKS_TOKEN
     Write-Host "URL DBW https://$($dbw.Url)"
-    Write-Host "Databricks Access Token " $DATABRICKS_TOKEN
+    Write-Host "Databricks Token " $DATABRICKS_TOKEN
+    Write-Host "Databricks Token (env) " $env:DATABRICKS_TOKEN
+    
     $scopesList = databricks secrets list-scopes --output json | ConvertFrom-Json
+    Write-Host "List of scopes: " $scopesList
     if (! $scopesList.scopes.name -contains "dataops") {
         databricks secrets create-scope --scope 'dataops' --scope-backend-type AZURE_KEYVAULT --resource-id $kv.ResourceId --dns-name $kv.VaultUri
     }

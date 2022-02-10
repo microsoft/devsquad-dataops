@@ -106,8 +106,12 @@ stages:
               scriptPath: infrastructure-as-code/scripts/DatabricksSecrets.ps1
               scriptArguments: >
                 -Environment ${{ parameters.environment }}
+                -DataLakeName $(dataLakeName)
+                -DatabricksName $(databricksName)
+                -KeyVaultName $(keyVaultName)
+                -DATABRICKS_TOKEN $(DATABRICKS_TOKEN)
               azurePowerShellVersion: 'OtherVersion'
-              preferredAzurePowerShellVersion: latest
+              preferredAzurePowerShellVersion: 5.5.0
 
           - task: PowerShell@2
             displayName: Deploy DBW Clusters
