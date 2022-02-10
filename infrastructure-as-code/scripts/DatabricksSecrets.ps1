@@ -10,9 +10,9 @@ param(
 $ErrorActionPreference = "Stop"
 
 Write-Host "Getting variables from Library file..." -ForegroundColor Green
-Write-Host "DataLake: " $DataLakeName 
-Write-Host "DataBricks: " $DatabricksName 
-Write-Host "Key Valt: " $KeyVaultName
+#Write-Host "DataLake: " $DataLakeName 
+#Write-Host "DataBricks: " $DatabricksName 
+#Write-Host "Key Valt: " $KeyVaultName
 
 Write-Host "Getting variables from $SolutionParametersFile file..." -ForegroundColor Green
 $ParameterContent = Get-Content -Path $SolutionParametersFile | ConvertFrom-Json
@@ -67,8 +67,8 @@ if ($servicePrincipal) {
     $env:DATABRICKS_HOST = "https://$($dbw.Url)"
     $env:DATABRICKS_TOKEN = $DATABRICKS_TOKEN
     Write-Host "URL DBW https://$($dbw.Url)"
-    Write-Host "Databricks Token " $DATABRICKS_TOKEN
-    Write-Host "Databricks Token (env) " $env:DATABRICKS_TOKEN
+    #Write-Host "Databricks Token " $DATABRICKS_TOKEN
+    #Write-Host "Databricks Token (env) " $env:DATABRICKS_TOKEN
     
     $scopesList = databricks secrets list-scopes --output json | ConvertFrom-Json
     Write-Host "List of scopes: " $scopesList
