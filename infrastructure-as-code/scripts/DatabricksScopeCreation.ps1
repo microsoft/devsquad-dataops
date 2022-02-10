@@ -22,4 +22,7 @@ if (! $scopesList.scopes.name -contains "dataops") {
     databricks secrets create-scope --scope 'dataops' --scope-backend-type AZURE_KEYVAULT --resource-id $kv.ResourceId --dns-name $kv.VaultUri
 }
 
+Write-Host "Listing Databricks scope content..." -ForegroundColor Green
+databricks secrets list --scope dataops
+
 Write-Host "Finished!" -ForegroundColor Blue
