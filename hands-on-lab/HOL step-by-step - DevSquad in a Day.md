@@ -453,7 +453,9 @@ You should to change `Key Valt Name` with your information and execute this scri
 
 ```
 ./DatabricksScopeCreation.ps1 `
-    -KeyVaultName "<kv_name>" `
+    -KeyVaultName "<keyvault_name>",
+    -ComputeResourceGroup "<compute_resource_group>",
+    -DatabricksName "<databricks_name>" `
 ```
 
 >**Note**: To see Key names in secret scope dataops execute the follow command.
