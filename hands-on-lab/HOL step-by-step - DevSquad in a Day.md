@@ -443,6 +443,19 @@ The CD pipeline will be triggered automatically after the CI Pipeline. After exe
 
 >**Note**: Name of the Resource Groups and Resources depends on the custom alias defined by yourself and also the suscription id.
 
+With these resources created, you can configure a secrets scope in databricks, for secure management of secrets.
+
+##### **Databricks Secrets Scope**
+
+When you have the resources created in the environment, it is time to configure the scope secrets in databricks, to do that, run the PowerShell script located at infrastructure-as-code/scripts to create the Databricks secrets scope for each environment:
+
+You should to change `Key Valt Name` with your information and execute this script, and how the resources in development environment were created then we can create the scope in databricks dev.
+
+```
+./DatabricksScopeCreation.ps1 `
+    -KeyVaultName "<kv_name>" `
+```
+
 >**Note**: To see Key names in secret scope dataops execute the follow command.
 
 ```
