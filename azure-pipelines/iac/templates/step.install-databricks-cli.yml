@@ -27,5 +27,5 @@ steps:
         -d "grant_type=client_credentials&client_id=$servicePrincipalId&resource=$databricks_resource_id&client_secret=$servicePrincipalKey" \
         https://login.microsoftonline.com/$tenantId/oauth2/token \
         | jq -r .access_token)
-      echo "##vso[task.setvariable variable=DATABRICKS_TOKEN;issecret=true]$accessToken"
+      echo "##vso[task.setvariable variable=DATABRICKS_TOKEN;isSecret=true]$accessToken"
     addSpnToEnvironment: true

@@ -79,9 +79,9 @@ stages:
               showWarnings: true
             env:
               AzureDevOpsPAT: $(System.AccessToken)
-  
-  - deployment: deploy_databricks_secrets
-    displayName: 'Deploy Databricks Secrets to ${{ parameters.environment }}'
+          
+  - deployment: deploy_dbw_clusters
+    displayName: 'Deploy DBW Clusters to ${{ parameters.environment }}'
     condition: succeeded()
     dependsOn: deploy_arm
     pool:
@@ -89,7 +89,6 @@ stages:
     environment: ${{ parameters.environment }}
     variables:
     - group: dataops-iac-cd-output-${{ parameters.environment }}
-      azPowershellVersion: 5.5.0
     strategy:
       runOnce:
         deploy:
@@ -98,34 +97,22 @@ stages:
           - template: step.install-databricks-cli.yml
             parameters:
               azureServiceConnection: ${{ parameters.azureServiceConnection }}
+          
           - task: AzurePowerShell@4
-            displayName: 'Databricks Secrets'
+            displayName: 'Publish Databricks Secrets'
             inputs:
               azureSubscription: ${{ parameters.azureServiceConnection }}
               scriptType: filePath
               scriptPath: infrastructure-as-code/scripts/DatabricksSecrets.ps1
               scriptArguments: >
-                -DeploymentOutputFile "armOutput.json"
+                -Environment ${{ parameters.environment }}
+                -DataLakeName $(dataLakeName)
+                -DatabricksName $(databricksName)
+                -KeyVaultName $(keyVaultName)
+                -DATABRICKS_TOKEN $(DATABRICKS_TOKEN)
               azurePowerShellVersion: 'OtherVersion'
-              preferredAzurePowerShellVersion: $(azPowershellVersion)
+              preferredAzurePowerShellVersion: 5.5.0
 
-  - deployment: deploy_dbw_clusters
-    displayName: 'Deploy DBW Clusters to ${{ parameters.environment }}'
-    condition: succeeded()
-    dependsOn: deploy_databricks_secrets
-    pool:
-      vmImage: 'Ubuntu-20.04'
-    environment: ${{ parameters.environment }}
-    variables:
-    - group: dataops-iac-cd-output-${{ parameters.environment }}
-    strategy:
-      runOnce:
-        deploy:
-          steps:
-          - checkout: self
-          - template: step.install-databricks-cli.yml
-            parameters:
-              azureServiceConnection: ${{ parameters.azureServiceConnection }}
           - task: PowerShell@2
             displayName: Deploy DBW Clusters
             inputs:
