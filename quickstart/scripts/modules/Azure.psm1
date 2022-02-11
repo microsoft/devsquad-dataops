@@ -139,8 +139,8 @@ function AssignApplicationAdministratorAZRole
     )
 
     # Login into Azure AD with current user
-    Connect-AzureAD
-    
+    # Connect-AzureAD
+
     # Fetch role instance
     $role = Get-AzureADDirectoryRole | Where-Object {$_.displayName -eq 'Application administrator'}
 
