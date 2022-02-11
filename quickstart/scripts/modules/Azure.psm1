@@ -76,6 +76,7 @@ function SetupEnvironments {
         Set-AzContext -Subscription $enviroment.subscriptionId
 
         AssignRoleIfNotExists -RoleName "Owner" -ObjectId $servicePrincipal.objectId -SubscriptionId $enviroment.subscriptionId
+        AssignRoleIfNotExists -RoleName "Application administrator" -ObjectId $servicePrincipal.objectId -SubscriptionId $enviroment.subscriptionId
 
         SetupResourceGroups -Environment $envKey -Configuration $Configuration
 		SetupServiceConnection -Environment $enviroment -ServicePrincipal $servicePrincipal -Configuration $Configuration
