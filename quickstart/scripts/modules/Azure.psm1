@@ -155,7 +155,14 @@ function AssignApplicationAdministratorAZRole
     }
 
     # Add the SP to role
-    Add-AzureADDirectoryRoleMember -ObjectId $role.ObjectId  -RefObjectId $ObjectId
+    try {
+        Add-AzureADDirectoryRoleMember -ObjectId $role.ObjectId  -RefObjectId $ObjectId
+        LogInfo -Message "Service Principal add into Role Application administrator with success!"
+    }
+    catch { 
+        LogInfo -Message "Service Principal already have Application administrator role."
+    }
+    
 }
 
 function AssignRoleIfNotExists 
