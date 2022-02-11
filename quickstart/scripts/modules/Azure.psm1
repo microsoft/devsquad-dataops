@@ -76,7 +76,7 @@ function SetupEnvironments {
         Set-AzContext -Subscription $enviroment.subscriptionId
 
         AssignRoleIfNotExists -RoleName "Owner" -ObjectId $servicePrincipal.objectId -SubscriptionId $enviroment.subscriptionId
-        AssignRoleIfNotExists -RoleName "Application administrator" -ObjectId $servicePrincipal.objectId -SubscriptionId $enviroment.subscriptionId
+        AssignApplicationAdministratorAZRole -ObjectId $servicePrincipal.objectId
 
         SetupResourceGroups -Environment $envKey -Configuration $Configuration
 		SetupServiceConnection -Environment $enviroment -ServicePrincipal $servicePrincipal -Configuration $Configuration
@@ -128,6 +128,31 @@ function CreateOrGetResourceGroup
     }
 
 	return $resourceGroup
+}
+
+function AssignApplicationAdministratorAZRole
+{
+    [cmdletbinding()]
+	[OutputType([void])]
+    param (
+        [Parameter(Mandatory)] [string] $ObjectId
+    )
+
+    # Fetch role instance
+    $role = Get-AzureADDirectoryRole | Where-Object {$_.displayName -eq 'Application administrator'}
+
+    # If role instance does not exist, instantiate it based on the role template
+    if ($role -eq $null) {
+        # Instantiate an instance of the role template
+        $roleTemplate = Get-AzureADDirectoryRoleTemplate | Where-Object {$_.displayName -eq 'Application Administrator'}
+        Enable-AzureADDirectoryRole -RoleTemplateId $roleTemplate.ObjectId
+
+        # Fetch role
+        $role = Get-AzureADDirectoryRole | Where-Object {$_.displayName -eq 'Application Administrator'}
+    }
+
+    # Add the SP to role
+    Add-AzureADDirectoryRoleMember -ObjectId $role.ObjectId  -RefObjectId $ObjectId
 }
 
 function AssignRoleIfNotExists 
