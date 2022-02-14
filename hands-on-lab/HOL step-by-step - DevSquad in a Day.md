@@ -94,7 +94,7 @@ In this task you will explore and understand the folder structure, navigating th
 
 To proceed with the execution of the other exercises below, you must understand the structure of the "infrastructure-as-code" folder.
 
-![infrastructure as code](./media/infrastructure-as-code-folder.PNG)
+![infrastructure as code](./media/infrastructure-as-code-folder.png)
 
 ```
 |infrastructure-as-code| ---> Main folder
@@ -154,7 +154,7 @@ To proceed with the execution of the other exercises below, you must understand 
 
 ##### *File: azuredeploy.json*
 
-![infrastructure-folder](./media/iac-folder-infrastructure.PNG)
+![infrastructure-folder](./media/iac-folder-infrastructure.png)
 
 Main template, with declared parameters, variables and resources. Here we use linkedTemplates.
 >*NOTE*: We have the option of using separate parameter files as a good practice when using IaC templates, without the need to change directly in the main template.
@@ -170,7 +170,7 @@ In linkedTemplates we have templates with "parts" of declared resources that are
 
 #### **Sub-Folders and Files: linkedTemplates**
 
-![linkedTemplate-sub-folders](./media/iac-folder-linkedtemplates-subfolders.PNG)
+![linkedTemplate-sub-folders](./media/iac-folder-linkedtemplates-subfolders.png)
 
 ##### *File: template.json (subfolders 1, 2, 3)*
 
@@ -182,7 +182,7 @@ For each subfolder **(1, 2, 3)** we have this file "similar" to the `azuredeploy
 
 Example of an Azure Data Factory declaration in a template.
 
-![lkd-template-compute](./media/iac-linkedtemplates-template-compute.PNG)
+![lkd-template-compute](./media/iac-linkedtemplates-template-compute.png)
 
 #### **File: compute.json, data.json (subfolder 4)**
 
@@ -194,7 +194,7 @@ To apply a correct role and permission to a resource, Azure uses features from A
 
 Example of a resource declaration in this template.
 
-![iac-service-principal](./media/iac-service-principal.PNG)
+![iac-service-principal](./media/iac-service-principal.png)
 
 
 #### **Folder: parameters**
@@ -206,18 +206,18 @@ Parameters folder and directory with templates files with parameters and values 
 
 Example of a parameters declaration in this template.
 
-![iac-parameters](./media/parameters-dev-json.PNG)
+![iac-parameters](./media/parameters-dev-json.png)
 
 
 #### **Folder [databricks]**
 
 In this file you will find declared settings related to the Databricks resource which will be used in executing the scripts (below) and provisioning your infrastructure, as well as its necessary resources.
 
-!['iac-databricks'](./media/iac-folder-databricks.PNG)
+!['iac-databricks'](./media/iac-folder-databricks.png)
 
 Example of a configuration declaration in this template.
 
-!['iac-databricks-corejson'](./media/iac-file-corejson-databricks.PNG)
+!['iac-databricks-corejson'](./media/iac-file-corejson-databricks.png)
 
 #### **Folder [scripts]**
 
@@ -226,7 +226,7 @@ Some scripts are referenced with ARM templates, "calling" them to perform some n
 
 There is a correct order for these scripts execution to succeed, as described in **Exercise 3**, in the IaC CI/CD discussion.
 
-!['iac-scripts'](./media/iac-scripts.PNG)
+!['iac-scripts'](./media/iac-scripts.png)
 
 
 #### **Folder [tests]**
@@ -331,12 +331,12 @@ We are working with three environments `dev`, `qa` and `prod`, and this environm
 
 >**Setting Azure Devops Project:** before starting to execute the pipelines and the git workflow, it is necessary to create environments in Azure Devops for the IaC and Databricks environments. Environments can be created inside the Pipelines menu of Azure DevOps.
 
-![](./media/environments-qa-prod.PNG)
+![](./media/environments-qa-prod.png)
 
 
 >**Note**: Create Environments for `dev`, `qa`, `prod`, `databricks-dev`, `databricks-qa` and `databricks-prod` in Azure Devops before making any Pull Request (PR).
     
-![](./media/environments.PNG)
+![](./media/environments.png)
 
 ### **Task 3: Git workflow**
 
@@ -412,11 +412,11 @@ Now we will start to work with the pipelines and understand the funcionality tha
 
 >**Note**: `dataops` word as part of the name is the alias that you assign to the project.
 
-![](./media/pipelines.PNG)
+![](./media/pipelines.png)
 
 In the quickstart the process create the pipelines to IaC, the customized library dataops, databricks and azure data factory.  Now we will see the IaC pipelines.
 
-![](./media/Pipelines-IaC.PNG)
+![](./media/Pipelines-IaC.png)
 
 >**Note**: `dataops` word as part of the name is the alias that you assign to the project.
 
@@ -424,22 +424,22 @@ In the quickstart the process create the pipelines to IaC, the customized librar
 
 ##### **Execute CI Pipeline:** 
 
-![](./media/Run-CIPipeline-Iac.PNG)
+![](./media/Run-CIPipeline-Iac.png)
 
-![](./media/CI-Iac.PNG)
+![](./media/CI-Iac.png)
 
 This pipeline was executed manually, but it has been configurated in the branch policies to start automatically if changes are made in the folder `infrastructure-as-code`:
 
-![](./media/branch-policies-builder.PNG)
+![](./media/branch-policies-builder.png)
 
 ##### **Execute CD Pipeline**: 
 
-![](./media/Run-CDPipeline-Iac.PNG)
+![](./media/Run-CDPipeline-Iac.png)
 
 The CD pipeline will be triggered automatically after the CI Pipeline. After executing the IaC CD, check your Azure Devops environments to see how it changes. When this pipeline finishes its execution, also validate if you see the Azure resources created in the resource groups of the development environment.
 
-![](./media/RGComputeDev.PNG)
-![](./media/RGDataDev.PNG)
+![](./media/RGComputeDev.png)
+![](./media/RGDataDev.png)
 
 >**Note**: Name of the Resource Groups and Resources depends on the custom alias defined by yourself and also the suscription id.
 
@@ -464,7 +464,7 @@ You should to change `Key Valt Name` with your information and execute this scri
 databricks secrets list --scope dataops
 ```
 
-![](./media/scope-dataops.PNG)
+![](./media/scope-dataops.png)
 
 ### **Task 2: Exploring Azure Data Services**
 
@@ -516,7 +516,7 @@ In this task, you will explore the Azure Blob Storage instance.
 
 Now, we need to create the custom library that we use in the notebooks of databricks, then we have the CI and CD Pipeline for the lib.  When these pipelines finished the execution, you could see the artifact in the feed `lib-packages` that you create in the [step 3 of the quickstart](../quickstart/docs/3a-azdo-setup-basic.md).
 
-![](./media/Pipelines-lib.PNG)
+![](./media/Pipelines-lib.png)
 
 >**Note**: `vic` word as part of the name is the alias that you assign to the project.
 
@@ -524,11 +524,11 @@ Now, we need to create the custom library that we use in the notebooks of databr
 
 Execute the CI pipeline of the library to create the version `alpha` of the library.
 
-![](./media/Run-CIPipeline-lib.PNG)
+![](./media/Run-CIPipeline-lib.png)
 
 When this pipeline finished in artifacts you can see the version.
 
-![](./media/alpbaVersionlib.PNG)
+![](./media/alpbaVersionlib.png)
 
 >**Note**: The number in the version is variable depends of the Build Id.
 
@@ -536,11 +536,11 @@ When this pipeline finished in artifacts you can see the version.
 
 In the CD Pipeline you can to see the different stages by environment, we will to execute the CD Pipeline to left the version `beta` enable to be used in the databricks notebook.
 
-![](./media/Run-CDPipeline-lib.PNG)
+![](./media/Run-CDPipeline-lib.png)
 
 When this pipeline finished in artifacts you can see the version.
 
-![](./media/betaVersionlib.PNG)
+![](./media/betaVersionlib.png)
 
 >**Note**: The number in the version is variable depends of the Build Id.
 
@@ -548,49 +548,49 @@ When this pipeline finished in artifacts you can see the version.
 
 Now you could see the pipelines that work with databricks in the aspect of the custom library and the notebooks that will be executed in databricks.
 
-![](./media/Pipelines-databricks.PNG)
+![](./media/Pipelines-databricks.png)
 
 ### **CI Pipeline**
 
 This pipeline make the check of the notebooks in databricks.
 
-![](./media/Run-CIPipeline-Databricks.PNG)
+![](./media/Run-CIPipeline-Databricks.png)
 
 ### **CD Pipeline Lib to Databricks**
 
 This pipeline upload the current version library to the `dbfs` of databriks.
 
-![](./media/Run-CDPipeline-Databricks-Lib.PNG)
+![](./media/Run-CDPipeline-Databricks-Lib.png)
 
 You could see in the environments that the status in `databricks-dev` changed.
 
-![](./media/environments-DEV-Databricks.PNG)
+![](./media/environments-DEV-Databricks.png)
 
 ### **CD Pipeline Notebooks to Databricks**
 
 This pipeline upload the current notebooks to the shared folder in databricks.
 
-![](./media/Run-CDPipeline-Databricks-Notebooks.PNG)
+![](./media/Run-CDPipeline-Databricks-Notebooks.png)
 
 You could see in the environments that the status in `databricks-dev` changed.
 
-![](./media/environments-DEV-Databricks-Notebooks.PNG)
+![](./media/environments-DEV-Databricks-Notebooks.png)
 
 ### **Task 3: Executing CI/CD Pipeline Azure Data Factory**
 
 This pipeline check the integrity on the data and trigger the ADF Pipeline identifying some problems in it but this process doesnt wait that this pipeline finished.
 
-![](./media/Pipelines-ADF.PNG)
+![](./media/Pipelines-ADF.png)
 
 >**Note**: The first time that this pipeline is executed it fails, because it is necessary that ADF pipeline finished sucessful the first time to create some folders in the container in the datalake that are necessaries to check the integrity of the data.
 
-![](./media/Run-CDPipeline-ADF.PNG)
+![](./media/Run-CDPipeline-ADF.png)
 
 When the ADF Pipeline finished, you could execute again this CD Pipeline. you can check it, open ADF resource in the Azure Portal, and the in monitor the pipeline running.
 
-![](./media/ADFPipelineRunning.PNG)
+![](./media/ADFPipelineRunning.png)
 
-![](./media/Run-CDPipeline-ADFGood.PNG)
+![](./media/Run-CDPipeline-ADFGood.png)
 
 Now that you understand the workflow, you can start with the other environments, and when the pipeline in ADF finished you can run again the pipeline to get the sucessful execution.
 
@@ -681,7 +681,7 @@ In this task, you will explore the `adf-dataops-eastus2-dev` Azure Data Factory 
 
 3. You will find the pipeline `ProcessFlightDelaysData` and 6 datasets. The pipeline contains the activities to copy data from the XXXXXXXSource datasets into the XXXXXXSink datasets.
 
-!['Author Hub'](./media/adf-dataops-eastus2-dev-author.PNG)
+!['Author Hub'](./media/adf-dataops-eastus2-dev-author.png)
 
 4. Open the pipeline `ProcessFlightDelaysData` and review the settings of the activities:
 - Copy Airport Codes Data
@@ -690,39 +690,39 @@ In this task, you will explore the `adf-dataops-eastus2-dev` Azure Data Factory 
 - Mount ADLS
 - Transform Flights Data
 
-!['Pipeline'](./media/adf-dataops-eastus2-dev-process-data.PNG)
+!['Pipeline'](./media/adf-dataops-eastus2-dev-process-data.png)
 
 4.1. Select the Copy Airport Codes Data (1). Select the Source Tab (2) and Click on Open to see the settings of the AirportCodesSource dataset (3).
 
-!['Copy Airport Codes Data'](./media/copy-airport-codes.PNG)
+!['Copy Airport Codes Data'](./media/copy-airport-codes.png)
 
 4.2  Select Edit to review the Azure blob Storage linked service (1). View the file path that you want to copy (2). Select Browse to navigate into the `stgdataopseastus2dev` Azure Blob Storage instance (3) and Select the file path.  
 
-!['Airport Codes Source dataset'](./media/airport-codes-source-csv.PNG)
+!['Airport Codes Source dataset'](./media/airport-codes-source-csv.png)
 
 4.3 Navigate back to the Copy Airport Codes Data Activity in the pipeline ProcessFlightDelaysData. Select the Sink tab (1) and Click on Open to see the setting of the AirportCodesSink dataset (2).
 
-!['Sink'](./media/copy-airport-codes-sink.PNG)
+!['Sink'](./media/copy-airport-codes-sink.png)
 
 4.4. Select Edit to review the Azure Data Lake linked service (1). View the layer  where you will copy the data (2). Select Browse to navigate into the lakedataopseastus2dev Azure Data Lake instance (3) and select the  layer (4).  
 
-!['Airport dataset'](./media/airport-codes-sync.PNG)
+!['Airport dataset'](./media/airport-codes-sync.png)
 
 5. Repeat the steps 4.1 - 4.4 for the Copy Flights Delays Data and Copy Flights Weather Data activities.
 
 6. Navigate back to the pipeline and select the notebook activity `Mount ADLS`. Select the Azure Databricks tab (1) and click on Edit to view the settings of the linked service of the Databricks instance.
 
-!['notebook activity'](./media/mount-adls-1.PNG)
+!['notebook activity'](./media/mount-adls-1.png)
 
 7. Select the settings tab of the notebook activity to configure the notebook to run in the databricks instance (1). In the Notebook path, indicate the path of the notebook to run (2). Select Browse if you want to explore the available notebooks (3) and explore the available folders in the Databricks instance (4). Select Open to open the Databricks workspace. 
 
 8. Repeat the steps 6 and 7 to explore the Notebook Activity Transform Flight Data. 
 
-!['notebook activity'](./media/mount-adls-2.PNG)
+!['notebook activity'](./media/mount-adls-2.png)
 
 9. OPTIONAL - Navigate back to the pipeline and run it. 
 
-!['Execute pipeline'](./media/pipeline-trigger.PNG)
+!['Execute pipeline'](./media/pipeline-trigger.png)
 
 9.1 Navigate to the Data Lake. Follow the file path that you indicated in the step 4.4. You will find the CSV file just copied. 
 
@@ -991,31 +991,31 @@ First review how the DevOps pipeline was defined:
 
 1. Go to the repositoy that was created as part the Quickstart and open the templates folder, were you will see 3 yml files.
 
-!['Templastes Folder'](./media/templates-folder.PNG)
+!['Templastes Folder'](./media/templates-folder.png)
 
 2. Open the test.yml file by clicking on it
 
-!['Test yml'](./media/select-test-yml.PNG)
+!['Test yml'](./media/select-test-yml.png)
 
 3. Indentify the script activity that runs the behave modulo and identify the different paramentes that are set before it is called
 
-!['behave activity'](./media/behave-script.PNG)
+!['behave activity'](./media/behave-script.png)
 
 Now lets review the DevOps pipeline execution results:
   
 1. Go to DevOps Pipelines from the project defined on Execise 4 and select the Pipeline with the name "*\<your lab prefix>*-adf-cd" by clicking on it.
 
-!['Last Pipeline Run'](./media/last-pipeline-run.PNG) 
+!['Last Pipeline Run'](./media/last-pipeline-run.png) 
 
 2. You will see a list of resent runs of the selected pipeline, click on the lates run
 
 3. At the stages secction select the "Run behavior tests" stage
 
-!['Pipeline Stages'](./media/pipeline-stages-run.PNG) 
+!['Pipeline Stages'](./media/pipeline-stages-run.png) 
   
 4. Review the Azure DevOps execution results for "Run behavior tests"\\"TEST: Run behave features"
 
-!['Pipeline Results'](./media/pipeline-run-results.PNG)
+!['Pipeline Results'](./media/pipeline-run-results.png)
 
 <p>Here you see the results of running the BDD test using <b>behave</b></p>
 
@@ -1038,27 +1038,27 @@ When the all pipelines were executed in development branch and you validate the 
 
 Open a PR from `develop` to `qa` to promote the code changes to the QA environment. Please wait again for the creation of the QA infrastructure.
 
-![](./media/PRDEV2QA.PNG)
+![](./media/PRDEV2QA.png)
 
 >**Note**: It will be necessary modify branch policies to make the merge only with one reviewer and it can be the owner, click check `Allow requestors to approve their own changes` (only for the laboratory). 
 
-![](./media/branch-policies-own-owner.PNG)
+![](./media/branch-policies-own-owner.png)
 
-![](./media/PRDEV2QA-1.PNG)
+![](./media/PRDEV2QA-1.png)
 
 When you make the merge you could be that the CI Pipeline of IaC start automatically.
 
-![](./media/PRDEV2QA-2.PNG)
+![](./media/PRDEV2QA-2.png)
 
 >**Note:** Remember to **[configure the scope in Databricks for qa environment](#databricks-secrets-scope)** and run the pipeline of Lib for `qa` environment.
 
-![](./media/rcVersionlib.PNG)
+![](./media/rcVersionlib.png)
 
 ### **Task 2: Promote QA to Prod**
 
 Repeat the process one last time, opening a **PR** from `qa` to `main` to promote the code changes to the **PROD environment**. Please wait again for the creation of the PROD infrastructure.  In artifact you can see the final version of the library for production.
 
-![](./media/Versionlib.PNG)
+![](./media/Versionlib.png)
 
 ### Additional references
 

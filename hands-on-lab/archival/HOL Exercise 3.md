@@ -55,12 +55,12 @@
 
     **Setting Azure Devops Project:** before to start to execute the pipelines and execute the git workflow, it is necessary to create the environments in Azure Devops for the IaC and Databricks environments.
 
-    ![](media/environments-qa-prod.PNG)
+    ![](media/environments-qa-prod.png)
 
 
     >**Note**: Create Environments to `qa`, `prod`, `databricks-qa` and `databricks-prod` in Azure Devops before to make any Pull Request (PR).
     
-    ![](media/environments.PNG)
+    ![](media/environments.png)
 
 
     ## Infrastructure as code git workflow
@@ -126,11 +126,11 @@
 
     >**Note**: `dataops` word as part of the name is the alias that you assign to the project.
 
-    ![](./media/pipelines.PNG)
+    ![](./media/pipelines.png)
 
     In the quickstart the process create the pipelines to IaC, the customized library dataops, databricks and azure data factory.  Now we will see the IaC pipelines.
 
-    ![](./media/Pipelines-IaC.PNG)
+    ![](./media/Pipelines-IaC.png)
 
     >**Note**: `dataops` word as part of the name is the alias that you assign to the project.
 
@@ -140,23 +140,23 @@
 
     ## **Run CI Pipeline**: 
 
-    ![](./media/Run-CIPipeline-Iac.PNG)
+    ![](./media/Run-CIPipeline-Iac.png)
 
-    ![](./media/CI-Iac.PNG)
+    ![](./media/CI-Iac.png)
 
     This pipeline was executed manually, but it has in the branch policies configurated to start automatically if any change occur in branch in the folder `infrastructure-as-code`:
 
-    ![](./media/branch-policies-builder.PNG)
+    ![](./media/branch-policies-builder.png)
 
 
     ## **Run CD Pipeline**: 
 
-    ![](./media/Run-CDPipeline-Iac.PNG)
+    ![](./media/Run-CDPipeline-Iac.png)
 
     When you execute the CD Pipeline of IaC you can see in the Azure Devops that you environment status will change, when this pipeline finished the execution, you can validate if you see the resources created in the resource group of development environment.
 
-    ![](./media/RGComputeDev.PNG)
-    ![](./media/RGDataDev.PNG)
+    ![](./media/RGComputeDev.png)
+    ![](./media/RGDataDev.png)
 
     >**Note**: Name of the Resource Groups and Resources depends of the alias and the suscription id.
     
@@ -166,13 +166,13 @@
     databricks secrets list --scope dataops
     ```
 
-    ![](./media/scope-dataops.PNG)
+    ![](./media/scope-dataops.png)
 
     # CI/CD Pipeline Library
 
     Now, we need to create the custom library that we use in the notebooks of databricks, then we have the CI and CD Pipeline for the lib.  When these pipelines finished the execution, you could see the artifact in the feed `lib-packages` that you create in the [step 3 of the quickstart](../quickstart/docs/3a-azdo-setup-basic.md).
 
-    ![](./media/Pipelines-lib.PNG)
+    ![](./media/Pipelines-lib.png)
 
     >**Note**: `vic` word as part of the name is the alias that you assign to the project.
 
@@ -180,11 +180,11 @@
 
     Execute the CI pipeline of the library to create the version `alpha` of the library.
 
-    ![](./media/Run-CIPipeline-lib.PNG)
+    ![](./media/Run-CIPipeline-lib.png)
 
     When this pipeline finished in artifacts you can see the version.
 
-    ![](./media/alpbaVersionlib.PNG)
+    ![](./media/alpbaVersionlib.png)
 
     >**Note**: The number in the version is variable depends of the Build Id.
 
@@ -192,11 +192,11 @@
 
     In the CD Pipeline you can to see the different stages by environment, we will to execute the CD Pipeline to left the version `beta` enable to be used in the databricks notebook.
 
-    ![](./media/Run-CDPipeline-lib.PNG)
+    ![](./media/Run-CDPipeline-lib.png)
 
     When this pipeline finished in artifacts you can see the version.
 
-    ![](./media/betaVersionlib.PNG)
+    ![](./media/betaVersionlib.png)
 
     >**Note**: The number in the version is variable depends of the Build Id.
 
@@ -204,49 +204,49 @@
 
     Now you could see the pipelines that work with databricks in the aspect of the custom library and the notebooks that will be executed in databricks.
 
-    ![](./media/Pipelines-databricks.PNG)
+    ![](./media/Pipelines-databricks.png)
 
     ## CI Pipeline
 
     This pipeline make the check of the notebooks in databricks.
 
-    ![](./media/Run-CIPipeline-Databricks.PNG)
+    ![](./media/Run-CIPipeline-Databricks.png)
 
     ## CD Pipeline Lib
 
     This pipeline upload the current version library to the `dbfs` of databriks.
 
-    ![](./media/Run-CDPipeline-Databricks-Lib.PNG)
+    ![](./media/Run-CDPipeline-Databricks-Lib.png)
 
     You could see in the environments that the status in `databricks-dev` changed.
 
-    ![](./media/environments-DEV-Databricks.PNG)
+    ![](./media/environments-DEV-Databricks.png)
 
     ## CD Pipeline Notebooks
 
     This pipeline upload the current notebooks to the shared folder in databricks.
 
-    ![](./media/Run-CDPipeline-Databricks-Notebooks.PNG)
+    ![](./media/Run-CDPipeline-Databricks-Notebooks.png)
 
     You could see in the environments that the status in `databricks-dev` changed.
 
-    ![](./media/environments-DEV-Databricks-Notebooks.PNG)
+    ![](./media/environments-DEV-Databricks-Notebooks.png)
 
     # CD Pipeline ADF
 
     This pipeline check the integrity on the data and trigger the ADF Pipeline identifying some problems in it but this process doesnt wait that this pipeline finished.
 
-    ![](./media/Pipelines-ADF.PNG)
+    ![](./media/Pipelines-ADF.png)
 
     >**Note**: The first time that this pipeline is executed it fails, because it is necessary that ADF pipeline finished sucessful the first time to create some folders in the container in the datalake that are necessaries to check the integrity of the data.
 
-    ![](./media/Run-CDPipeline-ADF.PNG)
+    ![](./media/Run-CDPipeline-ADF.png)
 
     When the ADF Pipeline finished, you could execute again this CD Pipeline. you can check it, open ADF resource in the Azure Portal, and the in monitor the pipeline running.
 
-    ![](./media/ADFPipelineRunning.PNG)
+    ![](./media/ADFPipelineRunning.png)
 
-    ![](./media/Run-CDPipeline-ADFGood.PNG)
+    ![](./media/Run-CDPipeline-ADFGood.png)
 
     Now that you understand the workflow, you can start with the other environments.
 
@@ -256,25 +256,25 @@
 
     Open a PR from `develop` to `qa` to promote the code changes to the QA environment. Please wait again for the creation of the QA infrastructure.
 
-    ![](./media/PRDEV2QA.PNG)
+    ![](./media/PRDEV2QA.png)
 
     >**Note**: It will be necessary modify branch policies to make the merge only with one reviewer and it can be the owner, click check `Allow requestors to approve their own changes` (only for the laboratory). 
 
-    ![](./media/branch-policies-own-owner.PNG)
+    ![](./media/branch-policies-own-owner.png)
 
-    ![](./media/PRDEV2QA-1.PNG)
+    ![](./media/PRDEV2QA-1.png)
 
     When you make the merge you could be that the CI Pipeline of IaC start automatically.
 
-    ![](./media/PRDEV2QA-2.PNG)
+    ![](./media/PRDEV2QA-2.png)
 
     >**Note:** Remember to configure the scope and run the pipeline of Lib for `qa` environment.
 
-     ![](./media/rcVersionlib.PNG)
+     ![](./media/rcVersionlib.png)
 
     Repeat the process one last time, opening a PR from `qa` to `main` to promote the code changes to the PROD environment. Please wait again for the creation of the PROD infrastructure.  In artifact you can see the final version of the library for production.
 
-    ![](./media/Versionlib.PNG)
+    ![](./media/Versionlib.png)
 
   <br/><br/>
     

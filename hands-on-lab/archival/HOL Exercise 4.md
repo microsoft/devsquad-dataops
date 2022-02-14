@@ -182,7 +182,7 @@ In this task, you will explore the Azure Databricks instance dbw-dataops-eastus2
 
 3.2 Navigate back to the notebook named 01 ADLS Mount and attach the cluster
 
-!['Creating a cluster'](media/dbw-dataops-attaching-cluster.png) .PNG 
+!['Creating a cluster'](media/dbw-dataops-attaching-cluster.png) 
 
 4. Select Run Cell or Crt + Enter to run the cell and amount the Azure Data Lake. 
 This code is to mount the Azure Data Lake Storage Gen2 account to Databricks File System. For the authentication, it uses Key Vault and OAuth 2.0.
@@ -229,7 +229,7 @@ In this task, you will explore the adf-dataops-eastus2-dev Azure Data Factory in
 
 3. You will find the pipeline ProcessFlightDelaysData and 6 datasets. The pipeline contains the activities to copy data from the XXXXXXXSource datasets into the XXXXXXSink datasets.
 
-!['Author Hub'](media/adf-dataops-eastus2-dev-author.PNG)
+!['Author Hub'](media/adf-dataops-eastus2-dev-author.png)
 
 4. Open the pipeline ProcessFlightDelaysData and review the settings of the activities:
 - Copy Airport Codes Data
@@ -238,39 +238,39 @@ In this task, you will explore the adf-dataops-eastus2-dev Azure Data Factory in
 - Mount ADLS
 - Transform Flights Data
 
-!['Pipeline'](media/adf-dataops-eastus2-dev-process-data.PNG)
+!['Pipeline'](media/adf-dataops-eastus2-dev-process-data.png)
 
 4.1. Select the Copy Airport Codes Data (1). Select the Source Tab (2) and Click on Open to see the settings of the AirportCodesSource dataset (3).
 
-!['Copy Airport Codes Data'](media/copy-airport-codes.PNG)
+!['Copy Airport Codes Data'](media/copy-airport-codes.png)
 
 4.2  Select Edit to review the Azure blob Storage linked service (1). View the file path that you want to copy (2). Select Browse to navigate into the stgdataopseastus2dev Azure Blob Storage instance (3) and Select the file path.  
 
-!['Airport Codes Source dataset'](media/airport-codes-source-csv.PNG)
+!['Airport Codes Source dataset'](media/airport-codes-source-csv.png)
 
 4.3 Navigate back to the Copy Airport Codes Data Activity in the pipeline ProcessFlightDelaysData. Select the Sink tab (1) and Click on Open to see the setting of the AirportCodesSink dataset (2).
 
-!['Sink'](media/copy-airport-codes-sink.PNG)
+!['Sink'](media/copy-airport-codes-sink.png)
 
 4.4. Select Edit to review the Azure Data Lake linked service (1). View the layer  where you will copy the data (2). Select Browse to navigate into the lakedataopseastus2dev Azure Data Lake instance (3) and select the  layer (4).  
 
-!['Airport dataset'](media/airport-codes-sync.PNG)
+!['Airport dataset'](media/airport-codes-sync.png)
 
 5. Repeat the steps 4.1 - 4.4 for the Copy Flights Delays Data and Copy Flights Weather Data activities.
 
 6. Navigate back to the pipeline and select the notebook activity Mount ADLS. Select the Azure Databricks tab (1) and click on Edit to view the settings of the linked service of the Databricks instance.
 
-!['Notebook activity'](media/mount-adls-1.PNG )
+!['Notebook activity'](media/mount-adls-1.png )
 
 7. Select the settings tab of the notebook activity to configure the notebook to run in the databricks instance (1). In the Notebook path, indicate the path of the notebook to run (2). Select Browse if you want to explore the available notebooks (3) and explore the available folders in the Databricks instance (4). Select Open to open the Databricks workspace. 
 
 8. Repeat the steps 6 and 7 to explore the Notebook Activity Transform Flight Data. 
 
-!['Notebook activity'](media/mount-adls-2.PNG)
+!['Notebook activity'](media/mount-adls-2.png)
 
 9. OPTIONAL - Navigate back to the pipeline and run it. 
 
-!['Execute pipeline'](media/pipeline-trigger.PNG)
+!['Execute pipeline'](media/pipeline-trigger.png)
 
 9.1 Navigate to the Data Lake. Follow the file path that you indicated in the step 4.4. You will find the CSV file just copied. 
 
@@ -292,7 +292,7 @@ In this task you will explore and understand the folder structure and scripts, t
 
 To proceed with the execution of the other exercises below, you must understand the structure of the "infrastructure-as-code" folder, as well as its content of templates and scripts.
 
-!['infrastructure as code'](media/infrastructure-as-code-folder.PNG)
+!['infrastructure as code'](media/infrastructure-as-code-folder.png)
 
 ```
 |infrastructure-as-code|
@@ -809,7 +809,7 @@ Main template, with declared parameters, variables and resources. Here we use li
 In linkedTemplates we have templates with "parts" of declared resources that are not declared in the main Template, in order to reuse and can link with other templates.
 *NOTE*: linkedTemplates is a widely used practice, for better organization and handling of templates of different types of resources and being able to link them to any template.
 
-!['compute-linkedTemplate'](media/compute-template-json.PNG)
+!['compute-linkedTemplate'](media/compute-template-json.png)
 
 # Folder: parameters
 ```
@@ -825,7 +825,7 @@ In linkedTemplates we have templates with "parts" of declared resources that are
 Parameters folder and directory with templates files with parameters and values to be used by linkedTemplates and main template, without the need to change directly in the main template.
 *NOTE*: Using templates parameters is optional and can be used directly in the main template. However, following a model of good practice, the use separately is indicated.
 
-!['parameters-dev-json'](media/parameters-dev-json.PNG)
+!['parameters-dev-json'](media/parameters-dev-json.png)
 
 ### Task 2: Creating a new sandbox environment with Powershell
 
@@ -988,31 +988,31 @@ First review how the DevOps pipeline was defined:
 
   1. Go to the repositoy that was created as part the Exercise 3, Task # and open the templates folder, were you will see 3 yml files.
 
-!['Templastes Folder'](media/templates-folder.PNG)
+!['Templastes Folder'](media/templates-folder.png)
 
   2. Open the test.yml file by clicking on it
 
-!['Test yml'](media/select-test-yml.PNG)
+!['Test yml'](media/select-test-yml.png)
 
   3. Indentify the script activity that runs the behave modulo and identify the different paramentes that are set before it is called
 
-!['Behave activity'](media/behave-script.PNG)
+!['Behave activity'](media/behave-script.png)
 
 Now lets review the DevOps pipeline execution results:
   
   1. Go to DevOps Pipelines from the project defined on Execise 3 and select the Pipeline with the name "*\<your lab prefix>*-adf-cd" by clciking on it.
 
-!['Last Pipeline Run'](media/last-pipeline-run.PNG) 
+!['Last Pipeline Run'](media/last-pipeline-run.png) 
 
   2. You will see a list of resent runs of the selected pipeline, click on the lates run
 
   3. At the stages secction select the "Run behavior tests" stage
 
- !['Pipeline Stages'](media/pipeline-stages-run.PNG) 
+ !['Pipeline Stages'](media/pipeline-stages-run.png) 
   
   4. Review the Azure DevOps execution results for "Run behavior tests"\\"TEST: Run behave features"
 
-  !['Pipeline Results'](media/pipeline-run-results.PNG)
+  !['Pipeline Results'](media/pipeline-run-results.png)
 
   <p>Here you see the results of running the BDD test using <b>behave</b></p>
 
