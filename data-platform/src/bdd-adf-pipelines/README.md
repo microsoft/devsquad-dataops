@@ -70,7 +70,7 @@ behave
 
 The result should look similar to the next image:
 
-![Behave Results](/lab-files/media/behave-results.PNG)
+![Behave Results](/lab-files/media/behave-results.png)
 
 ## References
 

@@ -20,7 +20,7 @@ In this task you will explore and understand the folder structure and scripts, t
 
 To proceed with the execution of the other exercises below, you must understand the structure of the "infrastructure-as-code" folder, as well as its content of templates and scripts.
 
-!['infrastructure as code'](media/infrastructure-as-code-folder.PNG)
+!['infrastructure as code'](media/infrastructure-as-code-folder.png)
 
 ```
 |infrastructure-as-code| ---> Principal folder
@@ -80,7 +80,7 @@ To proceed with the execution of the other exercises below, you must understand 
 
 ## File: azuredeploy.json
 
-!['infrastructure-folder'](media/iac-folder-infrastructure.PNG)
+!['infrastructure-folder'](media/iac-folder-infrastructure.png)
 
 Main template, with declared parameters, variables and resources. Here we use linkedTemplates.
 *NOTE*: We have the option of using separate parameter files as a good practice when using IaC templates, without the need to change directly in the main template.
@@ -93,7 +93,7 @@ To deploy complex solutions, you can break your Azure Resource Manager template 
 
 ## Folder: linkedTemplates
 
-!['linkedTemplate-folder'](media/iac-folder-linkedtemplates.PNG)
+!['linkedTemplate-folder'](media/iac-folder-linkedtemplates.png)
 
 In linkedTemplates we have templates with "parts" of declared resources that are not declared in the main Template, in order to reuse and can link with other templates.
 *NOTE*: linkedTemplates is a widely used practice, for better organization and handling of templates of different types of resources and being able to link them to any template.
@@ -101,7 +101,7 @@ In linkedTemplates we have templates with "parts" of declared resources that are
 
 ## Sub-Folders and Files: linkedTemplates
 
-!['linkedTemplate-sub-folders'](media/iac-folder-linkedtemplates-subfolders.PNG)
+!['linkedTemplate-sub-folders'](media/iac-folder-linkedtemplates-subfolders.png)
 
 ## File: template.json (subfolders 1, 2, 3)
 
@@ -113,7 +113,7 @@ ML resources: Machine Learning Services
 
 Example of a resource declaration in this template.
 
-!['lkd-template-compute'](media/iac-linkedtemplates-template-compute.PNG)
+!['lkd-template-compute'](media/iac-linkedtemplates-template-compute.png)
 
 ## File: compute.json, data.json (subfolder 4)
 
@@ -127,30 +127,30 @@ An Azure service principal is an identity created for use with applications, hos
 
 Example of a resource declaration in this template.
 
-!['iac-service-principal'](media/iac-service-principal.PNG)
+!['iac-service-principal'](media/iac-service-principal.png)
 
 
 ## Folder: parameters
 
-!['parameters-folder'](media/iac-folder-parameters.PNG)
+!['parameters-folder'](media/iac-folder-parameters.png)
 
 Parameters folder and directory with templates files with parameters and values to be used by linkedTemplates and main template, without the need to change directly in the main template.
 *NOTE*: Using templates parameters is optional and can be used directly in the main template. However, following a model of good practice, the use separately is indicated.
 
 Example of a parameters declaration in this template.
 
-!['iac-parameters'](media/parameters-dev-json.PNG)
+!['iac-parameters'](media/parameters-dev-json.png)
 
 
 # Folder [databricks]
 
 In this file you will find declared settings related to the Databricks resource which will be used in executing the scripts (below) and provisioning your infrastructure, as well as its necessary resources.
 
-!['iac-databricks'](media/iac-folder-databricks.PNG)
+!['iac-databricks'](media/iac-folder-databricks.png)
 
 Example of a configuration declaration in this template.
 
-!['iac-databricks-corejson'](media/iac-file-corejson-databricks.PNG)
+!['iac-databricks-corejson'](media/iac-file-corejson-databricks.png)
 
 # Folder [scripts]
 
@@ -159,7 +159,7 @@ Some scripts are referenced with ARM templates, "calling" them to perform some n
 
 However, we have a correct order for this execution as described in next task.
 
-!['iac-scripts'](media/iac-scripts.PNG)
+!['iac-scripts'](media/iac-scripts.png)
 
 
 # Folder [tests]
@@ -172,14 +172,14 @@ You can practice a little more on this topic in Exercise 5: Testing.
 
 However, we have a correct order for this execution as described in next task.
 
-!['iac-tests'](media/iac-folder-subfolder-tests.PNG)
+!['iac-tests'](media/iac-folder-subfolder-tests.png)
 
 
 ### Task 2: Creating a new sandbox environment with Powershell
 
 In this task you will learn how to create your first sandbox environment, with Azure Powershell scripts.
 
-!['iac-ordem-scripts'](media/iac-ordem-scripts.PNG)
+!['iac-ordem-scripts'](media/iac-ordem-scripts.png)
 
 ### Task 3: Checklist of IaC best practices
 
