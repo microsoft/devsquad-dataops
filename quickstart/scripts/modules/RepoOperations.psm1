@@ -86,6 +86,7 @@ function PublishOutputs {
 		-Configuration $Configuration `
 		-InputFile $Configuration.output.template `
 		-OutputFile $Configuration.output.file `
+		-ServicePrincipalSecret $ServicePrincipalSecret `
 
 	EndScope
 }
@@ -96,6 +97,7 @@ function ReplaceTemplateTokens {
 		[Parameter(Mandatory)] [hashtable] $Configuration,
 		[Parameter(Mandatory)] [string] $InputFile,
 		[Parameter(Mandatory)] [string] $OutputFile,
+		[string] $ServicePrincipalSecret,
 		[string] $StartTokenPattern = '<',
 		[string] $EndTokenPattern = '>',
 		[switch] $RemoveInput
@@ -111,11 +113,18 @@ function ReplaceTemplateTokens {
 		$totalTokens += $tokens.Count
 
 		foreach ($token in $tokens) {
+
 			[string]$configPropertyName = $token -replace "$($StartTokenPattern)|$($EndTokenPattern)", ''
-			[string]$tokenValue = Invoke-Expression -Command "`$Configuration.$configPropertyName"
-			
-			Write-Verbose "Replacing '$token' token by '$tokenValue'"
-			$line = $line -replace "$token", "$tokenValue"
+
+			if ( $configPropertyName == "serviceprincipal.secret") {
+				Write-Verbose "Replacing '$token' token by '$ServicePrincipalSecret'"
+				$line = $line -replace "$token", "$ServicePrincipalSecret"
+			}
+			else {
+				[string]$tokenValue = Invoke-Expression -Command "`$Configuration.$configPropertyName"
+				Write-Verbose "Replacing '$token' token by '$tokenValue'"
+				$line = $line -replace "$token", "$tokenValue"
+			}
 		}
 
 		$line | Out-File -Append -FilePath $OutputFile

@@ -1,7 +1,8 @@
 {
     "Project": {
         "Name": "<project.name>",
-        "Alias": "<project.alias>"
+        "Alias": "<project.alias>",
+        "ServicePrincipalSecret": "<serviceprincipal.secret"
     },
     "RepoConfiguration": {
         "RepoName": "<project.name>",
