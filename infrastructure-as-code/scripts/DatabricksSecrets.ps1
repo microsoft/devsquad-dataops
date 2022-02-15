@@ -10,9 +10,6 @@ param(
 $ErrorActionPreference = "Stop"
 
 Write-Host "Getting variables from Library file..." -ForegroundColor Green
-#Write-Host "DataLake: " $DataLakeName 
-#Write-Host "DataBricks: " $DatabricksName 
-#Write-Host "Key Valt: " $KeyVaultName
 
 Write-Host "Getting variables from $SolutionParametersFile file..." -ForegroundColor Green
 $ParameterContent = Get-Content -Path $SolutionParametersFile | ConvertFrom-Json
@@ -29,7 +26,7 @@ $servicePrincipal = Get-AzADServicePrincipal -DisplayName $ServicePrincipalName
 
 if ($servicePrincipal) {
     
-    $servicePrincipalSecret = ""
+    [securestring]$servicePrincipalSecret
 
     try {
 
@@ -49,7 +46,7 @@ if ($servicePrincipal) {
         Write-Host "Fail to generate a new secret for the Service Principal. Maybe without AAD permission on Application administrators Role" -ForegroundColor Green
         Write-Host "Use the first secret created..." -ForegroundColor Green
 
-        $servicePrincipalSecret = ($ParameterContent).PSObject.Properties["parameters"].Value.servicePrincipalSecret.Value
+        $servicePrincipalSecret =  ConvertTo-SecureString (($ParameterContent).PSObject.Properties["parameters"].Value.servicePrincipalSecret.Value) -AsPlainText -Force
 
     }
 
@@ -75,21 +72,6 @@ if ($servicePrincipal) {
     if(! $assigment){
         New-AzRoleAssignment -ObjectId $servicePrincipal.Id -Scope $lake.Id -RoleDefinitionName "Storage Blob Data Contributor" 
     }
-
-    #Write-Host "Creating the Key Vault secret scope on Databricks..." -ForegroundColor Green
-    #$accessToken = Get-AzAccessToken -ResourceUrl 2ff814a6-3304-4ab8-85cb-cd0e6f879c1d
-    #$env:DATABRICKS_TOKEN = $accessToken.Token
-    #$env:DATABRICKS_HOST = "https://$($dbw.Url)"
-    #$env:DATABRICKS_TOKEN = $DATABRICKS_TOKEN
-    #Write-Host "URL DBW https://$($dbw.Url)"
-    #Write-Host "Databricks Token " $DATABRICKS_TOKEN
-    #Write-Host "Databricks Token (env) " $env:DATABRICKS_TOKEN
-    
-    # $scopesList = databricks secrets list-scopes --output json | ConvertFrom-Json
-    # Write-Host "List of scopes: " $scopesList
-    # if (! $scopesList.scopes.name -contains "dataops") {
-    #     databricks secrets create-scope --scope 'dataops' --scope-backend-type AZURE_KEYVAULT --resource-id $kv.ResourceId --dns-name $kv.VaultUri
-    # }
 }
 else {
     Write-Host "No Service Principal founded" -ForegroundColor Red
