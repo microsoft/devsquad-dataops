@@ -116,7 +116,7 @@ function ReplaceTemplateTokens {
 
 			[string]$configPropertyName = $token -replace "$($StartTokenPattern)|$($EndTokenPattern)", ''
 
-			if ( $configPropertyName == "serviceprincipal.secret") {
+			if ( $configPropertyName -eq "serviceprincipal.secret") {
 				Write-Verbose "Replacing '$token' token by '$ServicePrincipalSecret'"
 				$line = $line -replace "$token", "$ServicePrincipalSecret"
 			}
