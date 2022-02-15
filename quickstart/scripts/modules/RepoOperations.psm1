@@ -84,6 +84,9 @@ function PublishOutputs {
 	
 	BeginScope -Scope "Outputs"
 
+	Write-Host "Input file " $Configuration.output.template
+	Write-Host "Output file " $Configuration.output.file
+
 	ReplaceTemplateTokens `
 		-Configuration $Configuration `
 		-InputFile $Configuration.output.template `
@@ -108,6 +111,9 @@ function ReplaceTemplateTokens {
 	CleanFileIfExists -File $OutputFile
 
 	[int]$totalTokens = 0
+
+	Write-Host "Input File '$InputFile'"
+	Write-Host (Get-Content $InputFile)
 
 	(Get-Content $InputFile) | ForEach-Object {
 		$line = $_
