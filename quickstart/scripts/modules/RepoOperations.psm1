@@ -114,6 +114,10 @@ function ReplaceTemplateTokens {
 
 	[int]$totalTokens = 0
 
+	Write-Host "Input File '$InputFile'"
+	Write-Host "Input File content " ((Get-Content $InputFile) | ConvertFrom-Json)
+
+
 	(Get-Content $InputFile) | ForEach-Object {
 		$line = $_
 		$tokens = GetTokens -Line $line -StartTokenPattern $StartTokenPattern -EndTokenPattern $EndTokenPattern
