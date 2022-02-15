@@ -42,25 +42,30 @@ function UpdateIaCParameters {
 
 	BeginScope -Scope "IaC parameters"
 
+	$ServicePrincipalSecret = $Configuration.Project.ServicePrincipalSecret
+
 	ReplaceTemplateTokens -Configuration $Configuration -RemoveInput `
 		-InputFile infrastructure-as-code/infrastructure/parameters/parameters.dev.template.json `
-		-OutputFile infrastructure-as-code/infrastructure/parameters/parameters.dev.json
+		-OutputFile infrastructure-as-code/infrastructure/parameters/parameters.dev.json `
+		-ServicePrincipalSecret $ServicePrincipalSecret `
 
 	ReplaceTemplateTokens -Configuration $Configuration -RemoveInput `
 		-InputFile infrastructure-as-code/infrastructure/parameters/parameters.qa.template.json `
-		-OutputFile infrastructure-as-code/infrastructure/parameters/parameters.qa.json 
+		-OutputFile infrastructure-as-code/infrastructure/parameters/parameters.qa.json `
+		-ServicePrincipalSecret $ServicePrincipalSecret `
 
 	ReplaceTemplateTokens -Configuration $Configuration -RemoveInput `
 		-InputFile infrastructure-as-code/infrastructure/parameters/parameters.prod.template.json `
-		-OutputFile infrastructure-as-code/infrastructure/parameters/parameters.prod.json 
+		-OutputFile infrastructure-as-code/infrastructure/parameters/parameters.prod.json `
+		-ServicePrincipalSecret $ServicePrincipalSecret `
 	
 	ReplaceTemplateTokens -Configuration $Configuration -RemoveInput `
 		-InputFile azure-pipelines/databricks/databricks-lib-cd.template.yml `
-		-OutputFile azure-pipelines/databricks/databricks-lib-cd.yml 
+		-OutputFile azure-pipelines/databricks/databricks-lib-cd.yml `
 	
 	ReplaceTemplateTokens -Configuration $Configuration -RemoveInput `
 		-InputFile azure-pipelines/variable.environment.template.yml `
-		-OutputFile azure-pipelines/variable.environment.yml 
+		-OutputFile azure-pipelines/variable.environment.yml `
 		
 	EndScope
 
@@ -73,16 +78,21 @@ function UpdateIaCParameters {
 
 function PublishOutputs {
     param(
-        [Parameter(Mandatory)] [hashtable] $Configuration
+        [Parameter(Mandatory)] [hashtable] $Configuration,
+		[Parameter(Mandatory)] [string] $ServicePrincipalSecret
     )
 	
 	BeginScope -Scope "Outputs"
+
+	Write-Host "Input file " $Configuration.output.template
+	Write-Host "Output file " $Configuration.output.file
 
 	ReplaceTemplateTokens `
 		-Configuration $Configuration `
 		-InputFile $Configuration.output.template `
 		-OutputFile $Configuration.output.file `
-	
+		-ServicePrincipalSecret $ServicePrincipalSecret `
+
 	EndScope
 }
 
@@ -92,6 +102,7 @@ function ReplaceTemplateTokens {
 		[Parameter(Mandatory)] [hashtable] $Configuration,
 		[Parameter(Mandatory)] [string] $InputFile,
 		[Parameter(Mandatory)] [string] $OutputFile,
+		[string] $ServicePrincipalSecret,
 		[string] $StartTokenPattern = '<',
 		[string] $EndTokenPattern = '>',
 		[switch] $RemoveInput
@@ -101,17 +112,29 @@ function ReplaceTemplateTokens {
 
 	[int]$totalTokens = 0
 
+	Write-Host "Input File '$InputFile'"
+	Write-Host (Get-Content $InputFile)
+
 	(Get-Content $InputFile) | ForEach-Object {
 		$line = $_
 		$tokens = GetTokens -Line $line -StartTokenPattern $StartTokenPattern -EndTokenPattern $EndTokenPattern
 		$totalTokens += $tokens.Count
 
 		foreach ($token in $tokens) {
+
+			Write-Host "Token '$token'"
+
 			[string]$configPropertyName = $token -replace "$($StartTokenPattern)|$($EndTokenPattern)", ''
-			[string]$tokenValue = Invoke-Expression -Command "`$Configuration.$configPropertyName"
-			
-			Write-Verbose "Replacing '$token' token by '$tokenValue'"
-			$line = $line -replace "$token", "$tokenValue"
+
+			if ( $configPropertyName -eq "serviceprincipal.secret") {
+				Write-Verbose "Replacing '$token' token by '$ServicePrincipalSecret'"
+				$line = $line -replace "$token", "$ServicePrincipalSecret"
+			}
+			else {
+				[string]$tokenValue = Invoke-Expression -Command "`$Configuration.$configPropertyName"
+				Write-Verbose "Replacing '$token' token by '$tokenValue'"
+				$line = $line -replace "$token", "$tokenValue"
+			}
 		}
 
 		$line | Out-File -Append -FilePath $OutputFile

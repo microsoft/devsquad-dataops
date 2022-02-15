@@ -19,7 +19,7 @@ Sept 2021
 
 In this workshop, you will deploy a DataOps reference arquitecture, for understanding best practices of Data Engineering & Software Engineering combined.
 
-![](./hands-on-lab/media/high-level-overview-dataops.png 'Solution Architecture')
+!['Solution Architecture'](./hands-on-lab/media/high-level-overview-dataops.png)
 
 ### Lab Instructions
 
