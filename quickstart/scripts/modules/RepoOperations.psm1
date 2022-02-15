@@ -122,8 +122,6 @@ function ReplaceTemplateTokens {
 
 		foreach ($token in $tokens) {
 
-			Write-Host "Token '$token'"
-
 			[string]$configPropertyName = $token -replace "$($StartTokenPattern)|$($EndTokenPattern)", ''
 
 			if ( $configPropertyName -eq "serviceprincipal.secret") {
