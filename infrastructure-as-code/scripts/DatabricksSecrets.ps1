@@ -29,14 +29,29 @@ $servicePrincipal = Get-AzADServicePrincipal -DisplayName $ServicePrincipalName
 
 if ($servicePrincipal) {
     
-    Write-Host "Generating new client secret..." -ForegroundColor Green
-    $startDate = Get-Date
-    $endDate = $startDate.AddMonths(6)
+    $servicePrincipalSecret = ""
 
-    $clientSecret = New-AzADSpCredential -ObjectId $servicePrincipal.Id -StartDate $startDate -EndDate $endDate
-    $UnsecureSecret = ConvertFrom-SecureString -SecureString $clientSecret.Secret -AsPlainText
+    try {
 
-    Write-Host "New Secret was generated for Service Principal " $UnsecureSecret -ForegroundColor Yellow
+        Write-Host "Trying generate new client secret..." -ForegroundColor Green
+        $startDate = Get-Date
+        $endDate = $startDate.AddMonths(6)
+
+        $clientSecret = New-AzADSpCredential -ObjectId $servicePrincipal.Id -StartDate $startDate -EndDate $endDate
+        $UnsecureSecret = ConvertFrom-SecureString -SecureString $clientSecret.Secret -AsPlainText
+
+        $servicePrincipalSecret = $clientSecret.Secret
+
+        Write-Host "New Secret was generated for Service Principal " $UnsecureSecret -ForegroundColor Yellow
+
+    } 
+    catch {
+        Write-Host "Fail to generate a new secret for the Service Principal. Maybe without AAD permission on Application administrators Role" -ForegroundColor Green
+        Write-Host "Use the first secret created..." -ForegroundColor Green
+
+        $servicePrincipalSecret = ($ParameterContent).PSObject.Properties["parameters"].Value.servicePrincipalSecret.Value
+
+    }
 
     Write-Host "Getting Azure resources..." -ForegroundColor Green
     $kv = Get-AzKeyVault -VaultName $KeyVaultName
@@ -53,7 +68,7 @@ if ($servicePrincipal) {
     Write-Host "Setting service principal secrets on Key Vault..." -ForegroundColor Green
     Set-AzKeyVaultSecret -VaultName $KeyVaultName -Name "tenantId" -SecretValue $(ConvertTo-SecureString $context.Tenant.Id -AsPlainText -Force)
     Set-AzKeyVaultSecret -VaultName $KeyVaultName -Name "clientId" -SecretValue $(ConvertTo-SecureString $servicePrincipal.Id -AsPlainText -Force)
-    Set-AzKeyVaultSecret -VaultName $KeyVaultName -Name "clientSecret" -SecretValue $clientSecret.Secret
+    Set-AzKeyVaultSecret -VaultName $KeyVaultName -Name "clientSecret" -SecretValue $servicePrincipalSecret
 
     Write-Host "Assigning roles to the service principal on the data lake..." -ForegroundColor Green
     $assigment = Get-AzRoleAssignment -ObjectId $servicePrincipal.Id -Scope $lake.Id | Where-Object { $_.RoleDefinitionName -eq "Storage Blob Data Contributor" }

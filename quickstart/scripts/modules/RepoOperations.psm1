@@ -84,9 +84,6 @@ function PublishOutputs {
 	
 	BeginScope -Scope "Outputs"
 
-	Write-Host "Input file " $Configuration.output.template
-	Write-Host "Output file " $Configuration.output.file
-
 	ReplaceTemplateTokens `
 		-Configuration $Configuration `
 		-InputFile $Configuration.output.template `
@@ -112,17 +109,12 @@ function ReplaceTemplateTokens {
 
 	[int]$totalTokens = 0
 
-	Write-Host "Input File '$InputFile'"
-	Write-Host (Get-Content $InputFile)
-
 	(Get-Content $InputFile) | ForEach-Object {
 		$line = $_
 		$tokens = GetTokens -Line $line -StartTokenPattern $StartTokenPattern -EndTokenPattern $EndTokenPattern
 		$totalTokens += $tokens.Count
 
 		foreach ($token in $tokens) {
-
-			Write-Host "Token '$token'"
 
 			[string]$configPropertyName = $token -replace "$($StartTokenPattern)|$($EndTokenPattern)", ''
 
