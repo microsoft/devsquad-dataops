@@ -73,16 +73,20 @@ function UpdateIaCParameters {
 
 function PublishOutputs {
     param(
-        [Parameter(Mandatory)] [hashtable] $Configuration
+        [Parameter(Mandatory)] [hashtable] $Configuration,
+		[Parameter(Mandatory)] [string] $ServicePrincipalSecret
     )
 	
 	BeginScope -Scope "Outputs"
+
+	Write-Host "Input file " $Configuration.output.template
+	Write-Host "Output file " $Configuration.output.file
 
 	ReplaceTemplateTokens `
 		-Configuration $Configuration `
 		-InputFile $Configuration.output.template `
 		-OutputFile $Configuration.output.file `
-	
+
 	EndScope
 }
 

@@ -14,6 +14,9 @@
         "servicePrincipal": {
             "value": "SP-<Project.Name>-DevTest"
         },
+        "servicePrincipalSecret": {
+            "value": "<ServicePrincipal.Secret>"
+        },
         "resourceGroupData":{
             "value": "rg-<Project.Alias>-data-prod"
         },
