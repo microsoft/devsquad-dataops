@@ -42,25 +42,34 @@ function UpdateIaCParameters {
 
 	BeginScope -Scope "IaC parameters"
 
+	$ServicePrincipalSecret = $Configuration.Project.ServicePrincipalSecret
+
+	Write-Host "SP Secret '$ServicePrincipalSecret'"
+
 	ReplaceTemplateTokens -Configuration $Configuration -RemoveInput `
 		-InputFile infrastructure-as-code/infrastructure/parameters/parameters.dev.template.json `
-		-OutputFile infrastructure-as-code/infrastructure/parameters/parameters.dev.json
+		-OutputFile infrastructure-as-code/infrastructure/parameters/parameters.dev.json `
+		-ServicePrincipalSecret $ServicePrincipalSecret
 
 	ReplaceTemplateTokens -Configuration $Configuration -RemoveInput `
 		-InputFile infrastructure-as-code/infrastructure/parameters/parameters.qa.template.json `
-		-OutputFile infrastructure-as-code/infrastructure/parameters/parameters.qa.json 
+		-OutputFile infrastructure-as-code/infrastructure/parameters/parameters.qa.json `
+		-ServicePrincipalSecret $ServicePrincipalSecret
 
 	ReplaceTemplateTokens -Configuration $Configuration -RemoveInput `
 		-InputFile infrastructure-as-code/infrastructure/parameters/parameters.prod.template.json `
-		-OutputFile infrastructure-as-code/infrastructure/parameters/parameters.prod.json 
+		-OutputFile infrastructure-as-code/infrastructure/parameters/parameters.prod.json `
+		-ServicePrincipalSecret $ServicePrincipalSecret
 	
 	ReplaceTemplateTokens -Configuration $Configuration -RemoveInput `
 		-InputFile azure-pipelines/databricks/databricks-lib-cd.template.yml `
-		-OutputFile azure-pipelines/databricks/databricks-lib-cd.yml 
+		-OutputFile azure-pipelines/databricks/databricks-lib-cd.yml `
+		-ServicePrincipalSecret $ServicePrincipalSecret
 	
 	ReplaceTemplateTokens -Configuration $Configuration -RemoveInput `
 		-InputFile azure-pipelines/variable.environment.template.yml `
-		-OutputFile azure-pipelines/variable.environment.yml 
+		-OutputFile azure-pipelines/variable.environment.yml `
+		-ServicePrincipalSecret $ServicePrincipalSecret
 		
 	EndScope
 
