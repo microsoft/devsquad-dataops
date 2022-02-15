@@ -37,6 +37,10 @@ EndScope
 
 [hashtable]$servicePrincipals = SetupServicePrincipals -Configuration $config -Verbose:$VerbosePreference
 SetupEnvironments -Configuration $config -ServicePrincipals $servicePrincipals -Verbose:$VerbosePreference
-PublishOutputs -Configuration $config -Verbose:$VerbosePreference
+
+#Save this password inside output hol file
+$ServicePrincipalSecret = $ServicePrincipals[$config.servicePrincipals[0]].clientSecret
+
+PublishOutputs -Configuration $config -ServicePrincipalSecret $ServicePrincipalSecret  -Verbose:$VerbosePreference
 
 Write-Host "Done!"
