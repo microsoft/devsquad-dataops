@@ -452,13 +452,16 @@ When you have the resources created in the environment, it is time to configure 
 You should to change `Key Valt Name` with your information and execute this script, and how the resources in development environment were created then we can create the scope in databricks dev.
 
 ```
-./DatabricksScopeCreation.ps1 `
+./infrastructure-as-code/scripts/DatabricksScopeCreation.ps1 `
     -KeyVaultName "<keyvault_name>",
     -ComputeResourceGroup "<compute_resource_group>",
     -DatabricksName "<databricks_name>" `
 ```
 
->**Note**: To see Key names in secret scope dataops execute the follow command.
+
+>**Note 1**: If you get the error msg about `Error 403 User not authorized` open the Databricks Workspace page using the same user due first access and then just run the script again.
+
+>**Note 2**: To see Key names in secret scope dataops execute the follow command.
 
 ```
 databricks secrets list --scope dataops
