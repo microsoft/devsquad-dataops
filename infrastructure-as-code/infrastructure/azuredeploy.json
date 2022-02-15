@@ -26,6 +26,12 @@
         "description": "Service Principal for credentials usage"
       }
     },
+    "servicePrincipalSecret": {
+      "type": "string",
+      "metadata": {
+        "description": "Service Principal Secret for databricks usage"
+      }
+    },
     "resourceGroupData": {
       "type": "string",
       "metadata": {
