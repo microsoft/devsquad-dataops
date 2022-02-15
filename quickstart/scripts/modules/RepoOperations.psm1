@@ -47,27 +47,27 @@ function UpdateIaCParameters {
 	ReplaceTemplateTokens -Configuration $Configuration -RemoveInput `
 		-InputFile infrastructure-as-code/infrastructure/parameters/parameters.dev.template.json `
 		-OutputFile infrastructure-as-code/infrastructure/parameters/parameters.dev.json `
-		-ServicePrincipalSecret $ServicePrincipalSecret
+		-ServicePrincipalSecret $ServicePrincipalSecret `
 
 	ReplaceTemplateTokens -Configuration $Configuration -RemoveInput `
 		-InputFile infrastructure-as-code/infrastructure/parameters/parameters.qa.template.json `
 		-OutputFile infrastructure-as-code/infrastructure/parameters/parameters.qa.json `
-		-ServicePrincipalSecret $ServicePrincipalSecret
+		-ServicePrincipalSecret $ServicePrincipalSecret `
 
 	ReplaceTemplateTokens -Configuration $Configuration -RemoveInput `
 		-InputFile infrastructure-as-code/infrastructure/parameters/parameters.prod.template.json `
 		-OutputFile infrastructure-as-code/infrastructure/parameters/parameters.prod.json `
-		-ServicePrincipalSecret $ServicePrincipalSecret
+		-ServicePrincipalSecret $ServicePrincipalSecret `
 	
 	ReplaceTemplateTokens -Configuration $Configuration -RemoveInput `
 		-InputFile azure-pipelines/databricks/databricks-lib-cd.template.yml `
 		-OutputFile azure-pipelines/databricks/databricks-lib-cd.yml `
-		-ServicePrincipalSecret $ServicePrincipalSecret
+		-ServicePrincipalSecret $ServicePrincipalSecret `
 	
 	ReplaceTemplateTokens -Configuration $Configuration -RemoveInput `
 		-InputFile azure-pipelines/variable.environment.template.yml `
 		-OutputFile azure-pipelines/variable.environment.yml `
-		-ServicePrincipalSecret $ServicePrincipalSecret
+		-ServicePrincipalSecret $ServicePrincipalSecret `
 		
 	EndScope
 
@@ -120,6 +120,8 @@ function ReplaceTemplateTokens {
 		$totalTokens += $tokens.Count
 
 		foreach ($token in $tokens) {
+
+			Write-Host "Token '$token'"
 
 			[string]$configPropertyName = $token -replace "$($StartTokenPattern)|$($EndTokenPattern)", ''
 
