@@ -62,12 +62,10 @@ function UpdateIaCParameters {
 	ReplaceTemplateTokens -Configuration $Configuration -RemoveInput `
 		-InputFile azure-pipelines/databricks/databricks-lib-cd.template.yml `
 		-OutputFile azure-pipelines/databricks/databricks-lib-cd.yml `
-		-ServicePrincipalSecret $ServicePrincipalSecret `
 	
 	ReplaceTemplateTokens -Configuration $Configuration -RemoveInput `
 		-InputFile azure-pipelines/variable.environment.template.yml `
 		-OutputFile azure-pipelines/variable.environment.yml `
-		-ServicePrincipalSecret $ServicePrincipalSecret `
 		
 	EndScope
 
@@ -128,7 +126,7 @@ function ReplaceTemplateTokens {
 
 			[string]$configPropertyName = $token -replace "$($StartTokenPattern)|$($EndTokenPattern)", ''
 
-			if ( $configPropertyName.ToLower() -eq "serviceprincipal.secret") {
+			if ( $configPropertyName -eq "serviceprincipal.secret") {
 				Write-Verbose "Replacing '$token' token by '$ServicePrincipalSecret'"
 				$line = $line -replace "$token", "$ServicePrincipalSecret"
 			}
