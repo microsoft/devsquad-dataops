@@ -44,8 +44,6 @@ function UpdateIaCParameters {
 
 	$ServicePrincipalSecret = $Configuration.Project.ServicePrincipalSecret
 
-	Write-Host "SP Secret '$ServicePrincipalSecret'"
-
 	ReplaceTemplateTokens -Configuration $Configuration -RemoveInput `
 		-InputFile infrastructure-as-code/infrastructure/parameters/parameters.dev.template.json `
 		-OutputFile infrastructure-as-code/infrastructure/parameters/parameters.dev.json `
@@ -125,7 +123,7 @@ function ReplaceTemplateTokens {
 
 			[string]$configPropertyName = $token -replace "$($StartTokenPattern)|$($EndTokenPattern)", ''
 
-			if ( $configPropertyName -eq "serviceprincipal.secret") {
+			if ( $configPropertyName.ToLower() -eq "serviceprincipal.secret") {
 				Write-Verbose "Replacing '$token' token by '$ServicePrincipalSecret'"
 				$line = $line -replace "$token", "$ServicePrincipalSecret"
 			}
