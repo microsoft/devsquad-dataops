@@ -64,8 +64,7 @@ if ($servicePrincipal) {
 
     Write-Host "Setting service principal secrets on Key Vault..." -ForegroundColor Green
     Set-AzKeyVaultSecret -VaultName $KeyVaultName -Name "tenantId" -SecretValue $(ConvertTo-SecureString $context.Tenant.Id -AsPlainText -Force)
-    Set-AzKeyVaultSecret -VaultName $KeyVaultName -Name "clientId" -SecretValue $(ConvertTo-SecureString $servicePrincipal.Id -AsPlainText -Force)
-
+    Set-AzKeyVaultSecret -VaultName $KeyVaultName -Name "clientId" -SecretValue $(ConvertTo-SecureString $servicePrincipal.AppId -AsPlainText -Force)
     Set-AzKeyVaultSecret -VaultName $KeyVaultName -Name "clientSecret" -SecretValue $servicePrincipalSecret
 
     Write-Host "Assigning roles to the service principal on the data lake..." -ForegroundColor Green
