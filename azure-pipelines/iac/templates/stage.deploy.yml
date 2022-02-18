@@ -110,8 +110,7 @@ stages:
                 -DatabricksName $(databricksName)
                 -KeyVaultName $(keyVaultName)
                 -DATABRICKS_TOKEN $(DATABRICKS_TOKEN)
-              azurePowerShellVersion: 'OtherVersion'
-              preferredAzurePowerShellVersion: 5.5.0
+              azurePowerShellVersion: latestVersion
 
           - task: PowerShell@2
             displayName: Deploy DBW Clusters

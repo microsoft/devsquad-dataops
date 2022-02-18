@@ -6,7 +6,7 @@ Write-Host "Unzip sample-data..."
 mkdir ./sample-data
 
 $zipFiles = ('FlightWeatherWithAirportCode.zip', 'FlightDelaysWithAirportCodes.zip', 'AirportCodeLocationLookupClean.zip')
-$zipPath = '../infrastructure/sample-data/'
+$zipPath = './infrastructure-as-code/infrastructure/sample-data/'
 
 foreach ($zipFile in $zipFiles){
     $file = ($zipPath + $zipFile)
