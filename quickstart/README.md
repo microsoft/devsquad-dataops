@@ -54,7 +54,13 @@ Execute all these steps below to setup your evironment before running the Hands-
 
     ![Open Azure cloud shell](./docs/images/open-cloud-powershell.png)
 
-2. **On the Azure PowerShell terminal:** clone the source code of the lab and go to the `hol` directory.
+2. **Update Az.Resource to the last version**
+
+    The quickstart scripts needs the lastest version of `Az.Resources` library installed. To update your powershell library on the console with the last version of the lib use the command bellow (It will automatically check if te update is needed or not):
+
+    ```Install-Module -Name Az.Resources -Force```
+
+3. **On the Azure PowerShell terminal:** clone the source code of the lab and go to the `hol` directory.
 
     ```powershell
     git clone https://github.com/microsoft/devsquad-in-a-day.git
@@ -62,7 +68,7 @@ Execute all these steps below to setup your evironment before running the Hands-
     cd devsquad-in-a-day
     ```
 
-3. **On the Azure PowerShell terminal**: execute the following command to create a new config file based on an existing template. Provide arguments to this setup based on the table below:
+4. **On the Azure PowerShell terminal**: execute the following command to create a new config file based on an existing template. Provide arguments to this setup based on the table below:
 
     ```powershell
     # Be sure to execute this script under the hol directory
