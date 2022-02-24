@@ -329,12 +329,12 @@ We are working with three environments `dev`, `qa` and `prod`, and this environm
 
 <br/>
 
->**Setting Azure Devops Project:** before starting to execute the pipelines and the git workflow, it is necessary to create environments in Azure Devops for the IaC and Databricks environments. Environments can be created inside the Pipelines menu of Azure DevOps.
+>**Setting Azure Devops Project:** before starting to execute the pipelines and the git workflow, check the environments in Azure Devops for the IaC and Databricks. If anyone is missing you can create inside the Pipelines menu of Azure DevOps.
 
 ![](./media/environments-qa-prod.png)
 
 
->**Note**: Create Environments for `dev`, `qa`, `prod`, `databricks-dev`, `databricks-qa` and `databricks-prod` in Azure Devops before making any Pull Request (PR).
+>**Note**: All enviornments was created on the quickstart scripts. For instance the environments needs for the lab is: `dev`, `qa`, `prod`, `databricks-dev`, `databricks-qa` and `databricks-prod`. All of then must exists in Azure Devops before making any Pull Request (PR).
     
 ![](./media/environments.png)
 
@@ -452,14 +452,10 @@ When you have the resources created in the environment, it is time to configure 
 You should to change `Key Valt Name` with your information and execute this script, and how the resources in development environment were created then we can create the scope in databricks dev.
 
 ```
-./infrastructure-as-code/scripts/DatabricksScopeCreation.ps1 `
-    -KeyVaultName "<keyvault_name>",
-    -ComputeResourceGroup "<compute_resource_group>",
-    -DatabricksName "<databricks_name>" `
+./infrastructure-as-code/scripts/DatabricksScopeCreation.ps1 -KeyVaultName "<keyvault_name>" -ComputeResourceGroup "<compute_resource_group>" -DatabricksName "<databricks_name>" 
 ```
 
-
->**Note 1**: If you get the error msg about `Error 403 User not authorized` open the Databricks Workspace page using the same user due first access and then just run the script again.
+>**Note 1**: If you get the error msg about `Error 403 User not authorized` open the Databricks Workbench page using the same user due first access profile creation and then just run the script again.
 
 >**Note 2**: To see Key names in secret scope dataops execute the follow command.
 

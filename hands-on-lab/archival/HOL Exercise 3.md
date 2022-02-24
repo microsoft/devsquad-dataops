@@ -53,12 +53,12 @@
 
     <br/>
 
-    **Setting Azure Devops Project:** before to start to execute the pipelines and execute the git workflow, it is necessary to create the environments in Azure Devops for the IaC and Databricks environments.
+    >**Setting Azure Devops Project:** before starting to execute the pipelines and the git workflow, check the environments in Azure Devops for the IaC and Databricks. If anyone is missing you can create inside the Pipelines menu of Azure DevOps.
 
-    ![](media/environments-qa-prod.png)
+    ![](./media/environments-qa-prod.png)
 
 
-    >**Note**: Create Environments to `qa`, `prod`, `databricks-qa` and `databricks-prod` in Azure Devops before to make any Pull Request (PR).
+    >**Note**: All enviornments was created on the quickstart scripts. For instance the environments needs for the lab is: `dev`, `qa`, `prod`, `databricks-dev`, `databricks-qa` and `databricks-prod`. All of then must exists in Azure Devops before making any Pull Request (PR).
     
     ![](media/environments.png)
 
