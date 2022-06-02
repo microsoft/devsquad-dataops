@@ -83,7 +83,7 @@ Execute all these steps below to setup your evironment before running the Hands-
     |<_projectName_>|Name of the existing project inside Azure DevOps where you will execute the Hands-On Lab|_project-dataops_|
     |<_subscriptionId_>|Azure Subscription ID where the resources will be deployed|_f7e5bb9e-0f98-4c5d-a5c1-a9154bf3cd61_|
 
-- (_OPTIONAL_) If you are using this project as a Hands-On Lab, feel free to proceed to the next step of the lab setup. If you are using this project as a template for dataops, check [this additional documentation](./0b-prerequisites-advanced.md) that explains advanced configuration options.
+- (_OPTIONAL_) If you are using this project as a Hands-On Lab, feel free to proceed to the next step of the lab setup. If you are using this project as a template for dataops, check [this additional documentation](./docs/0b-prerequisites-advanced.md) that explains advanced configuration options.
 
 
 ## Step 3: Deploy Azure Resources in your subscription
