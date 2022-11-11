@@ -8,4 +8,4 @@ twine
 pytest
 pytest-runner
 databricks-cli
-pyspark==3.0.1
+pyspark==3.2.2
