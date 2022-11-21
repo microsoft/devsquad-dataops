@@ -29,4 +29,4 @@ Write-Host "Filtering environments that should be excluded..." -ForegroundColor 
 $filtered = "dev", "qa", "prod" | Where-Object { $_ -ne $Environment }
 
 Write-Host "Running acceptance tests..." -ForegroundColor Green
-Invoke-Pester -CI -Output Detailed ../infrastructure-as-code/scripts/tests/ -ExcludeTagFilter $filtered
+Invoke-Pester -CI -Output Detailed ../infrastructure-as-code/tests/ -ExcludeTagFilter $filtered
