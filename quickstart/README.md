@@ -145,33 +145,6 @@ Execute all these steps below to setup your evironment before running the Hands-
 
 3. (Optional) If you are using this project as a Hands-On Lab, feel free to proceed to the next step of the lab setup.
 
-## Step 5: Create the Hands-On Lab VM
-
-1. Deploy a pre-configured VM that contains all the tools required for executing the Hands-On Lab.
-
-    - **On the Azure PowerShell terminal**: run `Deploy-LabVM.ps1`.
-    
-        ```powershell
-        ./quickstart/scripts/labvm/Deploy-LabVM.ps1
-        ```
-
-
-2. Access the VM resource and assign a new password to the user `labuser`.
-    
-    ![Reset VM password](./docs/images/vm-lab-reset-password.png)
-
-    - Feel free to create any password of your preference, or to use the suggestion below:
-
-        - **Username:** `labuser`
-
-        - **Password:** `Password.1!!`
-
-3. Connect to the VM using a RDP client:
-
-    ![RDP Access to the Lab VM](./docs/images/vm-lab-rdp-connection.png)
-
-    > Note that the RDP port of the VM is already configured to allow inbound access.
-
 
 ## Hands-On Lab
 
