@@ -455,7 +455,7 @@ You should to change `Key Valt Name` with your information and execute this scri
 ./infrastructure-as-code/scripts/DatabricksScopeCreation.ps1 -KeyVaultName "<keyvault_name>" -ComputeResourceGroup "<compute_resource_group>" -DatabricksName "<databricks_name>" 
 ```
 
->**Note 1**: If you get the error msg about `Error 403 User not authorized` open the Databricks Workbench page using the same user due first access profile creation and then just run the script again.
+>**Note 1**: If you get the error msg about `Error 403 User not authorized` open the Databricks workspace page using the same user due first access profile creation and then just run the script again.
 
 >**Note 2**: To see Key names in secret scope dataops execute the follow command.
 
