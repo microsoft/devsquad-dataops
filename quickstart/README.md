@@ -75,7 +75,7 @@ Execute all these steps below to setup your evironment before running the Hands-
     ./quickstart/scripts/cloud-setup/Replace-TemplateArgs.ps1
     ```
     
-    > **Don't use the default parameters from the table below!** You will need to use your own Azure DevOps organization name, Azure DevOps project name and Azure subscription ID. The alias can be any randomized alphanumerical string with **less than 8 characters**.
+    > **Don't use the default parameters from the table below!** You will need to use your own Azure DevOps organization name, Azure DevOps project name and Azure subscription ID.**
 
     |Argument|Description|Example|
     |-----|-----------|-------|
