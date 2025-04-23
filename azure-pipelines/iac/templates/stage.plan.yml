@@ -17,12 +17,12 @@ stages:
     pool:
       vmImage: 'Ubuntu-20.04'
     variables:
-      azPowershellVersion: 5.5.0
+      azPowershellVersion: 7.5.0
     steps:
     - template: step.install-gitversion.yml
       parameters:
         gitversionConfigFile: $(Build.SourcesDirectory)/infrastructure-as-code/GitVersion.yml
-    - task: AzurePowerShell@4
+    - task: AzurePowerShell@5
       displayName: 'Plan'
       inputs:
         azureSubscription: ${{ parameters.azureServiceConnection }}
