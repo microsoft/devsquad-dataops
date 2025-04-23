@@ -18,7 +18,7 @@ stages:
     pool:
       vmImage: 'Ubuntu-20.04'
     variables:
-      azPowershellVersion: 5.5.0
+      azPowershellVersion: 7.5.0
     environment: ${{ parameters.environment }}
     strategy:
       runOnce:
@@ -28,7 +28,7 @@ stages:
           - template: step.install-gitversion.yml
             parameters:
               gitversionConfigFile: $(Build.SourcesDirectory)/infrastructure-as-code/GitVersion.yml
-          - task: AzurePowerShell@4
+          - task: AzurePowerShell@5
             displayName: 'Deploy ARM'
             inputs:
               azureSubscription: ${{ parameters.azureServiceConnection }}
@@ -43,7 +43,7 @@ stages:
               azurePowerShellVersion: 'OtherVersion'
               preferredAzurePowerShellVersion: $(azPowershellVersion)
 
-          - task: AzurePowerShell@4
+          - task: AzurePowerShell@5
             displayName: 'Update Key Vault Secrets'
             inputs:
               azureSubscription: ${{ parameters.azureServiceConnection }}
@@ -54,7 +54,7 @@ stages:
               azurePowerShellVersion: 'OtherVersion'
               preferredAzurePowerShellVersion: $(azPowershellVersion)
 
-          - task: AzurePowerShell@4
+          - task: AzurePowerShell@5
             displayName: 'Upload Sample Files'
             inputs:
               azureSubscription: ${{ parameters.azureServiceConnection }}
@@ -98,7 +98,7 @@ stages:
             parameters:
               azureServiceConnection: ${{ parameters.azureServiceConnection }}
           
-          - task: AzurePowerShell@4
+          - task: AzurePowerShell@5
             displayName: 'Publish Databricks Secrets'
             inputs:
               azureSubscription: ${{ parameters.azureServiceConnection }}
