@@ -15,9 +15,9 @@ stages:
     pool:
       vmImage: 'Ubuntu-20.04'
     variables:
-      azPowershellVersion: 5.5.0
+      azPowershellVersion: 7.5.0
     steps:
-    - task: AzurePowerShell@4
+    - task: AzurePowerShell@5
       displayName: 'Acceptance Test'
       inputs:
         azureSubscription: ${{ parameters.azureServiceConnection }}
