@@ -1,7 +1,7 @@
 parameters:
 - name: azPowershellVersion
   type: string
-  default: 5.5.0
+  default: 7.5.0
 
 steps:
 - pwsh: Save-Module -Path /usr/share/az_${{ parameters.azPowershellVersion }} -Name Az -RequiredVersion ${{ parameters.azPowershellVersion }} -Force -ErrorAction Stop -Verbose
