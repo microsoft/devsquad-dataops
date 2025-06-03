@@ -474,6 +474,8 @@ Write-Host "⏳ Waiting for the service connection conversation start..."
 Start-Sleep -Seconds 20
 # Call the function to convert manual connections to managed identity
 Convert-ServiceConnectionsToOIDC -OrganizationUrl $OrganizationURI -Project $project
-
+# ✅ INSERÇÃO NO FIM: Exibir detalhes finais da configuração
+Write-Host "`n✅ Finalização:"
+Write-Host "Service Principal ID: $ServicePrincipal"
     }
 }
