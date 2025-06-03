@@ -415,7 +415,7 @@ $organizationName = ([System.Uri]$OrganizationURI).Segments[-1].TrimEnd('/')
 
 # Get App ID
 $appId = az ad app list `
-    --display-name "SP-$project-DevTest" `
+    --display-name "$ServicePrincipal.displayName" `
     --query "[0].appId" `
     -o tsv
 
@@ -476,6 +476,5 @@ Start-Sleep -Seconds 20
 Convert-ServiceConnectionsToOIDC -OrganizationUrl $OrganizationURI -Project $project
 # ✅ INSERÇÃO NO FIM: Exibir detalhes finais da configuração
 Write-Host "`n✅ Finalização:"
-Write-Host "Service Principal name: $($ServicePrincipal.displayName)" 
     }
 }
