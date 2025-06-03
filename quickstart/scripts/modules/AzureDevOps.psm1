@@ -415,7 +415,7 @@ $organizationName = ([System.Uri]$OrganizationURI).Segments[-1].TrimEnd('/')
 
 # Get App ID
 $appId = az ad app list `
-    --display-name "$ServicePrincipal.displayName" `
+    --display-name "$($ServicePrincipal.displayName)" `
     --query "[0].appId" `
     -o tsv
 
