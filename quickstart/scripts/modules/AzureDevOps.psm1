@@ -476,6 +476,6 @@ Start-Sleep -Seconds 20
 Convert-ServiceConnectionsToOIDC -OrganizationUrl $OrganizationURI -Project $project
 # ✅ INSERÇÃO NO FIM: Exibir detalhes finais da configuração
 Write-Host "`n✅ Finalização:"
-Write-Host "Service Principal ID: $ServicePrincipal"
+Write-Host "Service Principal name: $($ServicePrincipal.displayName)" 
     }
 }
