@@ -300,21 +300,21 @@ function CreateAzDevOpsRepoBuildPolicy {
 function SetupServiceConnection {
     [cmdletbinding()]
     param (
-		[Parameter(Mandatory)] [hashtable] $Configuration,
+                [Parameter(Mandatory)] [hashtable] $Configuration,
         [Parameter(Mandatory)] [hashtable] $Environment,
         [Parameter(Mandatory)] [hashtable] $ServicePrincipal
     )
 
-	[string]$organizationURI = "https://dev.azure.com/$($Configuration.azureDevOps.organization)"
-	[string]$project = $Configuration.azureDevOps.project
-	[string]$serviceConnectionName = $Environment.serviceConnectionName
+        [string]$organizationURI = "https://dev.azure.com/$($Configuration.azureDevOps.organization)"
+        [string]$project = $Configuration.azureDevOps.project
+        [string]$serviceConnectionName = $Environment.serviceConnectionName
 
     LogInfo -Message "Listing Azure DevOps service connections..."
 
     $serviceEndpointId = az devops service-endpoint list `
-		--query "[?name=='$serviceConnectionName'].id" -o tsv `
-		--organization $organizationURI `
-		--project $project
+                --query "[?name=='$serviceConnectionName'].id" -o tsv `
+                --organization $organizationURI `
+                --project $project
     
     if (!$serviceEndpointId) {
         LogInfo -Message "No '$serviceConnectionName' service connection found. Creating..."
@@ -328,7 +328,7 @@ function SetupServiceConnection {
         $env:AZURE_DEVOPS_EXT_AZURE_RM_SERVICE_PRINCIPAL_KEY = $Pass
 
         $subscription = Get-AzSubscription | Where-Object { $_.Id -eq $Environment.subscriptionId }
-
+# Create a Service Connection
         $serviceEndpointId = az devops service-endpoint azurerm create `
             --azure-rm-service-principal-id $ServicePrincipal.clientId `
             --azure-rm-subscription-id $subscription.Id `
@@ -339,16 +339,142 @@ function SetupServiceConnection {
             --project $project `
             --query "id" -o tsv
 
-		LogInfo -Message "Service connection '$serviceConnectionName' created."
-        
+                LogInfo -Message "Service connection '$serviceConnectionName' created."
+
+# Function to convert manual connections to managed identity connections
+function Convert-ServiceConnectionsToOIDC {
+    param (
+        [string]$OrganizationUrl,
+        [string]$Project
+    )
+
+    $apiVersion = "7.1"
+    $azdoResource = "499b84ac-1321-427f-aa17-267ca6975798" # Azure DevOps App ID (fixed)
+    $OrganizationUrl = $OrganizationUrl.TrimEnd('/')
+
+    Write-Host "Looking for manual service connections with Service Principal for conversion..."
+
+    try {
+        $allConnections = az rest `
+            --resource $azdoResource `
+            --method GET `
+            --url "$OrganizationUrl/$Project/_apis/serviceendpoint/endpoints?includeDetails=true&api-version=$apiVersion" `
+            | ConvertFrom-Json
+
+        if (!$allConnections) {
+            Write-Warning "No connection found. Check that the URL and project are correct."
+            return
+        }
+
+        $eligibleConnections = $allConnections.value | Where-Object {
+            $_.type -eq 'azurerm' -and
+            $_.authorization.scheme -eq 'ServicePrincipal' -and
+            $_.data.creationMode -eq 'Manual' -and
+            $_.name -like 'spn-iac*'
+        }
+
+        if (!$eligibleConnections -or $eligibleConnections.Count -eq 0) {
+            Write-Warning "No manual connection to Service Principal found to convert."
+            return
+        }
+
+        foreach ($sc in $eligibleConnections) {
+            Write-Host "Converting the connection '$($sc.name)' to Workload Identity Federation..."
+
+            $sc.authorization.scheme = "WorkloadIdentityFederation"
+
+            if ($sc.data.PSObject.Properties.Name -contains 'revertSchemeDeadline') {
+                $sc.data.PSObject.Properties.Remove('revertSchemeDeadline')
+            }
+
+            $body = $sc | ConvertTo-Json -Depth 10 -Compress
+            $putUrl = "$OrganizationUrl/$Project/_apis/serviceendpoint/endpoints/$($sc.id)?operation=ConvertAuthenticationScheme&api-version=$apiVersion"
+
+            $result = az rest `
+                --method PUT `
+                --url $putUrl `
+                --headers "Content-Type=application/json" `
+                --body $body `
+                --resource $azdoResource `
+                | ConvertFrom-Json
+
+            if ($result) {
+                Write-Host "✅ '$($sc.name)' successfully converted!"
+            } else {
+                Write-Error "Failed to convert '$($sc.name)'"
+            }
+        }
+    } catch {
+        Write-Error "An error occurred during the conversion: $_"
     }
+}
 
-	LogInfo -Message "Granting acess permission to all pipelines on the '$serviceConnectionName' service connection..."
 
+# Extract the name of organization
+$organizationName = ([System.Uri]$OrganizationURI).Segments[-1].TrimEnd('/')
+
+# Get App ID
+$appId = az ad app list `
+    --display-name "$($ServicePrincipal.displayName)" `
+    --query "[0].appId" `
+    -o tsv
+
+Write-Host "Application ID: $appId"
+
+# Get instanceId of Azure DevOps
+$url = "$OrganizationURI/_apis/connectiondata?api-version=6.0-preview"
+$pat = $env:AZURE_DEVOPS_EXT_PAT
+$base64AuthInfo = [Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes(":$pat"))
+$headers = @{ Authorization = "Basic $base64AuthInfo" }
+
+try {
+    $response = Invoke-RestMethod -Uri $url -Method Get -Headers $headers -ContentType "application/json"
+    $instanceId = $response.instanceId
+} catch {
+    Write-Error "Error to get Instance ID: $_"
+    return
+}
+
+Write-Output "Instance ID: $instanceId"
+
+# List environment
+$ambientes = @("dev", "qa", "prod")
+if (-not $global:AmbienteIndex) { $global:AmbienteIndex = 0 }
+$areas = $ambientes[$global:AmbienteIndex]
+$global:AmbienteIndex = ($global:AmbienteIndex + 1) % $ambientes.Length
+
+Write-Host "Selected environment: $areas"
+
+# Create federated credential
+az ad app federated-credential create `
+  --id $appId `
+  --parameters "{
+    `"name`": `"federated-devops.$areas`",
+    `"issuer`": `"https://vstoken.dev.azure.com/$instanceId`",
+    `"subject`": `"sc://$organizationName/$project/$serviceConnectionName`",
+    `"audiences`": [ `"api://AzureADTokenExchange`" ]
+  }"
+
+Write-Host "Federated credential added successfully to the Service Principal."
+
+# Update permission on the service endpoint
+az devops service-endpoint update `
+    --id $serviceEndpointId `
+    --enable-for-all true `
+    --organization $OrganizationURI `
+    --project $project
     az devops service-endpoint update `
-		--id $serviceEndpointId --enable-for-all true `
-		--organization $organizationURI `
-		--project $project
-	
-	LogInfo -Message "Access permission to all pipelines granted for '$serviceConnectionName' service connection."
+                --id $serviceEndpointId --enable-for-all true `
+                --organization $organizationURI `
+                --project $project
+
+        LogInfo -Message "Access permission to all pipelines granted for '$serviceConnectionName' service connection."
+
+Write-Host "⏳ Waiting for the service connection conversation start..."
+Start-Sleep -Seconds 20
+# Call the function to convert manual connections to managed identity
+Convert-ServiceConnectionsToOIDC -OrganizationUrl $OrganizationURI -Project $project
+# ✅ INSERÇÃO NO FIM: Exibir detalhes finais da configuração
+Write-Host "`n✅ Finalização:"
+    }
 }
