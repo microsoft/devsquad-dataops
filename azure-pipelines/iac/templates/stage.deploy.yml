@@ -16,7 +16,7 @@ stages:
     displayName: 'Deploy ARM to ${{ parameters.environment }}'
     condition: succeeded()
     pool:
-      vmImage: 'Ubuntu-20.04'
+      vmImage: 'ubuntu-latest'
     variables:
       azPowershellVersion: 7.5.0
     environment: ${{ parameters.environment }}
@@ -85,10 +85,11 @@ stages:
     condition: succeeded()
     dependsOn: deploy_arm
     pool:
-      vmImage: 'Ubuntu-20.04'
+      vmImage: 'ubuntu-latest'
     environment: ${{ parameters.environment }}
     variables:
     - group: dataops-iac-cd-output-${{ parameters.environment }}
+    - group: databricks-sp-auth-${{ parameters.environment }}
     strategy:
       runOnce:
         deploy:
@@ -109,8 +110,9 @@ stages:
                 -DataLakeName $(dataLakeName)
                 -DatabricksName $(databricksName)
                 -KeyVaultName $(keyVaultName)
-                -DATABRICKS_TOKEN $(DATABRICKS_TOKEN)
               azurePowerShellVersion: latestVersion
+            env:
+              DATABRICKS_TOKEN: $(DATABRICKS_TOKEN)
 
           - task: PowerShell@2
             displayName: Deploy DBW Clusters
@@ -121,9 +123,16 @@ stages:
               arguments: >
                 -Environment ${{ parameters.environment }}
                 -DeploymentOutputFile "dbwOutput.json"
+            # Service Principal authentication (preferred)
             env:
               DATABRICKS_HOST: https://$(databricksWorkspaceUrl)
-              DATABRICKS_TOKEN: $(DATABRICKS_TOKEN)
+              ARM_CLIENT_ID: $(ARM_CLIENT_ID)
+              ARM_CLIENT_SECRET: $(ARM_CLIENT_SECRET)
+              ARM_TENANT_ID: $(ARM_TENANT_ID)
+            # OR Token-based authentication (not both)
+            # env:
+            #   DATABRICKS_HOST: https://$(databricksWorkspaceUrl)
+            #   DATABRICKS_TOKEN: $(DATABRICKS_TOKEN)
           - task: PowerShell@2
             displayName: 'Publish Outputs'
             inputs:

@@ -5,7 +5,7 @@ stages:
   - job: lint
     displayName: 'Lint'
     pool:
-      vmImage: 'Ubuntu-20.04'
+      vmImage: 'ubuntu-latest'
     steps:
     - template: step.install-arm-template-toolkit.yml
       parameters:

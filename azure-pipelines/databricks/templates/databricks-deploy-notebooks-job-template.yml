@@ -13,7 +13,7 @@ stages:
   - deployment: publish_static_artifacts_${{ parameters.environment }}
     displayName: 'Deploy to ${{ parameters.environment }} Databricks'
     pool:
-      vmImage: 'Ubuntu-18.04'
+      vmImage: 'ubuntu-latest'
     environment: databricks-${{ parameters.environment }}
     variables:
     - group:  ${{ parameters.iacCdVariableGroupPrefix }}-${{ parameters.environment }}

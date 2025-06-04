@@ -8,13 +8,12 @@ parameters:
 
 stages:
 - stage: publish_library_${{ parameters.environment }}
-  #condition: eq(variables['Build.SourceBranch'], '${{ parameters.branch }}')
   displayName: 'Deploy to ${{ parameters.environment }} Databricks'
   jobs:
   - deployment: publish_library_${{ parameters.environment }}
     displayName: 'Deploy to ${{ parameters.environment }} Databricks'
     pool:
-      vmImage: 'Ubuntu-18.04'
+      vmImage: 'ubuntu-latest'
     environment: databricks-${{ parameters.environment }}
     variables:
     - group: dataops-iac-cd-output-${{ parameters.environment }}

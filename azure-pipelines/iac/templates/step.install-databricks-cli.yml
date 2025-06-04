@@ -3,30 +3,65 @@ parameters:
   type: string
 
 steps:
-
 - task: UsePythonVersion@0
   inputs:
-    versionSpec: 3.6
+    versionSpec: 3.9
     addToPath: true
     architecture: 'x64'
-  displayName: 'Use Python Version: 3.6'
-  
+  displayName: 'Use Python Version: 3.9'
+
 - script: |
-    python -m pip install --upgrade pip
-    pip install databricks-cli
-  displayName: 'Setup Agent'
-  
-- task: AzureCLI@2
-  displayName: Get Databricks token
-  inputs:
-    azureSubscription: ${{ parameters.azureServiceConnection }}
-    scriptType: bash
-    scriptLocation: inlineScript
-    inlineScript: |
-      databricks_resource_id="2ff814a6-3304-4ab8-85cb-cd0e6f879c1d" # This is the official databricks resource id
-      accessToken=$(curl -X GET -H 'Content-Type: application/x-www-form-urlencoded' \
-        -d "grant_type=client_credentials&client_id=$servicePrincipalId&resource=$databricks_resource_id&client_secret=$servicePrincipalKey" \
-        https://login.microsoftonline.com/$tenantId/oauth2/token \
-        | jq -r .access_token)
-      echo "##vso[task.setvariable variable=DATABRICKS_TOKEN;isSecret=true]$accessToken"
-    addSpnToEnvironment: true
+    # Use the latest stable version from GitHub releases
+    CLI_VERSION="0.252.0"
+    
+    echo "Downloading Databricks CLI v${CLI_VERSION} (v2.x)..."
+    
+    # Download with proper error handling
+    curl -fsSL --output databricks.tar.gz "https://github.com/databricks/cli/releases/download/v${CLI_VERSION}/databricks_cli_${CLI_VERSION}_linux_amd64.tar.gz"
+
+    if [ $? -ne 0 ]; then
+      echo "##vso[task.logissue type=error]Failed to download Databricks CLI"
+      exit 1
+    fi
+    
+    # Extract and install
+    tar -xzf databricks.tar.gz
+    chmod +x databricks
+    sudo mv databricks /usr/local/bin/
+    
+    # Verify installation
+    echo "Verifying Databricks CLI version..."
+    databricks version
+    
+    if [ $? -ne 0 ]; then
+      echo "##vso[task.logissue type=error]Databricks CLI installation failed"
+      exit 1
+    fi
+  displayName: 'Install Databricks CLI v2.x (binary)'
+
+- script: |
+    echo "Configuring Databricks CLI authentication..."
+    
+    # Create config directory if it doesn't exist
+    mkdir -p ~/.databricks
+    
+    # Create config file with service principal credentials
+    cat > ~/.databrickscfg << EOF
+    [DEFAULT]
+    host = https://$(databricksWorkspaceUrl)
+    azure_client_id = $(ARM_CLIENT_ID)
+    azure_client_secret = $(ARM_CLIENT_SECRET)
+    azure_tenant_id = $(ARM_TENANT_ID)
+    azure_use_msi = false
+    EOF
+    
+    # Test authentication 
+    databricks workspace list /
+    
+    if [ $? -ne 0 ]; then
+      echo "##vso[task.logissue type=error]Databricks CLI authentication failed"
+      exit 1
+    fi
+    
+    echo "Authentication successful!"
+  displayName: 'Authenticate with Databricks CLI'

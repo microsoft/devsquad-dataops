@@ -3,11 +3,20 @@ param(
     [Parameter(Mandatory)] [string] $DataLakeName,
     [Parameter(Mandatory)] [string] $DatabricksName,
     [Parameter(Mandatory)] [string] $KeyVaultName,
-    [Parameter(Mandatory)] [string] $DATABRICKS_TOKEN,
     [string] $SolutionParametersFile = "./infrastructure-as-code/infrastructure/parameters/parameters.$Environment.json"
 )
 
+# Access token from environment variable
+$DatabricksToken = $env:DATABRICKS_TOKEN
+
+if (-not $DatabricksToken) {
+    Write-Error "DATABRICKS_TOKEN environment variable is not set"
+    exit 1
+}
+
 $ErrorActionPreference = "Stop"
+
+Write-Host "DATABRICKS_TOKEN is set and ready to use." -ForegroundColor Green
 
 Write-Host "Getting variables from Library file..." -ForegroundColor Green
 
@@ -35,11 +44,12 @@ if ($servicePrincipal) {
         $endDate = $startDate.AddMonths(6)
 
         $clientSecret = New-AzADSpCredential -ObjectId $servicePrincipal.Id -StartDate $startDate -EndDate $endDate
-        $UnsecureSecret = ConvertFrom-SecureString -SecureString $clientSecret.Secret -AsPlainText
 
-        $servicePrincipalSecret = $clientSecret.Secret
+        $servicePrincipalSecret = $clientSecret.SecretText
 
-        Write-Host "New Secret was generated for Service Principal " $UnsecureSecret -ForegroundColor Yellow
+        Write-Host "New Secret was generated for Service Principal " $servicePrincipalSecret -ForegroundColor Yellow
+
+        $secureSecret = ConvertTo-SecureString $servicePrincipalSecret -AsPlainText -Force
 
     } 
     catch {
@@ -65,7 +75,7 @@ if ($servicePrincipal) {
     Write-Host "Setting service principal secrets on Key Vault..." -ForegroundColor Green
     Set-AzKeyVaultSecret -VaultName $KeyVaultName -Name "tenantId" -SecretValue $(ConvertTo-SecureString $context.Tenant.Id -AsPlainText -Force)
     Set-AzKeyVaultSecret -VaultName $KeyVaultName -Name "clientId" -SecretValue $(ConvertTo-SecureString $servicePrincipal.AppId -AsPlainText -Force)
-    Set-AzKeyVaultSecret -VaultName $KeyVaultName -Name "clientSecret" -SecretValue $servicePrincipalSecret
+    Set-AzKeyVaultSecret -VaultName $KeyVaultName -Name "clientSecret" -SecretValue $secureSecret
 
     Write-Host "Assigning roles to the service principal on the data lake..." -ForegroundColor Green
     $assigment = Get-AzRoleAssignment -ObjectId $servicePrincipal.Id -Scope $lake.Id | Where-Object { $_.RoleDefinitionName -eq "Storage Blob Data Contributor" }

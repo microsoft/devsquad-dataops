@@ -15,7 +15,7 @@ stages:
   - job: plan
     displayName: 'Plan for ${{ parameters.environment }}'
     pool:
-      vmImage: 'Ubuntu-20.04'
+      vmImage: 'ubuntu-latest'
     variables:
       azPowershellVersion: 7.5.0
     steps:
